@@ -1,6 +1,5 @@
 ModelClass
 =========
-
 ModelClass is a MATLAB class that simplifies working with ODE models. The main idea is to simplify the work of building a ODE model, and therefore reducing the time spent in this process. The main utilities of this class are: (i) doing simulations from symbolic ODEs, (ii) linearize the model at the equilibrium point, (iii) calculate eigenvalues. Using this class has many advantages like having to code less, it is easier to maintain ODE models and all your models will have these utilities.
 License: MIT
 For more information please contact fersann1@upv.es
@@ -25,8 +24,9 @@ x3 -> 0, d3 = 1.0
 ```
 Gracias al código de Jose Luis podemos inicializar la clase con las reacciones.
 ```MATLAB 
-[Yir,model] = getCSVModel('chemical_reactions_model');
-constructModelClass(model,Yir);
+% TODO:
+% [Yir,model] = getCSVModel('chemical_reactions_model');
+% constructModelClass(model,Yir);
 
 ```
 Genera el archivo "model.m".
@@ -35,18 +35,26 @@ Genera el archivo "model.m".
 classdef model < ModelClass
   methods
     function [self] = model()
-      s = self.NewState();
+      s = self.newSymbol();
       s.name = 'x1';
       s.eqn = 'd_x1 ==  + k1 - gamma12*x1*x2 - d1*x1 ';
-      self.AddState(s);
-      s = self.NewState();
+      self.addSymbol(s);
+      s = self.newSymbol();
       s.name = 'x2';
       s.eqn = 'd_x2 ==  + k2*x3 - gamma12*x1*x2 - d2*x2 ';
-      self.AddState(s);
-      s = self.NewState();
+      s.noNegative = true;
+      self.addSymbol(s);
+      s = self.newSymbol();
       s.name = 'x3';
       s.eqn = 'd_x3 ==  + k3*x1 - d3*x3 ';
-      self.AddState(s);
+      s.noNegative = true;
+      self.addSymbol(s);
+      
+      s = self.newSymbol();
+      s.name = 'ref';
+      s.eqn = 'ref ==  k3/d3 ';
+      s.noNegative = true;
+      self.addSymbol(s);
     end
     
     function [p] = parameters(~)
@@ -70,24 +78,27 @@ end
 ### Modelo simbolico
 ```MATLAB exec ./examples/ex0_readme
 m = model();
-m.ode_states
-m.ode_ders
+m.vars
+m.eqns
 
 ```
 ### Función que evaluas las ODEs
 ```MATLAB
-m.CreateDerFunction();
+% TODO:
+% m.CreateDerFunction();
 
 ```
 ### Simulación
 ```MATLAB
 m = model();
+s = Simulation(m);
 t = [0 10];
 p = m.parameters();
 x0 = m.initialCondition();
 opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
-[out] = m.Simulate(t,x0,p,opt);
-m.PlotAllStates(out);
+[out] = s.simulate(t,x0,p,opt);
+s.plotAllStates(out);
+
 
 ```
 \resizebox{\textwidth}{!}{\input{./tikz/simulation.tex}}}
@@ -154,7 +165,6 @@ ans =
 [       -gamma12*x2, - d2 - gamma12*x1,  k2]
 [                k3,                 0, -d3]
 ```
-
 #### Automatiza el análisis de contractividad
 ```
 >> m = AntitheticController();
