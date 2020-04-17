@@ -4,7 +4,7 @@ ModelClass is a MATLAB class that simplifies working with ODE models. The main i
 License: MIT
 For more information please contact fersann1@upv.es
 ## Installation ##
-Download this repository into the directory of your choice. Then within MATLAB go to file >> Set path... and add the directory of the repository to the list (if it isn't already). That's it.
+Download this repository into the directory of your choice. Then within MATLAB go to HOME/ENVIROMENT >> Set path and add the directory of the repository and the utils directory to the list (if they aren't already).
 ## Usage ##
 ### Definición del modelo
 La clase de Matlab es un ``parser" que permite traducir los modelos.
