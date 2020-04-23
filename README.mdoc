@@ -1,7 +1,11 @@
 ModelClass
 =========
+ModelClass is a MATLAB class which simplifies working with ODE model. The main objetive is to simplify the process of coding and simulating an ODE model, and therefore reducing the time spent in this task. With ModelClass one can program ODE models directly from the symbolic equations and then simulate directly. This class provides also some functionality like OpenModelica (i.e. extendable classes, simulation of DAE models, etc).
 
-ModelClass is a MATLAB class that simplifies working with ODE models. The main idea is to simplify the work of building a ODE model, and therefore reducing the time spent in this process. The main utilities of this class are: (i) doing simulations from symbolic ODEs, (ii) linearize the model at the equilibrium point, (iii) calculate eigenvalues. Using this class has many advantages like having to code less, it is easier to maintain ODE models and all your models will have these utilities.
+Apart from that, ModelClass provides us more classes for different tasks. For example, there is a class for mathematical analysis that can calculate equilibrium points, linearize the model, and calculate eigenvalues from the model defined in ModelClass. On other hand, there is class for contractivity test to check whether a model is contractive or no.
+
+Lastly it is even possible to define ModelClass models from chemical reactions directly and then perform QSSA analysis and simulate.
+
 License: MIT
 For more information please contact fersann1@upv.es
 
@@ -50,6 +54,7 @@ Genera el archivo "model.m".
 @[ini=%% 3,end=%%](./examples/ex0_readme/main.m)
 ```
 
+<!--
 ### Simulación
 
 ```MATLAB
@@ -158,3 +163,4 @@ ans =
 - Integrar completamente esta clase con el código de Jose Luis.
 - Mejorar el solver del DAE (sólo resuelve DAEs del índice 1).
 - Terminar de implementar el modelo multiescala.
+-->
