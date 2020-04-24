@@ -34,7 +34,7 @@ It is expected that in the future there be more ways of generating ModelClass mo
 
 Once we have a ModelClass model it is easy to start simulating it. We need to pass a ModelClass object of our model to the SimulationClass. Then we can configure the options for the simulation (e.g. parameters of the model, initial conditions, ODE configuration, which ODE solver to use, time span, ...). And finally we can use the functions for simulating and the SimulationClass will return a struct with the results of the simulation.
 
-```MATLAB exec --path ./examples/ex0_readme
+```MATLAB exec 
 @[ini=%% 2,end=%%](./examples/ex0_readme/main.m)
 ```
 
@@ -42,7 +42,7 @@ Once we have a ModelClass model it is easy to start simulating it. We need to pa
 
 The PlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
 
-```MATLAB exec --path ./examples/ex0_readme
+```MATLAB
 @[ini=%% 3,end=%%](./examples/ex0_readme/main.m)
 ```
 
@@ -54,7 +54,7 @@ The PlotClass simplifies the task of plotting the result of simulations. And if 
 
 We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
 
-```MATLAB --path ./examples/ex0_readme
+```MATLAB 
 @[ini=%% 4,end=%%](./examples/ex0_readme/main.m)
 ```
 

@@ -57,13 +57,30 @@ m.vars
 m.eqns
 ```
 
+```
+ans =
+ 
+  x1
+  x2
+  x3
+ ref
+ 
+ 
+ans =
+ 
+    d_x1 == k1 - d1*x1 - gamma12*x1*x2
+ d_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
+                 d_x3 == k3*x1 - d3*x3
+                          ref == k3/d3
+ 
+
+```
 
 ### 2. Simulate the ModelClass model
 
 Once we have a ModelClass model it is easy to start simulating it. We need to pass a ModelClass object of our model to the SimulationClass. Then we can configure the options for the simulation (e.g. parameters of the model, initial conditions, ODE configuration, which ODE solver to use, time span, ...). And finally we can use the functions for simulating and the SimulationClass will return a struct with the results of the simulation.
 
 ``` MATLAB
-m = model();
 s = Simulation(m);
 
 t = [0 10];
@@ -87,37 +104,30 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 out
 ```
 
+```
+out = 
+
+  struct with fields:
+
+      t: [154x1 double]
+     x1: [154x1 double]
+     x2: [154x1 double]
+     x3: [154x1 double]
+    ref: [154x1 double]
+
+
+```
 
 ### 3. Plot simulation results
 
 The PlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
 
-``` MATLAB
-m = model();
-s = Simulation(m);
-
-t = [0 10];
-
-p.k1 = 1.0;
-p.k2 = 1.0;
-p.k3 = 1.0;
-p.gamma12 = 1.0;
-p.d1 = 1.0;
-p.d2 = 1.0;
-p.d3 = 1.0;
-
-x0.x1 = 0.000000;
-x0.x2 = 0.000000;
-x0.x3 = 0.000000;
-
-opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
-
-[out] = s.simulate(t,x0,p,opt);
+```MATLAB
 
 s.plotAllStates(out);
 print('simulationPlot','-dpng')
-```
 
+```
 
 <p align="center">
   <img width="650" src="./examples/ex0_readme/simulationPlot.png">
@@ -127,9 +137,9 @@ print('simulationPlot','-dpng')
 
 We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
 
-```MATLAB --path ./examples/ex0_readme
+```MATLAB 
 % TODO:
-% m.CreateDerFunction()
+% m.CreateDerFunction();
 ```
 
 ```MATLAB
