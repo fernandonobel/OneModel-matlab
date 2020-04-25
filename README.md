@@ -8,15 +8,29 @@ Lastly it is even possible to define ModelClass models from chemical reactions d
 
 For more information please contact fersann1@upv.es
 
-## Installation ##
+# Installation
 
 Download this repository into the directory of your choice. Then within MATLAB go to HOME/ENVIROMENT >> Set path and add the directory of the repository and the utils directory to the list (if they aren't already).
 
-## General workflow
+# Table of contents
+
+* [Installation](#installation)
+* [Table of contents](#table-of-contents)
+* [General workflow](#general-workflow)
+	* [1. Obtaining a ModelClass model](#1-obtaining-a-modelclass-model)
+	* [2. Simulate the ModelClass model](#2-simulate-the-modelclass-model)
+	* [3. Plot simulation results](#3-plot-simulation-results)
+	* [4. Generate an ODE function](#4-generate-an-ode-function)
+	* [5. Mathematical analysis](#5-mathematical-analysis)
+	* [6. Contractivity test](#6-contractivity-test)
+	* [7. Parser of ModelClass models into LaTeX](#7-parser-of-modelclass-models-into-latex)
+
+
+# General workflow
 
 ModelClass is a class that allows us to define mathematical models in a standard way. Therefore, the first step in the general workflow should be parsing the mathematical model we want to study into the ModelClass framework.
 
-### 1. Obtaining a ModelClass model
+## 1. Obtaining a ModelClass model
 
 There are multiple ways we can choose for obtaining a ModelClass model: (i) the most basic one is to write ourselves a class that extends the ModelClass and then use functions for defining the model, (ii) we can also define our model as chemical reactions and then use the parser of Jose Luis and (iii) we can extend a previous ModelClass model defined and extend it in a OpenModelica style (we can even combine different models into a single one).
 
@@ -72,11 +86,10 @@ ans =
  d_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
                  d_x3 == k3*x1 - d3*x3
                           ref == k3/d3
- 
 
 ```
 
-### 2. Simulate the ModelClass model
+## 2. Simulate the ModelClass model
 
 Once we have a ModelClass model it is easy to start simulating it. We need to pass a ModelClass object of our model to the SimulationClass. Then we can configure the options for the simulation (e.g. parameters of the model, initial conditions, ODE configuration, which ODE solver to use, time span, ...). And finally we can use the functions for simulating and the SimulationClass will return a struct with the results of the simulation.
 
@@ -114,26 +127,24 @@ out =
      x2: [154x1 double]
      x3: [154x1 double]
     ref: [154x1 double]
-
-
 ```
 
-### 3. Plot simulation results
+## 3. Plot simulation results
 
 The PlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
 
 ```MATLAB
 
 s.plotAllStates(out);
-print('simulationPlot','-dpng')
-
 ```
 
 <p align="center">
-  <img width="650" src="./examples/ex0_readme/simulationPlot.png">
+  <img width="850" src="./examples/ex0_readme/simulationPlot.png">
 </p>
 
-### 4. Generate an ODE function
+## 4. Generate an ODE function
+
+Work in progress.
 
 We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
 
@@ -163,15 +174,15 @@ out(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
 end
 ```
 
-### 5. Mathematical analysis
+## 5. Mathematical analysis
 
 Work in progress.
 
-### 6. Contractivity test
+## 6. Contractivity test
 
 Work in progress.
 
-### 7. Parser of ModelClass models into LaTeX
+## 7. Parser of ModelClass models into LaTeX
 
 Work in progress.
 

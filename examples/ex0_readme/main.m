@@ -30,8 +30,7 @@ out
 %% 3. Plot simulation results
 
 s.plotAllStates(out);
-print('simulationPlot','-dpng')
-
+%% print('simulationPlot','-dpng')
 %% 4. Function that evaluates the ODEs
 % TODO:
 % m.CreateDerFunction();
