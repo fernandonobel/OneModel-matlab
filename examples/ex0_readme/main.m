@@ -29,7 +29,10 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 out
 %% 3. Plot simulation results
 
-s.plotAllStates(out);
+sp = SimulationPlotClass(m);
+
+sp.plotAllStates(out);
+
 %% print('simulationPlot','-dpng')
 %% 4. Function that evaluates the ODEs
 % TODO:

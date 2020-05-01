@@ -131,11 +131,14 @@ out =
 
 ## 3. Plot simulation results
 
-The PlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
+The SimulatePlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
 
 ```MATLAB
 
-s.plotAllStates(out);
+sp = SimulationPlotClass(m);
+
+sp.plotAllStates(out);
+
 ```
 
 <p align="center">
