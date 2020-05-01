@@ -94,7 +94,7 @@ ans =
 Once we have a ModelClass model it is easy to start simulating it. We need to pass a ModelClass object of our model to the SimulationClass. Then we can configure the options for the simulation (e.g. parameters of the model, initial conditions, ODE configuration, which ODE solver to use, time span, ...). And finally we can use the functions for simulating and the SimulationClass will return a struct with the results of the simulation.
 
 ``` MATLAB
-s = Simulation(m);
+s = SimulationClass(m);
 
 t = [0 10];
 

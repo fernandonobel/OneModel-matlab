@@ -6,7 +6,7 @@ m.vars
 m.eqns
 %% 2. Simulation
 
-s = Simulation(m);
+s = SimulationClass(m);
 
 t = [0 10];
 
