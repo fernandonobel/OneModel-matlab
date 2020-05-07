@@ -34,5 +34,5 @@ out
 % sp.plotAllStates(out);
 
 %% 4. Function that evaluates the ODEs
-% TODO:
-% m.CreateDerFunction();
+
+s.createDerFunction();
