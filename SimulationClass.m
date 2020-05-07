@@ -165,7 +165,7 @@ classdef SimulationClass < handle
       % return: void
 
       if nargin < 2
-        name = [class(obj) '_der'];
+        name = [class(obj.model) '_dae'];
       end
 
       % Write ModelClassV2 model to file.
