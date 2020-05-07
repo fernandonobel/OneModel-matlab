@@ -1,14 +1,19 @@
 ``` MATLAB
+% Initialize an object of the model.
 m = model();
 
+% Display variables and equations of the model.
 m.vars
 m.eqns
-%% 2. Simulation
+%% 2. Simulation.
 
+% Initialize a SimulationClass object with the model data.
 s = SimulationClass(m);
 
-t = [0 10];
+% Simulation time span.
+tspan = [0 10];
 
+% Parameters of the model.
 p.k1 = 1.0;
 p.k2 = 1.0;
 p.k3 = 1.0;
@@ -17,17 +22,23 @@ p.d1 = 1.0;
 p.d2 = 1.0;
 p.d3 = 1.0;
 
+% Intial conditions of the model.
 x0.x1 = 0.000000;
 x0.x2 = 0.000000;
 x0.x3 = 0.000000;
 
+% Options for the solver.
 opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 
-[out] = s.simulate(t,x0,p,opt);
+% Simulate the model.
+[out] = s.simulate(tspan,x0,p,opt);
 
+% Result of the simulation.
 out
 
+% Create an ode function of the model.
 s.createOdeFunction();
+
 ```
 
 ```
@@ -80,29 +91,14 @@ function [dxdt] =  modelOdeFun(t,x,p)
 % x(3,:) = x3
 % x(4,:) = ref	 % (Algebraic state)
 
-% der(x1) (No negative)
+% der(x1)
 dxdt(1,1) = p.k1-p.d1.*x(1,:)-p.gamma12.*x(1,:).*x(2,:);
 
-% Check if the state tries to be negative.
-if x(1,1) <= 0.0 && dxdt(1,1) <= 0.0
-	dxdt(1,1) = 0.0;
-end
-
-% der(x2) (No negative)
+% der(x2)
 dxdt(2,1) = -p.d2.*x(2,:)+p.k2.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
 
-% Check if the state tries to be negative.
-if x(2,1) <= 0.0 && dxdt(2,1) <= 0.0
-	dxdt(2,1) = 0.0;
-end
-
-% der(x3) (No negative)
+% der(x3)
 dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
-
-% Check if the state tries to be negative.
-if x(3,1) <= 0.0 && dxdt(3,1) <= 0.0
-	dxdt(3,1) = 0.0;
-end
 
 % der(ref) (Algebraic state)
 dxdt(4,1) = -x(4,:)+p.k3./p.d3;

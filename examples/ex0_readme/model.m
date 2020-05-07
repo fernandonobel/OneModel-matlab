@@ -4,19 +4,16 @@ classdef model < ModelClass
       s = self.newSymbol();
       s.name = 'x1';
       s.eqn = 'd_x1 ==  + k1 - gamma12*x1*x2 - d1*x1 ';
-      s.noNegative = true;
       self.addSymbol(s);
 
       s = self.newSymbol();
       s.name = 'x2';
       s.eqn = 'd_x2 ==  + k2*x3 - gamma12*x1*x2 - d2*x2 ';
-      s.noNegative = true;
       self.addSymbol(s);
 
       s = self.newSymbol();
       s.name = 'x3';
       s.eqn = 'd_x3 ==  + k3*x1 - d3*x3 ';
-      s.noNegative = true;
       self.addSymbol(s);
       
       s = self.newSymbol();

@@ -43,19 +43,16 @@ classdef model < ModelClass
       s = self.newSymbol();
       s.name = 'x1';
       s.eqn = 'd_x1 ==  + k1 - gamma12*x1*x2 - d1*x1 ';
-      s.noNegative = true;
       self.addSymbol(s);
 
       s = self.newSymbol();
       s.name = 'x2';
       s.eqn = 'd_x2 ==  + k2*x3 - gamma12*x1*x2 - d2*x2 ';
-      s.noNegative = true;
       self.addSymbol(s);
 
       s = self.newSymbol();
       s.name = 'x3';
       s.eqn = 'd_x3 ==  + k3*x1 - d3*x3 ';
-      s.noNegative = true;
       self.addSymbol(s);
       
       s = self.newSymbol();
@@ -68,8 +65,10 @@ end
 ```
 
 ``` MATLAB
+% Initialize an object of the model.
 m = model();
 
+% Display variables and equations of the model.
 m.vars
 m.eqns
 ```
@@ -97,10 +96,13 @@ ans =
 Once we have a ModelClass model it is easy to start simulating it. We need to pass a ModelClass object of our model to the SimulationClass. Then we can configure the options for the simulation (e.g. parameters of the model, initial conditions, ODE configuration, which ODE solver to use, time span, ...). And finally we can use the functions for simulating and the SimulationClass will return a struct with the results of the simulation.
 
 ``` MATLAB
+% Initialize a SimulationClass object with the model data.
 s = SimulationClass(m);
 
-t = [0 10];
+% Simulation time span.
+tspan = [0 10];
 
+% Parameters of the model.
 p.k1 = 1.0;
 p.k2 = 1.0;
 p.k3 = 1.0;
@@ -109,14 +111,18 @@ p.d1 = 1.0;
 p.d2 = 1.0;
 p.d3 = 1.0;
 
+% Intial conditions of the model.
 x0.x1 = 0.000000;
 x0.x2 = 0.000000;
 x0.x3 = 0.000000;
 
+% Options for the solver.
 opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 
-[out] = s.simulate(t,x0,p,opt);
+% Simulate the model.
+[out] = s.simulate(tspan,x0,p,opt);
 
+% Result of the simulation.
 out
 ```
 
@@ -138,8 +144,10 @@ The SimulatePlotClass simplifies the task of plotting the result of simulations.
 
 ```MATLAB
 
+% Initialize a SimulationPlotClass object with the model data.
 sp = SimulationPlotClass(m);
 
+% Plot the result of the simulation.
 sp.plotAllStates(out);
 
 ```
@@ -155,7 +163,9 @@ Work in progress.
 We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
 
 ``` MATLAB
+% Create an ode function of the model.
 s.createOdeFunction();
+
 ```
 
 
