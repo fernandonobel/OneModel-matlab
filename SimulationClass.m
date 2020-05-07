@@ -156,8 +156,8 @@ classdef SimulationClass < handle
       end
     end % noNegativeWrapper
 
-    function [] =  createDerFunction(obj,name)
-      %% CREATEDERFUNCTION Create matlab function that evaluates the ODE 
+    function [] =  createOdeFunction(obj,name)
+      %% CREATEODEFUNCTION Create a matlab function that evaluates the ODE 
       % of the model.
       %
       % param: name [char] Name of the file where the funtion is saved.

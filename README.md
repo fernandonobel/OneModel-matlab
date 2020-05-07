@@ -154,13 +154,10 @@ Work in progress.
 
 We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
 
-```MATLAB 
-
-s.createDerFunction();
-
-
-
+``` MATLAB
+s.createOdeFunction();
 ```
+
 
 ```MATLAB
 function [dxdt] =  modelOdeFun(t,x,p)

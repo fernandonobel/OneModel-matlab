@@ -35,7 +35,4 @@ sp.plotAllStates(out);
 
 %% 4. Function that evaluates the ODEs
 
-s.createDerFunction();
-
-
-
+s.createOdeFunction();
