@@ -236,10 +236,20 @@ classdef SimulationClass < handle
       for i = 1:length(obj.daeModel)
         aux=compose("%% der(%s)", char(obj.model.vars(i)));
         fprintf(fm,'%s',aux);
+
+        % Comment if it is an algebraic state.
         if obj.model.varsIsAlgebraic(i)
           aux=compose(" (Algebraic state)");
           fprintf(fm,'%s',aux);
         end
+
+        % Comment if it is an no negative state.
+        if obj.model.varsIsNoNegative(i)
+          aux=compose(" (No negative)");
+          fprintf(fm,'%s',aux);
+        end
+        
+
         fprintf(fm,'\n');
         aux=compose("dxdt(%d,1) = %s;", i, odes{i} );
         fprintf(fm,'%s',aux);

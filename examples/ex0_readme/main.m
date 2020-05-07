@@ -33,7 +33,7 @@ sp = SimulationPlotClass(m);
 
 sp.plotAllStates(out);
 
-% 4. Function that evaluates the ODEs
+%% 4. Function that evaluates the ODEs
 
 s.createDerFunction();
 

@@ -20,9 +20,11 @@ classdef (Abstract) ModelClass < handle
     varsIsAlgebraic
     % {[char]} Names of the vars of the model.
     varsName
+    % [bool] Is an no negative state?
+    varsIsNoNegative
     % [int] Index of variables that are no negative.
     varsIndexNoNegative
-    % [bool} Should var be plotted?
+    % [bool] Should var be plotted?
     varsPlot
     % [sym] Equations of the model. 
     eqns                
@@ -182,6 +184,15 @@ classdef (Abstract) ModelClass < handle
       
       out = {obj.symbols.name}.';
     end % get.varsName
+
+    function [out] =  get.varsIsNoNegative(obj)
+      %% GET.VARSNONEGATIVE Get no negative vars.
+      %
+      % return: out [bool] True if the var on that index is no negative.
+
+      out = [obj.symbols.noNegative];
+      
+    end % get.varsNoNegative
 
     function [out] =  get.varsIndexNoNegative(obj)
       %% GET.VARSINDEXNONEGATIVE Get index of no negative vars.
