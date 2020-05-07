@@ -17,11 +17,26 @@ function [dxdt] =  modelOdeFun(t,x,p)
 % der(x1) (No negative)
 dxdt(1,1) = p.k1-p.d1.*x(1,:)-p.gamma12.*x(1,:).*x(2,:);
 
+% Check if the state tries to be negative.
+if x(1,1) <= 0.0 && dxdt(1,1) <= 0.0
+	dxdt(1,1) = 0.0;
+end
+
 % der(x2) (No negative)
 dxdt(2,1) = -p.d2.*x(2,:)+p.k2.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
 
+% Check if the state tries to be negative.
+if x(2,1) <= 0.0 && dxdt(2,1) <= 0.0
+	dxdt(2,1) = 0.0;
+end
+
 % der(x3) (No negative)
 dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
+
+% Check if the state tries to be negative.
+if x(3,1) <= 0.0 && dxdt(3,1) <= 0.0
+	dxdt(3,1) = 0.0;
+end
 
 % der(ref) (Algebraic state)
 dxdt(4,1) = -x(4,:)+p.k3./p.d3;

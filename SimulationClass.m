@@ -248,11 +248,31 @@ classdef SimulationClass < handle
           aux=compose(" (No negative)");
           fprintf(fm,'%s',aux);
         end
-        
 
         fprintf(fm,'\n');
         aux=compose("dxdt(%d,1) = %s;", i, odes{i} );
         fprintf(fm,'%s',aux);
+
+        % Avoid negative states.
+        if obj.model.varsIsNoNegative(i)
+          fprintf(fm,'\n\n');
+
+          aux=compose("%% Check if the state tries to be negative.");
+          fprintf(fm,'%s\n',aux);
+
+          aux=compose("if x(%d,1) <= 0.0 && dxdt(%d,1) <= 0.0"...
+          ,i,i);
+          fprintf(fm,'%s',aux);
+
+          fprintf(fm,'\n');
+          aux=compose("dxdt(%d,1) = 0.0;"...
+          ,i);
+          fprintf(fm,'\t%s',aux);
+
+          fprintf(fm,'\n');
+          aux=compose("end");
+          fprintf(fm,'%s',aux);
+        end
 
         fprintf(fm,'\n\n');
       end
