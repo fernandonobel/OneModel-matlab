@@ -183,9 +183,9 @@ classdef SimulationClass < handle
       aux=compose("%% States");
       fprintf(fm,'%s\n',aux);
       for i = 1:length(obj.model.vars)
-        aux=compose("%% x(%d,:) = %s",i, char(obj.model.vars));
+        aux=compose("%% x(%d,:) = %s",i, char(obj.model.vars(i)));
         fprintf(fm,'%s',aux);
-        if (obj.model.vars)
+        if (obj.model.varsIsAlgebraic(i))
           aux=compose("\t %% (Algebraic state)");
           fprintf(fm,'%s',aux);
         end
@@ -202,9 +202,9 @@ classdef SimulationClass < handle
       odes = split(sf,';');
 
       for i = 1:length(obj.daeModel)
-        aux=compose("%% der(%s)", char(obj.vars(i)));
+        aux=compose("%% der(%s)", char(obj.model.vars(i)));
         fprintf(fm,'%s',aux);
-        if obj.vars_isAlgebraic(i)
+        if obj.model.varsIsAlgebraic(i)
           aux=compose(" (Algebraic state)");
           fprintf(fm,'%s',aux);
         end
