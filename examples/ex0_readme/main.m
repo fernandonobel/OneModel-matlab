@@ -50,6 +50,3 @@ sp.plotAllStates(out);
 s.createOdeFunction();
 % Create the driver script for the ode function.
 s.createDriverOdeFunction();
-
-%% 5. Simulate and plot using the driver for the ode fucntion.
-

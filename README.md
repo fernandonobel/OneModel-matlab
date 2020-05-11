@@ -28,13 +28,15 @@ Download this repository into the directory of your choice. Then within MATLAB g
 
 # General workflow
 
-ModelClass is a class that allows us to define mathematical models in a standard way. Therefore, the first step in the general workflow should be parsing the mathematical model we want to study into the ModelClass framework.
+ModelClass is a class that allows us to define mathematical models in a standard way. Therefore, the first step in the general workflow should be parsing the mathematical model we want to study into the ModelClass framework. The examples of code given in the following subsections can be found in the ./examples/ex0_readme folder.
 
 ## 1. Obtaining a ModelClass model
 
 There are multiple ways we can choose for obtaining a ModelClass model: (i) the most basic one is to write ourselves a class that extends the ModelClass and then use functions for defining the model, (ii) we can also define our model as chemical reactions and then use the parser of Jose Luis and (iii) we can extend a previous ModelClass model defined and extend it in a OpenModelica style (we can even combine different models into a single one).
 
 It is expected that in the future there be more ways of generating ModelClass models. And this is one of the advantages of using this framework, the model are easier to code than coding ODE function directly and after that we can reuse ModelClass easily.
+
+ModelClass model will look something like this (./examples/ex0_readme/main.m):
 
 ```MATLAB
 classdef model < ModelClass
@@ -63,6 +65,8 @@ classdef model < ModelClass
   end
 end
 ```
+
+and the models are initialized with the following method:
 
 ``` MATLAB
 % Initialize an object of the model.
@@ -140,7 +144,7 @@ out =
 
 ## 3. Plot simulation results
 
-The SimulatePlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
+The SimulatePlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information. This way do not need to provide it when plotting.
 
 ```MATLAB
 
@@ -157,17 +161,20 @@ sp.plotAllStates(out);
 
 ## 4. Generate an ODE function
 
-Work in progress.
+We could use ModelClass as our main workflow for working with models. However there are situations where we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us. Also it can generate a driver script that simulates using the generated ODE function (this script could be used as a start template for using the ODE function).
 
-We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
+With the following code you can generate the ODE function and the driver script:
 
 ``` MATLAB
 % Create an ode function of the model.
 s.createOdeFunction();
 % Create the driver script for the ode function.
 s.createDriverOdeFunction();
+
 ```
 
+
+, the contents of the generated ODE funtion (./examples/ex0_readme/modelOdeFun.m) are:
 
 ```MATLAB
 function [dxdt] =  modelOdeFun(t,x,p)
@@ -200,6 +207,55 @@ dxdt(4,1) = -x(4,:)+p.k3./p.d3;
 
 end
 ```
+
+and the content of the generated driver script (./examples/ex0_readme/modelDriverOdeFun.m) are:
+
+```MATLAB
+%% Driver script for simulating the ODE function modelDriverOdeFun
+
+clear all;
+close all;
+
+% Mass matrix for algebraic simulations.
+M = [
+	1	0	0	0	
+	0	1	0	0	
+	0	0	1	0	
+	0	0	0	0	
+];
+
+% Options for the solver.
+opt = odeset('AbsTol',1e-8,'RelTol',1e-8);
+opt = odeset(opt,'Mass',M);
+
+% Simulation time span.
+tspan = [0 10];
+
+% Initial condition.
+x0 = [
+	 0.0 % x1
+	 0.0 % x2
+	 0.0 % x3
+	 0.0 % ref
+];
+
+% Definition of parameters of the model.
+p.d1 = 1.0;
+p.d2 = 1.0;
+p.d3 = 1.0;
+p.gamma12 = 1.0;
+p.k1 = 1.0;
+p.k2 = 1.0;
+p.k3 = 1.0;
+
+[t,x] = ode15s(@(t,x) modelOdeFun(t,x,p), tspan, x0, opt);
+
+plot(t,x);
+legend('x1','x2','x3','ref');
+grid on;
+```
+
+Finally, we can simulate by executing the driver script.
 
 ## 5. Mathematical analysis
 

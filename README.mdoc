@@ -18,7 +18,7 @@ Download this repository into the directory of your choice. Then within MATLAB g
 
 # General workflow
 
-ModelClass is a class that allows us to define mathematical models in a standard way. Therefore, the first step in the general workflow should be parsing the mathematical model we want to study into the ModelClass framework.
+ModelClass is a class that allows us to define mathematical models in a standard way. Therefore, the first step in the general workflow should be parsing the mathematical model we want to study into the ModelClass framework. The examples of code given in the following subsections can be found in the ./examples/ex0_readme folder.
 
 ## 1. Obtaining a ModelClass model
 
@@ -26,9 +26,13 @@ There are multiple ways we can choose for obtaining a ModelClass model: (i) the 
 
 It is expected that in the future there be more ways of generating ModelClass models. And this is one of the advantages of using this framework, the model are easier to code than coding ODE function directly and after that we can reuse ModelClass easily.
 
+ModelClass model will look something like this (./examples/ex0_readme/main.m):
+
 ```MATLAB
 @[](./examples/ex0_readme/model.m)
 ```
+
+and the models are initialized with the following method:
 
 ```MATLAB exec --path ./examples/ex0_readme
 @[ini=%% 1,end=%%](./examples/ex0_readme/main.m)
@@ -44,7 +48,7 @@ Once we have a ModelClass model it is easy to start simulating it. We need to pa
 
 ## 3. Plot simulation results
 
-The SimulatePlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information and we wont need to provide it when plotting.
+The SimulatePlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information. This way do not need to provide it when plotting.
 
 ```MATLAB
 @[ini=%% 3,end=%%](./examples/ex0_readme/main.m)
@@ -56,17 +60,28 @@ The SimulatePlotClass simplifies the task of plotting the result of simulations.
 
 ## 4. Generate an ODE function
 
-Work in progress.
+We could use ModelClass as our main workflow for working with models. However there are situations where we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us. Also it can generate a driver script that simulates using the generated ODE function (this script could be used as a start template for using the ODE function).
 
-We could use ModelClass as our main workflow for working with models. However there are situations that we want to obtain a matlab ODE function (i.e. a function that calculates the derivatives of the model form the states). In this case, there is a functionality in the SimulationClass that generates the ODE function automatically for us.
+With the following code you can generate the ODE function and the driver script:
 
 ```MATLAB exec --no-echo
 @[ini=%% 4,end=%%](./examples/ex0_readme/main.m)
+
 ```
+
+, the contents of the generated ODE funtion (./examples/ex0_readme/modelOdeFun.m) are:
 
 ```MATLAB
 @[](./examples/ex0_readme/modelOdeFun.m)
 ```
+
+and the content of the generated driver script (./examples/ex0_readme/modelDriverOdeFun.m) are:
+
+```MATLAB
+@[](./examples/ex0_readme/modelDriverOdeFun.m)
+```
+
+Finally, we can simulate by executing the driver script.
 
 ## 5. Mathematical analysis
 
