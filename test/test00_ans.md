@@ -38,7 +38,8 @@ out
 
 % Create an ode function of the model.
 s.createOdeFunction();
-
+% Create the driver script for the ode function.
+s.createDriverOdeFunction();
 ```
 
 ```

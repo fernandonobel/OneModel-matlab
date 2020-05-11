@@ -1,5 +1,5 @@
 #!/bin/bash
-python3 ~/Sync/python/workspace/mdoc/mdoc.py parse test00.mdoc test00.md
+python3 ~/Sync/python/workspace/mdoc/mdoc.py parse test00.mdoc -m
 
 if diff test00.md test00_ans.md; then
   echo "Test okey!"
