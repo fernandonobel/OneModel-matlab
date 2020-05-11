@@ -1,5 +1,5 @@
 classdef SimulationClass < handle
-  %% SIMULATION This class simulates ModelClass models.
+  %% SIMULATIONCLASS This class simulates ModelClass models.
   %
 
   properties
