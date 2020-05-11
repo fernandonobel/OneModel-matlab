@@ -73,6 +73,23 @@ m.vars
 m.eqns
 ```
 
+```
+ans =
+ 
+  x1
+  x2
+  x3
+ ref
+ 
+ 
+ans =
+ 
+    d_x1 == k1 - d1*x1 - gamma12*x1*x2
+ d_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
+                 d_x3 == k3*x1 - d3*x3
+                          ref == k3/d3
+
+```
 
 ## 2. Simulate the ModelClass model
 
@@ -109,6 +126,17 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 out
 ```
 
+```
+out = 
+
+  struct with fields:
+
+      t: [154x1 double]
+     x1: [154x1 double]
+     x2: [154x1 double]
+     x3: [154x1 double]
+    ref: [154x1 double]
+```
 
 ## 3. Plot simulation results
 
@@ -136,6 +164,8 @@ We could use ModelClass as our main workflow for working with models. However th
 ``` MATLAB
 % Create an ode function of the model.
 s.createOdeFunction();
+% Create the driver script for the ode function.
+s.createDriverOdeFunction();
 ```
 
 
