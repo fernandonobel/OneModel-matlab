@@ -48,38 +48,8 @@ sp.plotAllStates(out);
 
 % Create an ode function of the model.
 s.createOdeFunction();
+% Create the driver script for the ode function.
+s.createDriverOdeFunction();
 
-%% 5. Simulate with the ode function.
+%% 5. Simulate and plot using the driver for the ode fucntion.
 
-% Options for the solver.
-opt = odeset('AbsTol',1e-8,'RelTol',1e-8);
-
-% In DAE simualtions, the mass matrix is needed.
-opt = odeset(opt,'Mass',s.massMatrix);
-
-% Simulation time span.
-tspan = [0 10]; 
-
-% Initial condition for the model.
-x0 = [0 0 0 0];
-
-% Simulate using the ode15s and using previous defined parameters.
-[t,x] = ode15s(@(t,x) modelOdeFun(t,x,p), tspan, x0, opt);
-
-% Final value of the states.
-x(end,:)
-
-%% 6. Plot simulation result of the ode function.
-
-% Plot the simulation result  on top of the previous one. 
-subplot(2,2,1);
-plot(t,x(:,1));
-
-subplot(2,2,2);
-plot(t,x(:,2));
-
-subplot(2,2,3);
-plot(t,x(:,3));
-
-subplot(2,2,4);
-plot(t,x(:,4));

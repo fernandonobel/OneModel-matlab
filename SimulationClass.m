@@ -278,7 +278,135 @@ classdef SimulationClass < handle
       end
 
       fprintf(fm,"end");
-    end % createDerFunction
+    end % createOdeFunction
+
+    function [] =  createDriverOdeFunction(obj,name)
+      %% CREATEDRIVERODEFUNCTION  Creates a driver script for simulating the ODE
+      % function.
+      %
+      % param: name [char] Name of the driver for the der function.
+      %
+      % return: void
+
+      if nargin < 2
+        name = [class(obj.model) 'DriverOdeFun'];
+      end
+
+      % Open driver file.
+      fm = fopen([name, '.m'],'w');
+
+      % Scrit main comment.
+      aux=compose(...
+        "%%%% Driver script for simulating the ODE function %s", ...
+        name);
+      fprintf(fm,'%s\n',aux);
+      
+      fprintf(fm,'\n',aux);
+
+      fprintf(fm,'clear all;\n',aux);
+      fprintf(fm,'close all;\n\n');
+
+      % Define mass matrix.
+      aux=compose(...
+        "%% Mass matrix for algebraic simulations."...
+        );
+      fprintf(fm,'%s\n',aux);
+
+      aux=compose(...
+        "M = ["...
+        );
+      fprintf(fm,'%s\n',aux);
+
+      for i = 1:size(obj.massMatrix,1)
+          fprintf(fm,'\t');
+          fprintf(fm,'%g\t',obj.massMatrix(i,:));
+          fprintf(fm,'\n');
+      end
+
+      aux=compose(...
+        "];"...
+        );
+      fprintf(fm,'%s\n',aux);
+
+      fprintf(fm,'\n',aux);
+
+      % Options for the solver.
+      aux=compose(...
+        "%% Options for the solver.\nopt = odeset('AbsTol',1e-8,'RelTol',1e-8);"...
+        );
+      fprintf(fm,'%s\n',aux);
+
+      % In DAE simualtions, the mass matrix is needed.
+      aux=compose(...
+        "opt = odeset(opt,'Mass',M);"...
+        );
+      fprintf(fm,'%s\n',aux);
+
+      fprintf(fm,'\n',aux);
+
+      % Simulation time span.
+      fprintf(fm,'%% Simulation time span.\n',aux);
+      aux=compose(...
+        "tspan = [0 10];"...
+        );
+      fprintf(fm,'%s\n\n',aux);
+
+      % Initial condition for the model.
+      fprintf(fm,'%% Initial condition.\n',aux);
+      fprintf(fm,'x0 = [\n',aux);
+
+      for i = 1:length(obj.model.vars)
+        aux=compose(...
+          "\t 0.0 %% %s",...
+          char(obj.model.vars(i)));
+        fprintf(fm,'%s\n',aux);
+      end
+
+      fprintf(fm,'];\n\n',aux);
+
+      % Paremeters definition.
+      fprintf(fm,'%% Definition of parameters of the model.\n',aux);
+
+      params = obj.model.params;
+      for i = 1:length(params)
+        aux=compose(...
+          "p.%s = 1.0;",...
+          char(params(i)));
+        fprintf(fm,'%s\n',aux);
+      end
+
+      fprintf(fm,'\n',aux);
+
+      % Simulate using the ode15s and using previous defined parameters.
+      aux=compose(...
+        "[t,x] = ode15s(@(t,x) modelOdeFun(t,x,p), tspan, x0, opt);"...
+        );
+      fprintf(fm,'%s\n',aux);
+
+      fprintf(fm,'\n',aux);
+
+      % Plot the result of the simulation.
+      fprintf(fm,'plot(t,x);\n');
+
+      % Plot a legend.
+      fprintf(fm,'legend(');
+
+      aux=compose(...
+        "'%s'",...
+        char(obj.model.vars(1)));
+      fprintf(fm,'%s',aux);
+
+      for i = 2:length(obj.model.vars)
+        aux=compose(...
+          ",'%s'",...
+          char(obj.model.vars(i)));
+        fprintf(fm,'%s',aux);
+      end
+
+      fprintf(fm,');\n');
+      fprintf(fm,'grid on;\n');
+
+    end % createDriverOdeFunction
 
     function [out] =  get.daeModel(obj)
       %% GET.DAEMODEL Get DAE model.
