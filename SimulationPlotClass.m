@@ -39,17 +39,18 @@ classdef SimulationPlotClass < handle
       plot(out.t, out.(name));
       grid on;
       set(groot,'DefaultTextInterpreter','latex');
-
-      i = obj.model.getSymbolIndex(name);
-      if i >= 0
-        xlim(obj.model.symbols(i).xlim);
-        ylim(obj.model.symbols(i).ylim);
-        xlabel(obj.model.symbols(i).xlabel);
-        ylabel(obj.model.symbols(i).ylabel);
-        title(obj.model.symbols(i).title);
-      else
-        title(name);
-      end
+      
+      % TODO:  recover this functionality.
+%       i = obj.model.getSymbolIndex(name);
+%       if i >= 0
+%         xlim(obj.model.symbols(i).xlim);
+%         ylim(obj.model.symbols(i).ylim);
+%         xlabel(obj.model.symbols(i).xlabel);
+%         ylabel(obj.model.symbols(i).ylabel);
+%         title(obj.model.symbols(i).title);
+%       else
+%         title(name);
+%       end
     end % plotState
 
 
@@ -126,11 +127,11 @@ classdef SimulationPlotClass < handle
 
       obj.plotNames = cellNames;
 
-      for i = 1:length(obj.model.symbols)
-        if ischar(obj.model.symbols(i).plot)
+      for i = 1:length(obj.model.variables)
+        if ischar(obj.model.variables(i).isPlot)
           try
-            obj.selectSubplotByName(obj.model.symbols(i).plot);
-            plot(out.t, out.(obj.model.symbols(i).name));
+            obj.selectSubplotByName(obj.model.variables(i).isPlot);
+            plot(out.t, out.(obj.model.variables(i).string));
           catch
           end
         end

@@ -147,7 +147,7 @@ classdef (Abstract) ModelClass < handle
 
       out = [];
 
-      for i = 1:length(obj.symbols)
+      for i = 1:length(obj.variables)
         if obj.variables(i).isNoNegative == true
           out(end+1) = i;
         end

@@ -26,8 +26,6 @@ classdef SymbolClass < handle
       %
       % return: out bool True if it is well configured.
 
-      1+1
-
       % TODO: Check if the name of the state is already used.
       
     end % checkSymbol
