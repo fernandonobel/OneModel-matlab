@@ -12,18 +12,14 @@ function [dxdt] =  modelOdeFun(t,x,p)
 % x(1,:) = x1
 % x(2,:) = x2
 % x(3,:) = x3
-% x(4,:) = ref	 % (Algebraic state)
 
 % der(x1)
-dxdt(1,1) = p.k1-p.d1.*x(1,:)-p.gamma12.*x(1,:).*x(2,:);
+dxdt(1,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
 
 % der(x2)
-dxdt(2,1) = -p.d2.*x(2,:)+p.k2.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
+dxdt(2,1) = p.k1-p.d1.*x(1,:)-p.gamma12.*x(1,:).*x(2,:);
 
 % der(x3)
-dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
-
-% der(ref) (Algebraic state)
-dxdt(4,1) = -x(4,:)+p.k3./p.d3;
+dxdt(3,1) = -p.d2.*x(2,:)+p.k2.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
 
 end

@@ -9,7 +9,12 @@ classdef (Abstract) ModelClass < handle
   % your models will have these utilities.
 
   properties
-
+    % [VariableClass] Array with all the variables of the model.
+    variables
+    % [ParameterClass] Array with all the parameters of the model.
+    parameters
+    % [EquationClass] Array with all the equationf of the model.
+    equations
   end % properties
 
   % Model data.
@@ -55,6 +60,49 @@ classdef (Abstract) ModelClass < handle
 
   %% Symbol manipulation.
   methods
+    function [] =  addVariable(obj,v)
+      %% ADDVARIABLE Add a variable to the model.
+      %
+      % param: v Variable to include.
+      %
+      % return: void
+
+      if isempty(obj.variables)
+        obj.variables = v;
+      else
+        obj.variables(end+1) = v;
+      end
+    end % addVariable
+
+    function [] =  addParameter(obj,p)
+      %% ADDVARIABLE Add a parameter to the model.
+      %
+      % param: p Parameter to include.
+      %
+      % return: void
+
+      if isempty(obj.parameters)
+        obj.parameters = p;
+      else
+        obj.parameters(end+1) = p;
+      end
+    end % addParameter
+
+    function [] =  addEquation(obj,e)
+      %% ADDVARIABLE Add an equation to the model.
+      %
+      % param: e Equation to include.
+      %
+      % return: void
+
+      if isempty(obj.equations)
+        obj.equations = e;
+      else
+        obj.equations(end+1) = e;
+      end
+    end % addEquation
+
+
     function [s] =  newSymbol(~)
       %% NEWSYMBOL Create a default new symbol.
       %
@@ -86,6 +134,7 @@ classdef (Abstract) ModelClass < handle
         obj.symbols(end+1) = s;
       end
     end % addSymbol
+
 
     function [s] =  checkSymbol(obj,s)
       %% CHECKSYMBOL Check that the symbol is well configured.
@@ -164,7 +213,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic varibles array.
 
-      out = str2sym({obj.symbols.name}).';
+      out = [obj.variables.sym].';
     end % get.vars
 
     function [out] =  get.varsIsAlgebraic(obj)
@@ -174,7 +223,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Boolean array.
 
-      out = [obj.symbols.isAlgebraic].';
+      out = [obj.variables.isAlgebraic].';
     end % get.varsIsAlgebraic
 
     function [out] =  get.varsName(obj)
@@ -182,7 +231,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out {[char]} Names of the vars of the model.
       
-      out = {obj.symbols.name}.';
+      out = {obj.variables.string}.';
     end % get.varsName
 
     function [out] =  get.varsIsNoNegative(obj)
@@ -190,7 +239,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out [bool] True if the var on that index is no negative.
 
-      out = [obj.symbols.noNegative];
+      out = [obj.variables.isNoNegative];
       
     end % get.varsNoNegative
 
@@ -202,7 +251,7 @@ classdef (Abstract) ModelClass < handle
       out = [];
 
       for i = 1:length(obj.symbols)
-        if obj.symbols(i).noNegative == true
+        if obj.variables(i).isNoNegative == true
           out(end+1) = i;
         end
       end
@@ -215,7 +264,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out [bool] varsPlot.
 
-      out  = [obj.symbols.plot];
+      out  = [obj.variables.isPlot];
     end % get.varsPlot
 
     function [out] =  get.eqns(obj)
@@ -223,7 +272,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic equations array.
 
-      out = str2sym({obj.symbols.eqn}).';
+      out = [obj.equations.sym].';
     end % get.eqns
 
 
@@ -232,13 +281,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Simbolic left part of equations.
 
-      ind_equal = cellfun(@(x) strfind(x,'='),...
-        {obj.symbols.eqn},'Uni',0);
-
-      out = cellfun(@(x,y) x(1:y(1)-1),...
-        {obj.symbols.eqn},ind_equal,'Uni',0);
-
-      out = str2sym(out).';
+      out = [obj.equations.left];
     end % get.eqnsLeft
 
     function [out] =  get.eqnsRight(obj)
@@ -246,13 +289,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Simbolic right part of equations.
 
-      ind_equal = cellfun(@(x) strfind(x,'='),...
-        {obj.symbols.eqn},'Uni',false);
-
-      out = cellfun(@(x,y) x(y(2)+1:end),...
-        {obj.symbols.eqn},ind_equal,'Uni',false);
-
-      out = str2sym(out).';
+      out = [obj.equations.right];
     end % get.eqnsRight
 
     function [out] =  get.ders(obj)
@@ -261,7 +298,7 @@ classdef (Abstract) ModelClass < handle
       % return: out Symbolic derivatives.
 
       out = cellfun(@(x) sym(['d_' x]),...
-        {obj.symbols([obj.symbols.isAlgebraic]==false).name}...
+        {obj.variables.string}...
         ,'Uni',false);
       out = [out{:}];
     end % get.ders
@@ -272,47 +309,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic parameters array.
 
-      out = sym([]);
-
-      % Init model params
-      aux = '';
-      for i = 1:length(obj.symbols)
-        aux = [aux char(obj.eqns(i)) ' '];
-      end
-
-      ind = false(size(aux));
-      % Search for everything but words.
-      % Words cannot start with a number but they can contain numbers.
-      ind(regexp(aux,'\W|(?<=[0-9])[a-zA-Z]')) = true;
-      aux(ind)= ' ';
-      % Remove numbers that follow an empty space.
-      while 1
-        ind_old = ind;
-        ind(regexp(aux,'(?<=\s)\d')) = true;
-        aux(ind)= ' ';
-        if ~sum(ind ~= ind_old)
-          break;
-        end
-      end
-      aux = split(aux);
-      aux = sort(aux);
-
-      [~,idx]=unique(  strcat(aux(:)) );
-      aux = aux(idx,:); % List of string of all symbolic params.
-
-      % Remove vars from the list.
-      ind = ismember(aux,arrayfun(@char, obj.vars, 'uniform', 0));
-      aux = aux(~ind);
-      % Remove ders form the list.
-      ind = ismember(aux,arrayfun(@char, obj.ders, 'uniform', 0));
-      aux = aux(~ind);
-      % Remove void.
-      ind = ismember(aux,'');
-      aux = aux(~ind);
-
-      for i = 1:length(aux)
-        out(i) = str2sym(aux{i});
-      end
+      out = [obj.parameters.sym];
     end % get.params
 
   end % methods
