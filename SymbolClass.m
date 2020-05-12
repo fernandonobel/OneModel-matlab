@@ -21,6 +21,16 @@ classdef SymbolClass < handle
       
     end % SymbolClass
 
+    function [out] =  checkSymbol(obj)
+      %% CHECKSYMBOL Check that the symbol is well configured.
+      %
+      % return: out bool True if it is well configured.
+
+      1+1
+
+      % TODO: Check if the name of the state is already used.
+      
+    end % checkSymbol
     	
   end % methods
   

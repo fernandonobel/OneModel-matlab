@@ -8,15 +8,6 @@ classdef (Abstract) ModelClass < handle
   % having to code less, it is easier to maintain ODE models and all 
   % your models will have these utilities.
 
-  properties
-    % [VariableClass] Array with all the variables of the model.
-    variables
-    % [ParameterClass] Array with all the parameters of the model.
-    parameters
-    % [EquationClass] Array with all the equationf of the model.
-    equations
-  end % properties
-
   % Model data.
   properties (Dependent)
     % [sym] Variables of the model.      
@@ -44,8 +35,12 @@ classdef (Abstract) ModelClass < handle
   end % propierties (Dependent)
 
   properties % (Access = private)
-    % Array with structs with all the information of the model.
-    symbols             
+    % [VariableClass] Array with all the variables of the model.
+    variables
+    % [ParameterClass] Array with all the parameters of the model.
+    parameters
+    % [EquationClass] Array with all the equationf of the model.
+    equations
   end % Propierties (Access = private)
 
   %% Contructors
@@ -67,6 +62,8 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
 
+      v.checkSymbol();
+
       if isempty(obj.variables)
         obj.variables = v;
       else
@@ -80,6 +77,8 @@ classdef (Abstract) ModelClass < handle
       % param: p Parameter to include.
       %
       % return: void
+
+      p.checkSymbol();
 
       if isempty(obj.parameters)
         obj.parameters = p;
@@ -101,108 +100,6 @@ classdef (Abstract) ModelClass < handle
         obj.equations(end+1) = e;
       end
     end % addEquation
-
-
-    function [s] =  newSymbol(~)
-      %% NEWSYMBOL Create a default new symbol.
-      %
-      % return: s Default new symbol.
-
-      s.name = '';
-      s.eqn = '';
-      s.isAlgebraic = false;
-      s.xlim = [-inf inf];
-      s.ylim = [-inf inf];
-      s.xlabel = 'Time [t]';
-      s.ylabel = '[a.u.]';
-      s.title = '';
-      s.noNegative = false;
-      s.plot = true;
-      s.name_tex = ''; % Name for LaTeX generation.
-    end % newSymbol
-
-    function [] =  addSymbol(obj,s)
-      %% ADDSYMBOL Add a symbol to the model.
-      %
-      % param: s Symbol to add.
-
-      s = obj.checkSymbol(s);
-
-      if isempty(obj.symbols)
-        obj.symbols = s;
-      else
-        obj.symbols(end+1) = s;
-      end
-    end % addSymbol
-
-
-    function [s] =  checkSymbol(obj,s)
-      %% CHECKSYMBOL Check that the symbol is well configured.
-      %
-      % param: s Symbol to check.
-      % 
-      % return: s Symbol checked.
-
-      % If state does not have a title, just use the name for the
-      % title.
-      if strcmp(s.title,'')
-        s.title = s.name;
-      end
-
-      % If state does not have a name_tex, just use the name for the
-      % name_tex.
-      if strcmp(s.name_tex,'')
-        s.name_tex = s.name;
-      end
-
-      % Check if the name of the state is already used.
-      if obj.getSymbolIndex(s.name) ~= -1
-        error(['Error: Symbol name "' s.name 
-        '" is already used. Change the name of one of the symbols.']);
-      end
-
-      % Check is the state is algebraic.
-      if isempty(strfind(s.eqn,['d_' s.name]))
-        s.isAlgebraic = true;
-      end
-    end % checkSymbol
-
-    function [ind] =  getSymbolIndex(obj,name)
-      %% GETSYMBOLINDEX Get the index of a symbol by its name.
-      % Return -1 if symbol not found.
-      %
-      % param: name Name of the symbol.
-      %
-      % return: ind Index of the symbol.
-
-      for i = 1:length(obj.symbols)
-        if strcmp(obj.symbols(i).name,name)
-          ind = i;
-          return;
-        end
-      end
-      ind = -1;
-    end % getSymbolIndex
-
-    function [s] =  getSymbol(obj,name)
-      %% GETSYMBOL Get a symbol by its name.
-      %
-      % param: name Name of the symbol.
-      %
-      % return: s Symbol found.
-
-      ind = obj.GetSymbolIndex(name);
-      s = obj.symbols(ind);
-    end % getSymbol
-
-    function [] =  updateSymbol(obj,s)
-      %% UPDATESYMBOL Update the information of a symbol.
-      %
-      % param: s Symbol with the updated information.
-
-      ind = obj.GetSymbolIndex(s.name);
-      obj.symbols(ind) = s;
-    end % updateSymbol
 
   end % methods
 

@@ -9,6 +9,18 @@ classdef VariableClass < SymbolClass
     isNoNegative
     % plot Should the variable be plot?
     isPlot
+    % [Real Real] x-limits for plotting.
+    xlim
+    % [Real Real] y-limits for plotting.
+    ylim
+    % [char] Label for the x axis.
+    xlabel
+    % [char] Label for teh y axis.
+    ylabel
+    % [char] Title used for plotting.
+    title
+    % [char] Name for LaTeX generation.
+    nameTex
   end % properties
 
   methods 
@@ -24,6 +36,25 @@ classdef VariableClass < SymbolClass
       obj.isPlot = true;
       
     end % VariableClass
+
+    function [out] =  checkSymbol(obj)
+      %% CHECKSYMBOL Check that the symbol is well configured.
+      %
+      % return: out bool True if it is well configured.
+
+      obj.checkSymbol@SymbolClass();
+
+      % If state does not have a title, just use the name for the title.
+      if strcmp(obj.title,'')
+        obj.title = obj.string;
+      end
+
+      % If state does not have a nameTex, just use the name for the nameTex.
+      if strcmp(obj.nameTex,'')
+        obj.nameTex = obj.string;
+      end
+
+    end % checkSymbol
     	
   end % methods
   
