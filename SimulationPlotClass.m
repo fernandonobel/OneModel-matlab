@@ -131,7 +131,7 @@ classdef SimulationPlotClass < handle
         if ischar(obj.model.variables(i).isPlot)
           try
             obj.selectSubplotByName(obj.model.variables(i).isPlot);
-            plot(out.t, out.(obj.model.variables(i).string));
+            plot(out.t, out.(obj.model.variables(i).name));
           catch
           end
         end

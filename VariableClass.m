@@ -44,7 +44,7 @@ classdef VariableClass < SymbolClass
 
       % If state does not have a title, just use the name for the title.
       if strcmp(obj.title,'')
-        obj.title = obj.string;
+        obj.title = obj.name;
       end
 
     end % checkSymbol

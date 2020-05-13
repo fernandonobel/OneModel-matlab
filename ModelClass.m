@@ -110,7 +110,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic varibles array.
 
-      out = [obj.variables.sym].';
+      out = [obj.variables.nameSym].';
     end % get.vars
 
     function [out] =  get.varsIsAlgebraic(obj)
@@ -128,7 +128,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out {[char]} Names of the vars of the model.
       
-      out = {obj.variables.string}.';
+      out = {obj.variables.name}.';
     end % get.varsName
 
     function [out] =  get.varsIsNoNegative(obj)
@@ -169,7 +169,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic equations array.
 
-      out = [obj.equations.sym].';
+      out = [obj.equations.nameSym].';
     end % get.eqns
 
 
@@ -195,7 +195,7 @@ classdef (Abstract) ModelClass < handle
       % return: out Symbolic derivatives.
 
       out = cellfun(@(x) sym(['d_' x]),...
-        {obj.variables.string}...
+        {obj.variables.name}...
         ,'Uni',false);
       out = [out{:}];
     end % get.ders
@@ -206,7 +206,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic parameters array.
 
-      out = [obj.parameters.sym];
+      out = [obj.parameters.nameSym];
     end % get.params
 
   end % methods

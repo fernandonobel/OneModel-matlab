@@ -4,9 +4,9 @@ classdef SymbolClass < handle
   
   properties
     % [char] String with the name of the symbol.
-    string
+    name
     % sym Symbolic name used for manipulating the symbol in equations.
-    sym
+    nameSym
     % [char] Name for LaTeX generation.
     nameTex
   end % properties
@@ -18,12 +18,12 @@ classdef SymbolClass < handle
       %
       % param: name Name of the symbol. 
 
-      obj.string = name;
-      obj.sym = str2sym(name);
+      obj.name = name;
+      obj.nameSym = str2sym(name);
       
       % If state does not have a nameTex, just use the name for the nameTex.
       if strcmp(obj.nameTex,'')
-        obj.nameTex = obj.string;
+        obj.nameTex = obj.name;
       end
 
     end % SymbolClass
