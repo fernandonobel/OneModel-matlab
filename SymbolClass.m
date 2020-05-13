@@ -24,15 +24,6 @@ classdef SymbolClass < handle
 
     end % SymbolClass
 
-    function [out] =  checkSymbol(obj)
-      %% CHECKSYMBOL Check that the symbol is well configured.
-      %
-      % return: out bool True if it is well configured.
-
-      % TODO: Check if the name of the state is already used.
-      
-    end % checkSymbol
-
     function [] =  set.name(obj,name)
       %% SET.NAME Set interface for name propierty.
       %

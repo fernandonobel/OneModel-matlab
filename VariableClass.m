@@ -36,23 +36,9 @@ classdef VariableClass < SymbolClass
       obj.ylim = [-inf inf];
       obj.xlabel = '';
       obj.ylabel = '';
-      obj.title = '';
+      obj.title = obj.name
       
     end % VariableClass
-
-    function [out] =  checkSymbol(obj)
-      %% CHECKSYMBOL Check that the symbol is well configured.
-      %
-      % return: out bool True if it is well configured.
-
-      obj.checkSymbol@SymbolClass();
-
-      % If state does not have a title, just use the name for the title.
-      if strcmp(obj.title,'')
-        obj.title = obj.name;
-      end
-
-    end % checkSymbol
     	
   end % methods
   
