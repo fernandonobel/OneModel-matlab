@@ -23,8 +23,8 @@ classdef EquationClass < handle
       %
       % param: eqn [char] String with the equation.
 
-      obj.nameSym = str2sym(eqn);
       obj.name = eqn;
+      obj.nameSym = str2sym(eqn);
 
     end % EquationClass
 
