@@ -5,9 +5,10 @@ close all;
 
 % Mass matrix for algebraic simulations.
 M = [
-	1	0	0	
-	0	1	0	
-	0	0	1	
+	1	0	0	0	
+	0	1	0	0	
+	0	0	1	0	
+	0	0	0	0	
 ];
 
 % Options for the solver.
@@ -22,6 +23,7 @@ x0 = [
 	 0.0 % x1
 	 0.0 % x2
 	 0.0 % x3
+	 0.0 % ref
 ];
 
 % Definition of parameters of the model.
@@ -36,5 +38,5 @@ p.gamma12 = 1.0;
 [t,x] = ode15s(@(t,x) modelOdeFun(t,x,p), tspan, x0, opt);
 
 plot(t,x);
-legend('x1','x2','x3');
+legend('x1','x2','x3','ref');
 grid on;
