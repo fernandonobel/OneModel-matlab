@@ -39,6 +39,81 @@ classdef VariableClass < SymbolClass
       obj.title = obj.name
       
     end % VariableClass
+
+    function [] =  set.isAlgebraic(obj,isAlgebraic)
+      %% SET.ISALGEBRAIC Set interface for isAlgebraic propierty.
+      %
+      % param: isAlgebraic
+      %
+      % return: void
+
+      if ~islogical(isAlgebraic)
+        error('ERROR: isAlgebraic must be logical.');
+      end
+
+      obj.isAlgebraic = isAlgebraic;
+      
+    end % set.isAlgebraic
+
+    function [] =  set.isNoNegative(obj,isNoNegative)
+      %% SET.ISNONEGATIVE Set interface for isNoNegative propierty.
+      %
+      % param: isNoNegative
+      %
+      % return: void
+      
+      if ~islogical(isNoNegative)
+        error('ERROR: isNoNegative must be logical.');
+      end
+
+      obj.isNoNegative = isNoNegative;
+      
+    end % set.isNoNegative
+
+    function [] =  set.isPlot(obj,isPlot)
+      %% SET.ISPLOT Set interface for isPlot propierty.
+      %
+      % param: isPlot
+      %
+      % return: void
+
+      if ~islogical(isPlot);
+        error('ERROR: isPlot must be logical');
+      end
+
+      obj.isPlot = isPlot;
+      
+    end % set.isPlot
+
+    function [] =  set.xlim(obj,xlim)
+      %% SET.XLIM Set interface for xlim propierty.
+      %
+      % param: xlim
+      %
+      % return: void
+
+      if ~isnumeric(xlim) || sum((size(xlim) ~= [1 2]))
+        error('ERROR: xlim must be numeric and [1 2] size');
+      end
+      
+      obj.xlim = xlim;
+      
+    end % set.xlim
+
+    function [] =  set.ylim(obj,ylim)
+      %% SET.YLIM Set interface for ylim propierty.
+      %
+      % param: ylim
+      %
+      % return: void
+
+      if ~isnumeric(ylim) || sum((size(ylim) ~= [1 2]))
+        error('ERROR: ylim must be numeric and [1 2] size');
+      end
+      
+      obj.ylim = ylim;
+      
+    end % set.ylim
     	
   end % methods
   

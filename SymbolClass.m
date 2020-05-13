@@ -20,7 +20,7 @@ classdef SymbolClass < handle
 
       obj.name = name;
       obj.nameSym = sym(name);
-      obj.nameTex = sym(nameTex);
+      obj.nameTex = name;
 
     end % SymbolClass
 
