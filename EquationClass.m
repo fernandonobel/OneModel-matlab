@@ -3,10 +3,10 @@ classdef EquationClass < handle
   %
 
   properties
-    % [sym] Simbolic equation.
-    nameSym
     % [char] Char array equation.
     name
+    % [sym] Simbolic equation.
+    nameSym
   end % properties
 
   properties (Dependent)
