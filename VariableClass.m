@@ -32,6 +32,11 @@ classdef VariableClass < SymbolClass
       obj.isAlgebraic = false;
       obj.isNoNegative = false;
       obj.isPlot = true;
+      obj.xlim = [-inf inf];
+      obj.ylim = [-inf inf];
+      obj.xlabel = '';
+      obj.ylabel = '';
+      obj.title = '';
       
     end % VariableClass
 
