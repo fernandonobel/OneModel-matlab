@@ -19,8 +19,6 @@ classdef VariableClass < SymbolClass
     ylabel
     % [char] Title used for plotting.
     title
-    % [char] Name for LaTeX generation.
-    nameTex
   end % properties
 
   methods 
@@ -47,11 +45,6 @@ classdef VariableClass < SymbolClass
       % If state does not have a title, just use the name for the title.
       if strcmp(obj.title,'')
         obj.title = obj.string;
-      end
-
-      % If state does not have a nameTex, just use the name for the nameTex.
-      if strcmp(obj.nameTex,'')
-        obj.nameTex = obj.string;
       end
 
     end % checkSymbol
