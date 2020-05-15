@@ -40,6 +40,32 @@ classdef EquationClass < handle
       out = str2sym(out).';
     end % get.left
 
+    function [out] =  getFreeVars(obj,knownVars)
+      %% GETFREEVARS Return variables that are free in the equation.
+      %
+      % param: knownVars [sym] Array with known vars.
+      %
+      % return: out [sym] Free vars in the equation.
+
+      vars = symvar(obj.nameSym);
+
+      out = sym([]);
+
+      for i = 1:length(vars)
+        isFree = true;
+        for j = 1:length(knownVars)
+          if vars(i) == knownVars(j)
+            isFree = false;
+            break;
+          end
+        end
+        if isFree
+          out(end+1) = vars(i);
+        end
+      end
+      
+    end % getFreeVars
+
     function [out] =  get.right(obj)
       %% GET.RIGHT Get right equal part of the equation.
       %

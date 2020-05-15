@@ -62,8 +62,6 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
 
-      v.checkSymbol();
-
       if isempty(obj.variables)
         obj.variables = v;
       else
@@ -77,8 +75,6 @@ classdef (Abstract) ModelClass < handle
       % param: p Parameter to include.
       %
       % return: void
-
-      p.checkSymbol();
 
       if isempty(obj.parameters)
         obj.parameters = p;
