@@ -14,6 +14,10 @@ classdef EquationClass < handle
     left
     % [right] Right part of the equation.
     right 
+    % [sym] Variables of the equation.
+    vars
+    % [sym] Derivatives variables in the equation.
+    ders
   end % properties (Dependent)
 
   methods 
@@ -28,18 +32,6 @@ classdef EquationClass < handle
 
     end % EquationClass
 
-    function [out] =  get.left(obj)
-      %% GET.LEFT Get left equal part of the equation.
-      %
-      % return: out Simbolic left part of the equation.
-
-      ind_equal = strfind(obj.name,'=');
-
-      out = obj.name(1:ind_equal(1)-1);
-
-      out = str2sym(out).';
-    end % get.left
-
     function [out] =  getFreeVars(obj,knownVars)
       %% GETFREEVARS Return variables that are free in the equation.
       %
@@ -47,7 +39,7 @@ classdef EquationClass < handle
       %
       % return: out [sym] Free vars in the equation.
 
-      vars = symvar(obj.nameSym);
+      vars = obj.vars;
 
       out = sym([]);
 
@@ -66,6 +58,18 @@ classdef EquationClass < handle
       
     end % getFreeVars
 
+    function [out] =  get.left(obj)
+      %% GET.LEFT Get left equal part of the equation.
+      %
+      % return: out Simbolic left part of the equation.
+
+      ind_equal = strfind(obj.name,'=');
+
+      out = obj.name(1:ind_equal(1)-1);
+
+      out = str2sym(out).';
+    end % get.left
+
     function [out] =  get.right(obj)
       %% GET.RIGHT Get right equal part of the equation.
       %
@@ -77,6 +81,35 @@ classdef EquationClass < handle
 
       out = str2sym(out).';
     end % get.right
+
+    function [out] = get.vars(obj)
+      %% GET.VARS Variables of the equation.
+      %
+      % return: out [sym] Variables of the equation.
+
+      out = symvar(obj.nameSym);
+      
+    end % get.vars
+
+    function [out] = get.ders(obj)
+      %% GET.DERS Get the variables that have a derivative in the equation.
+      %
+      % return: out Derivative variables.
+
+      vars = obj.vars;
+
+      expression = 'd_(\w*)';
+
+      out = sym([]);
+      for i = 1:length(vars)
+        [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
+        if ~isempty(tokens)
+          out(end+1) = sym(tokens{1});
+          matches
+        end
+      end
+
+    end % get.ders
 
   end % methods
 
