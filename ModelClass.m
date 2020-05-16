@@ -165,7 +165,64 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic equations array.
 
-      out = [obj.equations.nameSym].';
+      % It is necessay to order the eqns to math the order of the vars. This way
+      % the process of simualtion is simplified a lot.
+
+      % The number of free variables must match the number of equations.
+      if length(obj.variables) ~= length(obj.equations)
+        error('ERROR: The number of free variables of the model does not match the number of equations');
+      end
+
+      % Index to match each equation to its corresponding free variable.
+      eqnIndex = zeros(size(obj.variables));
+      % Index to match each variable to its corresponding equations.
+      varIndex = zeros(size(obj.variables));
+
+      % First match equations with derivatives to the corresponding free
+      % variable.
+      for i = 1:length(obj.equations)
+        ders = obj.equations(i).ders;
+
+        if isempty(ders)
+          continue;
+        end
+
+        for j = 1:length(obj.variables)
+          if strcmp(char(ders),obj.variables(j).name)
+            eqnIndex(i) = j;
+            varIndex(j) = i;
+          end
+        end
+
+      end
+
+      % Then match the algebraic equation with the remaining freeVariables.
+      knownVars = [obj.parameters.nameSym obj.variables(eqnIndex(eqnIndex>0)).nameSym];
+
+      for i = 1:length(obj.equations)
+        % If the equation has an index, skip it.
+        if eqnIndex(i) > 0
+          continue
+        end
+        
+        % Check the number of free variables in the equantion.
+        eqnVars = obj.equations(i).vars;
+        eqnVars = eqnVars(~ismember(eqnVars,knownVars));
+
+        % If there is only one free var.
+        if length(eqnVars) == 1
+          % We have a match!
+          eqnIndex(i) = find(ismember([obj.variables.nameSym],[eqnVars]));
+          varIndex(find(ismember([obj.variables.nameSym],[eqnVars]))) = i;
+          % And add the var to known vars.
+          knownVars(end+1) = eqnVars;
+        end
+
+      end
+
+      varIndex
+
+      out = [obj.equations(varIndex).nameSym].';
     end % get.eqns
 
 

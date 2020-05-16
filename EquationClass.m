@@ -105,7 +105,7 @@ classdef EquationClass < handle
         [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
         if ~isempty(tokens)
           out(end+1) = sym(tokens{1});
-          matches
+          matches;
         end
       end
 

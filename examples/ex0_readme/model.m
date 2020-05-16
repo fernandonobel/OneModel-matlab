@@ -38,6 +38,9 @@ classdef model < ModelClass
             self.addParameter(p);
 
             % Equations
+            e = EquationClass('ref ==  k3/d3');
+            self.addEquation(e);
+            
             e = EquationClass('d_x1 ==  + k1 - gamma12*x1*x2 - d1*x1');
             self.addEquation(e);
 
@@ -47,8 +50,7 @@ classdef model < ModelClass
             e = EquationClass('d_x3 ==  + k3*x1 - d3*x3');
             self.addEquation(e);
 
-            e = EquationClass('ref ==  k3/d3');
-            self.addEquation(e);
+
 
         end
     end
