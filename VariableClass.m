@@ -36,7 +36,7 @@ classdef VariableClass < SymbolClass
       obj.ylim = [-inf inf];
       obj.xlabel = '';
       obj.ylabel = '';
-      obj.title = obj.name
+      obj.title = obj.name;
       
     end % VariableClass
 
