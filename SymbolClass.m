@@ -32,7 +32,7 @@ classdef SymbolClass < handle
       % return: void
 
       if ~isstring(name) && ~ischar(name)
-        error('ERROR: name must be a string.');
+        error('name must be a string.');
       end
 
       obj.name = name;
@@ -47,7 +47,7 @@ classdef SymbolClass < handle
       % return: void
 
       if ~strcmp(class(nameSym),'sym')
-        error('ERROR: nameSym must be a symbolic expression.');
+        error('nameSym must be a symbolic expression.');
       end
 
       obj.nameSym = nameSym;
@@ -62,7 +62,7 @@ classdef SymbolClass < handle
       % return: void
       
       if ~isstring(nameTex) && ~ischar(nameTex)
-        error('ERROR: nameTex must be a string.');
+        error('nameTex must be a string.');
       end
 
       obj.nameTex = nameTex;

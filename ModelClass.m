@@ -170,7 +170,7 @@ classdef (Abstract) ModelClass < handle
 
       % The number of free variables must match the number of equations.
       if length(obj.variables) ~= length(obj.equations)
-        error('ERROR: The number of free variables of the model does not match the number of equations');
+        error('The number of free variables of the model does not match the number of equations');
       end
 
       % Index to match each equation to its corresponding free variable.

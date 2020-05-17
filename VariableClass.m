@@ -48,7 +48,7 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~islogical(isAlgebraic)
-        error('ERROR: isAlgebraic must be logical.');
+        error('isAlgebraic must be logical.');
       end
 
       obj.isAlgebraic = isAlgebraic;
@@ -63,7 +63,7 @@ classdef VariableClass < SymbolClass
       % return: void
       
       if ~islogical(isNoNegative)
-        error('ERROR: isNoNegative must be logical.');
+        error('isNoNegative must be logical.');
       end
 
       obj.isNoNegative = isNoNegative;
@@ -78,7 +78,7 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~islogical(isPlot);
-        error('ERROR: isPlot must be logical');
+        error('isPlot must be logical');
       end
 
       obj.isPlot = isPlot;
@@ -93,7 +93,7 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~isnumeric(xlim) || sum((size(xlim) ~= [1 2]))
-        error('ERROR: xlim must be numeric and [1 2] size');
+        error('xlim must be numeric and [1 2] size');
       end
       
       obj.xlim = xlim;
@@ -108,7 +108,7 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~isnumeric(ylim) || sum((size(ylim) ~= [1 2]))
-        error('ERROR: ylim must be numeric and [1 2] size');
+        error('ylim must be numeric and [1 2] size');
       end
       
       obj.ylim = ylim;

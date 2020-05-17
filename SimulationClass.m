@@ -104,7 +104,7 @@ classdef SimulationClass < handle
 
       % Check if the initial conditions match the number of states.
       if length(x0) ~= length(obj.model.vars)
-        error('ERROR: The number of initial conditions do not match with the number of states');
+        error('The number of initial conditions do not match with the number of states');
       end
 
       % Save the fncModel to avoid recalculate it as it is a Dependet parameter.
