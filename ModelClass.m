@@ -34,6 +34,11 @@ classdef (Abstract) ModelClass < handle
     params              
   end % propierties (Dependent)
 
+  properties (Dependent, Access = private)
+    % [int] Index that match each variable with the related equation.
+    varIndex 
+  end % properties (Dependent)
+
   properties % (Access = private)
     % [VariableClass] Array with all the variables of the model.
     variables
@@ -160,10 +165,11 @@ classdef (Abstract) ModelClass < handle
       out  = [obj.variables.isPlot];
     end % get.varsPlot
 
-    function [out] =  get.eqns(obj)
-      %% GET.EQNS Get symbolic equations of the model.
+    function [out] = get.varIndex(obj)
+      %% GET.VARINDEX Index that relates each variable with the equation that
+      % calculate it.
       %
-      % return: out Symbolic equations array.
+      % return: out [int] varIndex
 
       % It is necessay to order the eqns to math the order of the vars. This way
       % the process of simualtion is simplified a lot.
@@ -220,9 +226,16 @@ classdef (Abstract) ModelClass < handle
 
       end
 
-      varIndex
+      out = varIndex;
+      
+    end % get.varIndex
+    
+    function [out] =  get.eqns(obj)
+      %% GET.EQNS Get symbolic equations of the model.
+      %
+      % return: out Symbolic equations array.
 
-      out = [obj.equations(varIndex).nameSym].';
+      out = [obj.equations(obj.varIndex).nameSym].';
     end % get.eqns
 
 
@@ -231,7 +244,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Simbolic left part of equations.
 
-      out = [obj.equations.left];
+      out = [obj.equations(obj.varIndex).left];
     end % get.eqnsLeft
 
     function [out] =  get.eqnsRight(obj)
@@ -239,7 +252,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Simbolic right part of equations.
 
-      out = [obj.equations.right];
+      out = [obj.equations(obj.varIndex).right];
     end % get.eqnsRight
 
     function [out] =  get.ders(obj)
