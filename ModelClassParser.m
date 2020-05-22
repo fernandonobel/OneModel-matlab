@@ -157,13 +157,13 @@ classdef ModelClassParser < handle
         options
       end
       
-      fprintf(fout,'v = VariableClass(''%s'');\n',nameVar);
+      fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
 
       for i=1:length(options)
-        fprintf(fout,'v.%s;\n',options{i});
+        fprintf(fout,'\t\t\tv.%s;\n',options{i});
       end
 
-      fprintf(fout,'obj.addVariable(v);\n\n');
+      fprintf(fout,'\t\t\tobj.addVariable(v);\n\n');
       
     end % addVariable
 
@@ -174,9 +174,27 @@ classdef ModelClassParser < handle
       %      : fout File output
       %
       % return: void
-      
-      fprintf(fout,'p = ParameterClass(''%s'');\n',arg);
-      fprintf(fout,'obj.addParameter(p);\n\n');
+
+      expression = '(\w*)\((.+)\)';
+
+      [tokens,matches] = regexp(arg,expression,'tokens','match');
+
+      if isempty(tokens)
+        nameParam = arg;
+        options = [];
+      else
+        nameParam = tokens{1}{1};
+        options = split(tokens{1}{2},',');
+        options
+      end
+
+      fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
+
+      for i=1:length(options)
+        fprintf(fout,'\t\t\tp.%s;\n',options{i});
+      end
+
+      fprintf(fout,'\t\t\tobj.addParameter(p);\n\n');
       
     end % addParameter
 
@@ -188,8 +206,8 @@ classdef ModelClassParser < handle
       %
       % return: void
       
-      fprintf(fout,'e = EquationClass(''%s'');\n',arg);
-      fprintf(fout,'obj.addEquation(e);\n\n');
+      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',arg);
+      fprintf(fout,'\t\t\tobj.addEquation(e);\n\n');
       
     end % addEquation
 
@@ -201,8 +219,8 @@ classdef ModelClassParser < handle
       % return: void
       
       fprintf(fout,'classdef %s < ModelClass\n',obj.basename);
-      fprintf(fout,'methods\n');
-      fprintf(fout,'function [obj] = %s()\n',obj.basename);
+      fprintf(fout,'\tmethods\n');
+      fprintf(fout,'\t\tfunction [obj] = %s()\n',obj.basename);
       
     end % addHeader
 
@@ -213,8 +231,8 @@ classdef ModelClassParser < handle
       %
       % return: void
       
-      fprintf(fout,'end\n');
-      fprintf(fout,'end\n');
+      fprintf(fout,'\t\tend\n');
+      fprintf(fout,'\tend\n');
       fprintf(fout,'end\n');
       
     end % addFooter
