@@ -63,7 +63,7 @@ classdef ModelClassParser < handle
           continue
         end
 
-        %disp(tline);
+        % disp(tline);
 
         [cmd,arg] = obj.getCmdArgLine(tline);
 
@@ -82,7 +82,7 @@ classdef ModelClassParser < handle
     function [out] = removeComments(obj,tline)
       %% REMOVECOMMENTS Remove commented text of the model text.
       %
-      % param: tline Line where to find and remoce comments.
+      % param: tline Line where to find and remove comments.
       %
       % return: out Line without comments.
 
@@ -144,6 +144,32 @@ classdef ModelClassParser < handle
 
     end % executeCommand
 
+    function [name,options] = getOptions(obj,arg)
+      %% GETOPTIONS Get and process the options for the commands.
+      %
+      % param: arg Raw argument.
+      %
+      % return: name Main name for the variable/parameter.
+      %         options Options to set for the variable/parameter.
+      
+      expression = '(\w*)\((.+)\)';
+
+      [tokens,matches] = regexp(arg,expression,'tokens','match');
+
+      if isempty(tokens)
+        name = arg;
+        options = [];
+      else
+        name = tokens{1}{1};
+        options = split(tokens{1}{2},',');
+      end
+
+      for i=1:length(options)
+        options{i} = options{i}(~isspace(options{i}));
+      end
+
+    end % getOptions
+
     function [] = addVariable(obj,arg,fout)
       %% ADDVARIABLE Add a varible to the Model Class.
       %
@@ -152,17 +178,7 @@ classdef ModelClassParser < handle
       %
       % return: void
 
-      expression = '(\w*)\((.+)\)';
-
-      [tokens,matches] = regexp(arg,expression,'tokens','match');
-
-      if isempty(tokens)
-        nameVar = arg;
-        options = [];
-      else
-        nameVar = tokens{1}{1};
-        options = split(tokens{1}{2},',');
-      end
+      [nameVar,options] = obj.getOptions(arg);
       
       fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
 
@@ -182,17 +198,7 @@ classdef ModelClassParser < handle
       %
       % return: void
 
-      expression = '(\w*)\((.+)\)';
-
-      [tokens,matches] = regexp(arg,expression,'tokens','match');
-
-      if isempty(tokens)
-        nameParam = arg;
-        options = [];
-      else
-        nameParam = tokens{1}{1};
-        options = split(tokens{1}{2},',');
-      end
+      [nameParam,options] = obj.getOptions(arg);
 
       fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
 
