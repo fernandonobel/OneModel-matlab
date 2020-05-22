@@ -10,5 +10,4 @@ function [out] = loadModelClass(name)
 
   out = feval(name);
 
-  
 end % loadModelClass

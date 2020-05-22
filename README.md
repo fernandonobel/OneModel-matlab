@@ -39,38 +39,36 @@ It is expected that in the future there be more ways of generating ModelClass mo
 ModelClass model will look something like this (./examples/ex0_readme/main.m):
 
 ```MATLAB
-classdef model < ModelClass
-  methods
-    function [self] = model()
-      s = self.newSymbol();
-      s.name = 'x1';
-      s.eqn = 'd_x1 ==  + k1 - gamma12*x1*x2 - d1*x1 ';
-      self.addSymbol(s);
+% Variables
 
-      s = self.newSymbol();
-      s.name = 'x2';
-      s.eqn = 'd_x2 ==  + k2*x3 - gamma12*x1*x2 - d2*x2 ';
-      self.addSymbol(s);
+Variable x1;
+Variable x2;
+Variable x3;
+Variable ref(isAlgebraic=true);
 
-      s = self.newSymbol();
-      s.name = 'x3';
-      s.eqn = 'd_x3 ==  + k3*x1 - d3*x3 ';
-      self.addSymbol(s);
-      
-      s = self.newSymbol();
-      s.name = 'ref';
-      s.eqn = 'ref ==  k3/d3 ';
-      self.addSymbol(s);
-    end
-  end
-end
+% Parameters
+
+Parameter k1;
+Parameter k2;
+Parameter k3;
+Parameter d1;
+Parameter d2;
+Parameter d3;
+Parameter gamma12;
+
+% Equations
+
+Equation d_x1 == k1    - gamma12*x1*x2 - d1*x1;
+Equation d_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
+Equation d_x3 == k3*x1 - d3*x3;
+Equation ref  == k3/d3;
 ```
 
 and the models are initialized with the following method:
 
 ``` MATLAB
 % Initialize an object of the model.
-m = model();
+m = loadModelClass('model');
 
 % Display variables and equations of the model.
 m.vars
@@ -240,13 +238,13 @@ x0 = [
 ];
 
 % Definition of parameters of the model.
+p.k1 = 1.0;
+p.k2 = 1.0;
+p.k3 = 1.0;
 p.d1 = 1.0;
 p.d2 = 1.0;
 p.d3 = 1.0;
 p.gamma12 = 1.0;
-p.k1 = 1.0;
-p.k2 = 1.0;
-p.k3 = 1.0;
 
 [t,x] = ode15s(@(t,x) modelOdeFun(t,x,p), tspan, x0, opt);
 
