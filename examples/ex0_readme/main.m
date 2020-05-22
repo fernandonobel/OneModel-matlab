@@ -1,7 +1,10 @@
 %% 1. Model definition.
 
+mp = ModelClassParser('model2.mc');
+mp.parse
+%%
 % Initialize an object of the model.
-m = model();
+m = model2();
 
 % Display variables and equations of the model.
 m.vars
