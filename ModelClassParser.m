@@ -185,7 +185,6 @@ classdef ModelClassParser < handle
       else
         nameParam = tokens{1}{1};
         options = split(tokens{1}{2},',');
-        options
       end
 
       fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);

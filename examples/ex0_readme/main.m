@@ -1,14 +1,12 @@
 %% 1. Model definition.
 
-mp = ModelClassParser('model.mc');
-mp.parse
-%%
 % Initialize an object of the model.
-m = model();
+m = loadModelClass('model');
 
 % Display variables and equations of the model.
 m.vars
 m.eqns
+
 %% 2. Simulation.
 
 % Initialize a SimulationClass object with the model data.
