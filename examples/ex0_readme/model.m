@@ -11,7 +11,8 @@ classdef model < ModelClass
 			obj.addVariable(v);
 
 			v = VariableClass('ref');
-			v.isAlgebraic=true;
+			v.    isAlgebraic=true;
+			v.    isNoNegative=true    ;
 			obj.addVariable(v);
 
 			p = ParameterClass('k1');

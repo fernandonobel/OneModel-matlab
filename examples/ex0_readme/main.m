@@ -3,6 +3,7 @@
 % Initialize an object of the model.
 m = loadModelClass('model');
 
+%%
 % Display variables and equations of the model.
 m.vars
 m.eqns

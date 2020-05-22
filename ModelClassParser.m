@@ -55,6 +55,16 @@ classdef ModelClassParser < handle
           continue
         end
 
+        % Is the line complete?
+        if tline(end) == ';'
+
+        else
+          tline = [tline fgetl(fid)];
+          continue
+        end
+
+        %disp(tline);
+
         [cmd,arg] = obj.getCmdArgLine(tline);
 
         obj.executeCommand(cmd,arg,fout);
