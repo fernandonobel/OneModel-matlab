@@ -11,6 +11,7 @@ v = VariableClass('x3');
 obj.addVariable(v);
 
 v = VariableClass('ref');
+v.isAlgebraic=true;
 obj.addVariable(v);
 
 p = ParameterClass('k1');

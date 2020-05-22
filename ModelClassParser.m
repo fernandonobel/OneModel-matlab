@@ -143,8 +143,26 @@ classdef ModelClassParser < handle
       %      : fout File output
       %
       % return: void
+
+      expression = '(\w*)\((.+)\)';
+
+      [tokens,matches] = regexp(arg,expression,'tokens','match');
+
+      if isempty(tokens)
+        nameVar = arg;
+        options = [];
+      else
+        nameVar = tokens{1}{1};
+        options = split(tokens{1}{2},',');
+        options
+      end
       
-      fprintf(fout,'v = VariableClass(''%s'');\n',arg);
+      fprintf(fout,'v = VariableClass(''%s'');\n',nameVar);
+
+      for i=1:length(options)
+        fprintf(fout,'v.%s;\n',options{i});
+      end
+
       fprintf(fout,'obj.addVariable(v);\n\n');
       
     end % addVariable
