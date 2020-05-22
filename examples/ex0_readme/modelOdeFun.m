@@ -18,7 +18,7 @@ function [dxdt] =  modelOdeFun(t,x,p)
 dxdt(1,1) = p.k1-p.d1.*x(1,:)-p.gamma12.*x(1,:).*x(2,:);
 
 % der(x2)
-dxdt(2,1) = -p.d2.*x(2,:)+p.k3.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
+dxdt(2,1) = -p.d2.*x(2,:)+p.k2.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
 
 % der(x3)
 dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);

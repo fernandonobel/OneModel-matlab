@@ -55,8 +55,6 @@ classdef ModelClassParser < handle
           continue
         end
 
-        disp(tline)
-
         [cmd,arg] = obj.getCmdArgLine(tline);
 
         obj.executeCommand(cmd,arg,fout);
@@ -154,7 +152,6 @@ classdef ModelClassParser < handle
       else
         nameVar = tokens{1}{1};
         options = split(tokens{1}{2},',');
-        options
       end
       
       fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
