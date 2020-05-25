@@ -1,4 +1,5 @@
-``` MATLAB
+```MATLAB
+
 % Initialize an object of the model.
 m = loadModelClass('model');
 
@@ -73,7 +74,8 @@ out =
 
 # Autogenerate ode function
 
-``` shcat modelOdeFun.m
+```sh
+cat modelOdeFun.m
 ```
 
 ```

@@ -36,7 +36,7 @@ There are multiple ways we can choose for obtaining a ModelClass model: (i) the 
 
 It is expected that in the future there be more ways of generating ModelClass models. And this is one of the advantages of using this framework, the model are easier to code than coding ODE function directly and after that we can reuse ModelClass easily.
 
-ModelClass model will look something like this (./examples/ex0_readme/main.m):
+A ModelClass model will look something like this (./examples/ex0_readme/model.mc):
 
 ```MATLAB
 % Variables
@@ -66,7 +66,8 @@ Equation ref  == k3/d3;
 
 and the models are initialized with the following method:
 
-``` MATLAB
+```MATLAB
+
 % Initialize an object of the model.
 m = loadModelClass('model');
 
@@ -97,7 +98,8 @@ ans =
 
 Once we have a ModelClass model it is easy to start simulating it. We need to pass a ModelClass object of our model to the SimulationClass. Then we can configure the options for the simulation (e.g. parameters of the model, initial conditions, ODE configuration, which ODE solver to use, time span, ...). And finally we can use the functions for simulating and the SimulationClass will return a struct with the results of the simulation.
 
-``` MATLAB
+```MATLAB
+
 % Initialize a SimulationClass object with the model data.
 s = SimulationClass(m);
 
@@ -163,7 +165,8 @@ We could use ModelClass as our main workflow for working with models. However th
 
 With the following code you can generate the ODE function and the driver script:
 
-``` MATLAB
+```MATLAB
+
 % Create an ode function of the model.
 s.createOdeFunction();
 % Create the driver script for the ode function.
