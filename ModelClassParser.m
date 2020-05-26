@@ -9,6 +9,9 @@ classdef ModelClassParser < handle
     basename
     % [char] Name for the ModelClass model.
     nameM
+    % {filename} Filename of extended files. This is to avoid infinite recursion
+    % of files
+    filenameExtended = {}
 
   end % properties
 
@@ -35,6 +38,7 @@ classdef ModelClassParser < handle
       % return: void
 
       % Open the model.
+      obj.avoidRecursion(obj.filename);
       fid = fopen(obj.filename);
 
       % Open the generated model.
@@ -254,6 +258,7 @@ classdef ModelClassParser < handle
       end
 
       % Open the base model.
+      obj.avoidRecursion(arg);
       fBase = fopen(arg);
 
       obj.executeFileLines(fBase,fout);
@@ -287,6 +292,24 @@ classdef ModelClassParser < handle
       fprintf(fout,'end\n');
       
     end % addFooter
+
+    function [] = avoidRecursion(obj,filename)
+      %% AVOIDRECURSION Check if the filename was already used to avoid
+      % recursion.
+      %
+      % param: filename Filename to check.
+      %
+      % return: void
+
+      [pathstr,name,ext] = fileparts(filename);
+
+      if any(strcmp(obj.filenameExtended,name),'all')
+        error('The file "%s" was already included in the model. The parsing of the model was stoped to avoid infinite recursion.',name);
+      end
+
+      obj.filenameExtended{end+1} = name;
+      
+    end % avoidRecursion
 
   end % methods
 

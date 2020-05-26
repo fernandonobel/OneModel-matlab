@@ -1,4 +1,4 @@
-extends baseModel.mc;
+extends ./baseModel.mc;
 
 % I want to represent the reference dynamically.
 
