@@ -246,7 +246,19 @@ classdef ModelClassParser < handle
       %      : fout File output
       %
       % return: void
-      
+
+      % Check if base model exists.
+      if ~isfile(arg)
+        error(...
+        'The file "%s" does not exists. Check the filename and the path.',arg)
+      end
+
+      % Open the base model.
+      fBase = fopen(arg);
+
+      obj.executeFileLines(fBase,fout);
+
+      fclose(fBase);
       
     end % extendsModel
 
