@@ -1,5 +1,9 @@
 %% 1. Simulate with the base model.
 
+mp = ModelClassParser('baseModel');
+
+
+%%
 % Initialize an object of the base model.
 m = loadModelClass('baseModel');
 

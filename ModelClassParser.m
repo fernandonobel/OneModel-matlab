@@ -42,6 +42,23 @@ classdef ModelClassParser < handle
 
       obj.addHeader(fout);
 
+      obj.executeFileLines(fid,fout);
+
+      obj.addFooter(fout);
+
+      fclose(fid);
+      fclose(fout);
+
+    end % parse
+
+    function [] = executeFileLines(obj,fid,fout)
+      %% EXECUTEFILELINES 
+      %
+      % param: fid File descriptor to read.
+      %      : fout File descriptor to write.
+      %
+      % return: void
+
       % Read the model line by line.
       tline = fgetl(fid);
 
@@ -71,13 +88,8 @@ classdef ModelClassParser < handle
 
         tline = fgetl(fid);
       end
-
-      obj.addFooter(fout);
-
-      fclose(fid);
-      fclose(fout);
-
-    end % parse
+      
+    end % executeFileLines
 
     function [out] = removeComments(obj,tline)
       %% REMOVECOMMENTS Remove commented text of the model text.
@@ -136,6 +148,9 @@ classdef ModelClassParser < handle
 
         case 'Equation'
           obj.addEquation(arg,fout);
+
+        case 'extends'
+          obj.extendsModel(arg,fout);
 
         otherwise
           disp('Error')
@@ -222,6 +237,18 @@ classdef ModelClassParser < handle
       fprintf(fout,'\t\t\tobj.addEquation(e);\n\n');
       
     end % addEquation
+
+    function [] = extendsModel(obj,arg,fout)
+      %% EXTENDSMODEL Extends the actual model with the information of a base
+      % model
+      %
+      % param: arg Arguments
+      %      : fout File output
+      %
+      % return: void
+      
+      
+    end % extendsModel
 
     function [] = addHeader(obj,fout)
       %% ADDHEADER Add the header to the Matlab Class.
