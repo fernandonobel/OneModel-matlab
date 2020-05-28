@@ -16,6 +16,7 @@ Download this repository into the directory of your choice. Then within MATLAB g
 
 * [Installation](#installation)
 * [Table of contents](#table-of-contents)
+* [Documentation](#documentation)
 * [General workflow](#general-workflow)
 	* [1. Obtaining a ModelClass model](#1-obtaining-a-modelclass-model)
 	* [2. Simulate the ModelClass model](#2-simulate-the-modelclass-model)
@@ -25,6 +26,10 @@ Download this repository into the directory of your choice. Then within MATLAB g
 	* [6. Contractivity test](#6-contractivity-test)
 	* [7. Parser of ModelClass models into LaTeX](#7-parser-of-modelclass-models-into-latex)
 
+
+# Documentation
+
+ModelClass has a documentation placed in the following [link](doc/README.md).
 
 # General workflow
 
