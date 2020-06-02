@@ -113,7 +113,6 @@ end
 # Extends a model
 
 ```MATLAB
-cd ../ex1_extends
 m = loadModelClass('extendedModel')
 ```
 
