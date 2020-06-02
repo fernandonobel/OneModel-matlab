@@ -109,3 +109,31 @@ dxdt(4,1) = -x(4,:)+p.k3./p.d3;
 
 end
 ```
+
+# Extends a model
+
+```MATLAB
+cd ../ex1_extends
+m = loadModelClass('extendedModel')
+```
+
+```
+m = 
+
+  extendedModel with properties:
+
+                   vars: [4x1 sym]
+        varsIsAlgebraic: [4x1 logical]
+               varsName: {4x1 cell}
+       varsIsNoNegative: [0 0 0 0]
+    varsIndexNoNegative: []
+               varsPlot: [1 1 1 1]
+                   eqns: [4x1 sym]
+               eqnsLeft: [1x4 sym]
+              eqnsRight: [1x4 sym]
+                   ders: [1x4 sym]
+                 params: [1x7 sym]
+              variables: [1x4 VariableClass]
+             parameters: [1x7 ParameterClass]
+              equations: [1x4 EquationClass]
+```
