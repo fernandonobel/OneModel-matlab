@@ -53,7 +53,6 @@ classdef SimulationPlotClass < handle
 %       end
     end % plotState
 
-
     function [] =  plotAllStates(obj,out,varargin)
       %% PLOTALLSTATES Plot all the variables of the model in subplots.
       %

@@ -241,6 +241,19 @@ classdef (Abstract) ModelClass < handle
       out = varIndex;
       
     end % get.varIndex
+
+    function [out] = getVarByName(obj,name)
+      %% GETVARBYNAME Get the Variable object by its name.
+      %
+      % param: name [char] String with the name of the varible.
+      %
+      % return: out Variable Object variable.
+
+      names = obj.varsName();
+
+      out = obj.variables(strcmp(name, names));
+      
+    end % get.varByName
     
     function [out] =  get.eqns(obj)
       %% GET.EQNS Get symbolic equations of the model.
