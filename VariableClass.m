@@ -67,7 +67,7 @@ classdef VariableClass < SymbolClass
       
     end % set.isPlot
 
-    function [] =  set.xlim(obj,xlim)
+  function [] =  set.xlim(obj,xlim)
       %% SET.XLIM Set interface for xlim propierty.
       %
       % param: xlim
@@ -97,6 +97,21 @@ classdef VariableClass < SymbolClass
       
     end % set.ylim
     	
+    function [] =  set.title(obj,title)
+      %% SET.XLIM Set interface for title propierty.
+      %
+      % param: title
+      %
+      % return: void
+
+      if ~ischar(title) 
+        error('xlim must be numeric and [1 2] size');
+      end
+      
+      obj.title = title;
+      
+    end % set.xlim
+
   end % methods
   
 end % classdef
