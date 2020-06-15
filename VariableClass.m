@@ -60,7 +60,7 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~islogical(isPlot);
-        error('isPlot must be logical');
+        error('isPlot must be logical.');
       end
 
       obj.isPlot = isPlot;
@@ -75,7 +75,7 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~isnumeric(xlim) || sum((size(xlim) ~= [1 2]))
-        error('xlim must be numeric and [1 2] size');
+        error('xlim must be numeric and [1 2] size.');
       end
       
       obj.xlim = xlim;
@@ -90,27 +90,57 @@ classdef VariableClass < SymbolClass
       % return: void
 
       if ~isnumeric(ylim) || sum((size(ylim) ~= [1 2]))
-        error('ylim must be numeric and [1 2] size');
+        error('ylim must be numeric and [1 2] size.');
       end
       
       obj.ylim = ylim;
       
     end % set.ylim
     	
+    function [] =  set.xlabel(obj,xlabel)
+      %% SET.XLABEL Set interface for xlabel propierty.
+      %
+      % param: xlabel
+      %
+      % return: void
+
+      if ~ischar(xlabel) 
+        error('xlabel must be a char array.');
+      end
+      
+      obj.xlabel = xlabel;
+      
+    end % set.xlabel
+
+    function [] =  set.ylabel(obj,ylabel)
+      %% SET.YLABEL Set interface for ylabel propierty.
+      %
+      % param: ylabel
+      %
+      % return: void
+
+      if ~ischar(ylabel) 
+        error('ylabel must be a char array.');
+      end
+      
+      obj.title = ylabel;
+      
+    end % set.title
+
     function [] =  set.title(obj,title)
-      %% SET.XLIM Set interface for title propierty.
+      %% SET.TITLE Set interface for title propierty.
       %
       % param: title
       %
       % return: void
 
       if ~ischar(title) 
-        error('xlim must be numeric and [1 2] size');
+        error('title must be a char array.');
       end
       
       obj.title = title;
       
-    end % set.xlim
+    end % set.title
 
   end % methods
   
