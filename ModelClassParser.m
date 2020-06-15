@@ -184,10 +184,46 @@ classdef ModelClassParser < handle
       end
 
       for i=1:length(options)
-        options{i} = options{i}(~isspace(options{i}));
+        options{i} = obj.removeSpace(options{i});
       end
 
     end % getOptions
+
+    function [out] = removeSpace(obj,in)
+      %% REMOVESPACE Remove unnecessary space in string but keep the spaces
+      % between "'".
+      %
+      % param: in String with spaces.
+      %
+      % return: out String without unnecessary spaces.
+
+      quotes = strfind(in,'''');
+
+      if isempty(quotes)
+        out = in(~isspace(in));
+        return;
+      end
+
+
+      aux = in(1:quotes(1)-1);
+      out = aux(~isspace(aux));
+
+      keepSpace = true;
+      for i = 2:length(quotes)
+        aux = in(quotes(1):quotes(2)-1);
+        if keepSpace
+          out = [out aux];
+        else
+          out = [out aux(~isspace(aux))];
+        end
+        keepSpace = ~keepSpace;
+      end
+
+      aux = in(quotes(end):end);
+      out = [out aux(~isspace(aux))];
+      out
+      
+    end % removeSpace
 
     function [] = addVariable(obj,arg,fout)
       %% ADDVARIABLE Add a varible to the Model Class.
