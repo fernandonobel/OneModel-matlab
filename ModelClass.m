@@ -116,12 +116,18 @@ classdef (Abstract) ModelClass < handle
 
     function [out] =  get.varsIsAlgebraic(obj)
       %% GET.VARSISALGEBRAIC Are the variables algebraics?
-      % Get a boolean array, if true the varibale corresponding to that 
+      % Get a boolean array, if true the variable corresponding to that 
       % index is algebraic.
       %
       % return: out Boolean array.
 
-      out = [obj.variables.isAlgebraic].';
+      out = [];
+
+      equations = [obj.equations(obj.varIndex)];
+
+      for i = 1:length(obj.variables)
+        out(i,1) = isempty(equations(i).ders);
+      end
     end % get.varsIsAlgebraic
 
     function [out] =  get.varsName(obj)
@@ -136,6 +142,14 @@ classdef (Abstract) ModelClass < handle
       %% GET.VARSNONEGATIVE Get no negative vars.
       %
       % return: out [bool] True if the var on that index is no negative.
+
+      out = [];
+
+      for i = 1:length(obj.variables)
+        if obj.variables(i).isNoNegative == true
+          out(end+1) = i;
+        end
+      end
 
       out = [obj.variables.isNoNegative];
       
