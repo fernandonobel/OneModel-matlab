@@ -123,7 +123,7 @@ classdef VariableClass < SymbolClass
         error('ylabel must be a char array.');
       end
       
-      obj.title = ylabel;
+      obj.ylabel = ylabel;
       
     end % set.title
 

@@ -43,10 +43,10 @@ classdef SimulationPlotClass < handle
       v = obj.model.getVarByName(name);
 
       if ~isempty(v)
-         xlim(v.xlim);
-         ylim(v.ylim);
-         xlabel(v.xlabel);
-         ylabel(v.ylabel);
+        xlim(v.xlim);
+        ylim(v.ylim);
+        xlabel(v.xlabel);
+        ylabel(v.ylabel);
         title(v.title);
       end
 
