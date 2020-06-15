@@ -40,17 +40,16 @@ classdef SimulationPlotClass < handle
       grid on;
       set(groot,'DefaultTextInterpreter','latex');
       
-      % TODO:  recover this functionality.
-%       i = obj.model.getSymbolIndex(name);
-%       if i >= 0
-%         xlim(obj.model.symbols(i).xlim);
-%         ylim(obj.model.symbols(i).ylim);
-%         xlabel(obj.model.symbols(i).xlabel);
-%         ylabel(obj.model.symbols(i).ylabel);
-%         title(obj.model.symbols(i).title);
-%       else
-%         title(name);
-%       end
+      v = obj.model.getVarByName(name);
+
+      if ~isempty(v)
+         xlim(v.xlim);
+         ylim(v.ylim);
+         xlabel(v.xlabel);
+         ylabel(v.ylabel);
+        title(v.title);
+      end
+
     end % plotState
 
     function [] =  plotAllStates(obj,out,varargin)

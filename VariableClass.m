@@ -31,8 +31,8 @@ classdef VariableClass < SymbolClass
       obj.isPlot = true;
       obj.xlim = [-inf inf];
       obj.ylim = [-inf inf];
-      obj.xlabel = '';
-      obj.ylabel = '';
+      obj.xlabel = 'Time (t)';
+      obj.ylabel = 'Concentration [A.U.]';
       obj.title = obj.name;
       
     end % VariableClass
