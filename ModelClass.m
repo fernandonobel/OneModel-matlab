@@ -121,8 +121,6 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Boolean array.
 
-      out = [];
-
       equations = [obj.equations(obj.varIndex)];
 
       for i = 1:length(obj.variables)

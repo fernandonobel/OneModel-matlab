@@ -3,8 +3,6 @@ classdef VariableClass < SymbolClass
   %
   
   properties
-    % bool Is the variable algebraic?
-    isAlgebraic
     % bool Is the variable no negative?
     isNoNegative
     % plot Should the variable be plot?
@@ -29,7 +27,6 @@ classdef VariableClass < SymbolClass
       % param: name Name of the symbol. 
 
       obj = obj@SymbolClass(name);
-      obj.isAlgebraic = false;
       obj.isNoNegative = false;
       obj.isPlot = true;
       obj.xlim = [-inf inf];
@@ -39,21 +36,6 @@ classdef VariableClass < SymbolClass
       obj.title = obj.name;
       
     end % VariableClass
-
-    function [] =  set.isAlgebraic(obj,isAlgebraic)
-      %% SET.ISALGEBRAIC Set interface for isAlgebraic propierty.
-      %
-      % param: isAlgebraic
-      %
-      % return: void
-
-      if ~islogical(isAlgebraic)
-        error('isAlgebraic must be logical.');
-      end
-
-      obj.isAlgebraic = isAlgebraic;
-      
-    end % set.isAlgebraic
 
     function [] =  set.isNoNegative(obj,isNoNegative)
       %% SET.ISNONEGATIVE Set interface for isNoNegative propierty.

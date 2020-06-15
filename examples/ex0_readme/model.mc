@@ -3,7 +3,7 @@
 Variable x1;
 Variable x2;
 Variable x3;
-Variable ref(isAlgebraic=true);
+Variable ref;
 
 % Parameters
 

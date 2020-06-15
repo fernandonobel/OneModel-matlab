@@ -49,7 +49,7 @@ A ModelClass model will look something like this (./examples/ex0_readme/model.mc
 Variable x1;
 Variable x2;
 Variable x3;
-Variable ref(isAlgebraic=true);
+Variable ref;
 
 % Parameters
 

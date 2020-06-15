@@ -41,7 +41,6 @@ classdef extendedModel < ModelClass
 			obj.addEquation(e);
 
 			v = VariableClass('ref');
-			v.isAlgebraic=true;
 			obj.addVariable(v);
 
 			e = EquationClass('ref  == k3/d3');

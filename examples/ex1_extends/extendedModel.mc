@@ -4,7 +4,7 @@
 extends ./baseModel.mc;
 
 % Then, add a variable for the reference.
-Variable ref(isAlgebraic=true);
+Variable ref;
 
 % And add the equation to calculate the reference value.
 Equation ref  == k3/d3;
