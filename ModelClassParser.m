@@ -66,6 +66,9 @@ classdef ModelClassParser < handle
       % Read the model line by line.
       tline = fgetl(fid);
 
+      % Aux buffer for preparing the lines to execute.
+      aux = '';
+
       while ischar(tline)
         % Remove commented text in lines.
         tline = obj.removeComments(tline);
@@ -76,23 +79,30 @@ classdef ModelClassParser < handle
           continue
         end
 
-        % Is the line complete?
-        if tline(end) == ';'
+        % Process char by char the line readed.
+        for i = 1:length(tline)
+          aux(end+1) = tline(i);
 
-        else
-          tline = [tline fgetl(fid)];
-          continue
+
+          % Is the line complete?
+          if aux(end) == ';'
+            % Process the line.
+            [cmd,arg] = obj.getCmdArgLine(aux);
+            obj.executeCommand(cmd,arg,fout);
+
+            % Reset the aux for new lines.
+            aux = '';
+          end
+
         end
-
-        % disp(tline);
-
-        [cmd,arg] = obj.getCmdArgLine(tline);
-
-        obj.executeCommand(cmd,arg,fout);
 
         tline = fgetl(fid);
       end
       
+      % Check if something is remaining in aux after finishing the model.
+      if ~all(isspace(aux)) && ~isempty(aux)
+        error('Not found ; in the last line of the model.');
+      end
     end % executeFileLines
 
     function [out] = removeComments(obj,tline)
@@ -123,7 +133,7 @@ classdef ModelClassParser < handle
       cmd = [];
       arg = [];
 
-      expression = '(\w*)\s(.+);';
+      expression = '\s*(\w*)\s(.+);';
 
       [tokens,matches] = regexp(tline,expression,'tokens','match');
 
@@ -157,7 +167,7 @@ classdef ModelClassParser < handle
           obj.extendsModel(arg,fout);
 
         otherwise
-          disp('Error')
+          disp('Error');
 
       end
 
@@ -221,7 +231,6 @@ classdef ModelClassParser < handle
 
       aux = in(quotes(end):end);
       out = [out aux(~isspace(aux))];
-      out
       
     end % removeSpace
 
