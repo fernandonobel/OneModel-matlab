@@ -15,7 +15,7 @@ classdef ParameterClass < SymbolClass
       % param: name Name of the symbol. 
 
       obj = obj@SymbolClass(name);
-      obj.value = [];
+      obj.value = nan;
       
     end % ParameterClass
 
