@@ -146,6 +146,11 @@ classdef SimulationClass < handle
         catch
           out.(f{i}) = pDefault.(f{i});
         end
+
+        % Check if the parameter has been initialized.
+        if isnan(out.(f{i}))
+          error('Value of ''%s'' was not defined.', f{i});
+        end
       end
 
     end % combineParam
