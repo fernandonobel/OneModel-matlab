@@ -32,6 +32,8 @@ classdef (Abstract) ModelClass < handle
     ders                
     % [sym] Parameters of the model.
     params              
+    % [real] Default value of the parameters.
+    paramsValue 
   end % propierties (Dependent)
 
   properties (Dependent, Access = private)
@@ -299,6 +301,15 @@ classdef (Abstract) ModelClass < handle
 
       out = [obj.parameters.nameSym];
     end % get.params
+
+    function [out] = get.paramsValue(obj)
+      %% GET.PARAMSVALUE Get the defautl value of the parameters of the model.
+      %
+      % return: out [Real] Array with the default values of the parameters.
+
+      out = [obj.parameters.value];
+      
+    end % get.paramsValue
 
   end % methods
 
