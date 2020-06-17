@@ -109,9 +109,14 @@ classdef SimulationClass < handle
 
       % Save the fncModel to avoid recalculate it as it is a Dependet parameter.
       fncModel = obj.fncDaeModel;
+
+      % Combine the user parameters with the deaults of the model.
+      p = obj.combineParam(p);
+
       % Simulate
       %             [t,x] = ode15s(@(t,x) obj.f_model_odes(t,x,p),tspan,x0,opt);
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,fncModel),tspan,x0,opt);
+
     end % simulateTX
 
     function [out] = combineParam(obj,p)
@@ -137,9 +142,9 @@ classdef SimulationClass < handle
 
       for i = 1:length(f)
         try 
-          out.(f{i}) = p.(f{i})
+          out.(f{i}) = p.(f{i});
         catch
-          out.(f{i}) = pDefault.(f{i})
+          out.(f{i}) = pDefault.(f{i});
         end
       end
 
