@@ -132,6 +132,7 @@ m =
               eqnsRight: [1x4 sym]
                    ders: [1x4 sym]
                  params: [1x7 sym]
+            paramsValue: [NaN NaN NaN NaN NaN NaN NaN]
               variables: [1x4 VariableClass]
              parameters: [1x7 ParameterClass]
               equations: [1x4 EquationClass]
