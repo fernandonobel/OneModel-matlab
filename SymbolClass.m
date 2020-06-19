@@ -9,6 +9,10 @@ classdef SymbolClass < handle
     nameSym
     % [char] Name for LaTeX generation.
     nameTex
+    % [char] Physical units of the symbol.
+    units
+    % [char] Comment of the symbol.
+    comment
   end % properties
   
   methods 
@@ -68,7 +72,37 @@ classdef SymbolClass < handle
       obj.nameTex = nameTex;
       
     end % set.nameTex
-    	
+
+    function [] = set.units(obj,units)
+      %% SET.UNITS Set interface for units propierty.
+      %
+      % param: units [char] Units.
+      %
+      % return: void
+
+      if ~isstring(units) && ~ischar(units)
+        error('units must be a string.');
+      end
+
+      obj.units = units;
+      
+    end % set.units
+
+    function [] = set.comment(obj,comment)
+      %% SET.COMMENT Set interface for comment propierty.
+      %
+      % param: comment [char] Comment.
+      %
+      % return: void
+
+      if ~isstring(comment) && ~ischar(comment)
+        error('comment must be a string.');
+      end
+
+      obj.comment = comment;
+      
+    end % set.comment
+   	
   end % methods
   
 end % classdef
