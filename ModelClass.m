@@ -219,25 +219,27 @@ classdef (Abstract) ModelClass < handle
       % Then match the algebraic equation with the remaining freeVariables.
       knownVars = [obj.parameters.nameSym obj.variables(eqnIndex(eqnIndex>0)).nameSym];
 
-      for i = 1:length(obj.equations)
-        % If the equation has an index, skip it.
-        if eqnIndex(i) > 0
-          continue
-        end
-        
-        % Check the number of free variables in the equantion.
-        eqnVars = obj.equations(i).vars;
-        eqnVars = eqnVars(~ismember(eqnVars,knownVars));
+      while ~isempty(find(eqnIndex==0))
+        for i = 1:length(obj.equations)
+          % If the equation has an index, skip it.
+          if eqnIndex(i) > 0
+            continue
+          end
+          
+          % Check the number of free variables in the equantion.
+          eqnVars = obj.equations(i).vars;
+          eqnVars = eqnVars(~ismember(eqnVars,knownVars));
 
-        % If there is only one free var.
-        if length(eqnVars) == 1
-          % We have a match!
-          eqnIndex(i) = find(ismember([obj.variables.nameSym],[eqnVars]));
-          varIndex(find(ismember([obj.variables.nameSym],[eqnVars]))) = i;
-          % And add the var to known vars.
-          knownVars(end+1) = eqnVars;
-        end
+          % If there is only one free var.
+          if length(eqnVars) == 1
+            % We have a match!
+            eqnIndex(i) = find(ismember([obj.variables.nameSym],[eqnVars]));
+            varIndex(find(ismember([obj.variables.nameSym],[eqnVars]))) = i;
+            % And add the var to known vars.
+            knownVars(end+1) = eqnVars;
+          end
 
+        end
       end
 
       out = varIndex;
