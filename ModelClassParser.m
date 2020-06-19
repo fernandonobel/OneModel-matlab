@@ -247,6 +247,18 @@ classdef ModelClassParser < handle
       fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
 
       for i=1:length(options)
+        % Skip empty options.
+        if isempty(options{i})
+            continue
+        end
+        %expression = '(.*)=(.*)';
+        %[tokens,matches] = regexp(options{i},expression,'tokens','match');
+        %
+        %if strcmp(tokens{1}{1},'value')
+        %    fprintf(fout,'\t\t\tp.value = str2sym(''%s'');\n',tokens{1}{2});
+        %else
+        %    fprintf(fout,'\t\t\tp.%s;\n',options{i});
+        %end
         fprintf(fout,'\t\t\tv.%s;\n',options{i});
       end
 
@@ -267,19 +279,13 @@ classdef ModelClassParser < handle
       fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
 
       for i=1:length(options)
+        % Skip empty options.
         if isempty(options{i})
             continue
         end
         
-        expression = '(.*)=(.*)';
-        [tokens,matches] = regexp(options{i},expression,'tokens','match');
-        
-        if strcmp(tokens{1}{1},'value')
-            fprintf(fout,'\t\t\tp.value = str2sym(''%s'');\n',tokens{1}{2});
-        else
-            fprintf(fout,'\t\t\tp.%s;\n',options{i});
-        end
-        
+        fprintf(fout,'\t\t\tp.%s;\n',options{i});
+
       end
 
       fprintf(fout,'\t\t\tobj.addParameter(p);\n\n');

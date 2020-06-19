@@ -26,8 +26,8 @@ classdef ParameterClass < SymbolClass
       %
       % return: void
       
-      if ~isreal(value) && ~strcmp(class(value),'sym')
-        error('value must be a real number or symbolic.');
+      if ~isreal(value)
+        error('value must be a real number.');
       end
 
       obj.value = value;
