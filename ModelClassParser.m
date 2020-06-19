@@ -267,7 +267,19 @@ classdef ModelClassParser < handle
       fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
 
       for i=1:length(options)
-        fprintf(fout,'\t\t\tp.%s;\n',options{i});
+        if isempty(options{i})
+            continue
+        end
+        
+        expression = '(.*)=(.*)';
+        [tokens,matches] = regexp(options{i},expression,'tokens','match');
+        
+        if strcmp(tokens{1}{1},'value')
+            fprintf(fout,'\t\t\tp.value = str2sym(''%s'');\n',tokens{1}{2});
+        else
+            fprintf(fout,'\t\t\tp.%s;\n',options{i});
+        end
+        
       end
 
       fprintf(fout,'\t\t\tobj.addParameter(p);\n\n');
