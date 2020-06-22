@@ -264,7 +264,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic equations array.
 
-      out = [obj.equations(obj.varIndex).nameSym].';
+      out = [obj.equations(obj.varIndex).eqnSym].';
     end % get.eqns
 
 
