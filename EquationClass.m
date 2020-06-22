@@ -9,6 +9,8 @@ classdef EquationClass < handle
     eqn
     % [sym] Simbolic equation.
     eqnSym
+    % bool Is the equation just an assignation of variables?
+    isAssign
   end % properties
 
   properties (Dependent)
@@ -31,6 +33,7 @@ classdef EquationClass < handle
 
       obj.name = name;
       obj.eqn = '';
+      obj.isAssign = false;
 
     end % EquationClass
 
@@ -90,6 +93,21 @@ classdef EquationClass < handle
       obj.eqnSym = str2sym(eqn);
       
     end % set.eqn
+
+    function [] = set.isAssign(obj,isAssign)
+      %% SET.ISASSIGN Set interface for isAssign propierty.
+      %
+      % param: isAssign
+      %
+      % return: void
+      
+      if ~islogical(isAssign)
+        error('isAssign must be logical.');
+      end
+
+      obj.isAssign = isAssign;
+      
+    end % set.isAssign
 
     function [out] =  get.left(obj)
       %% GET.LEFT Get left equal part of the equation.
