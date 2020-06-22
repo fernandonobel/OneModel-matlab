@@ -276,7 +276,7 @@ classdef ModelClassParser < handle
         [tokens,matches] = regexp(options{i},expression,'tokens','match');
         
         if strcmp(tokens{1}{1},'value')
-            arg = compose('(%s == %s, isAssign = true)',nameVar,tokens{1}{2});
+            arg = compose('(%s == %s, isSubstitution = true)',nameVar,tokens{1}{2});
             obj.addEquation(arg{1},fout);
         else
             fprintf(fout,'\t\t\tv.%s;\n',options{i});

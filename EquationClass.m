@@ -9,8 +9,8 @@ classdef EquationClass < handle
     eqn
     % [sym] Simbolic equation.
     eqnSym
-    % bool Is the equation just an assignation of variables?
-    isAssign
+    % bool Is the equation just a substitution of variables?
+    isSubstitution
   end % properties
 
   properties (Dependent)
@@ -33,7 +33,7 @@ classdef EquationClass < handle
 
       obj.name = name;
       obj.eqn = '';
-      obj.isAssign = false;
+      obj.isSubstitution = false;
 
     end % EquationClass
 
@@ -94,20 +94,20 @@ classdef EquationClass < handle
       
     end % set.eqn
 
-    function [] = set.isAssign(obj,isAssign)
-      %% SET.ISASSIGN Set interface for isAssign propierty.
+    function [] = set.isSubstitution(obj,isSubstitution)
+      %% SET.ISSUBSTITUTION Set interface for isSubstitution propierty.
       %
-      % param: isAssign
+      % param: isSubstitution
       %
       % return: void
       
-      if ~islogical(isAssign)
-        error('isAssign must be logical.');
+      if ~islogical(isSubstitution)
+        error('isSubstitution must be logical.');
       end
 
-      obj.isAssign = isAssign;
+      obj.isSubstitution = isSubstitution;
       
-    end % set.isAssign
+    end % set.isSubstitution
 
     function [out] =  get.left(obj)
       %% GET.LEFT Get left equal part of the equation.
