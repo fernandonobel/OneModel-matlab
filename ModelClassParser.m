@@ -182,9 +182,28 @@ classdef ModelClassParser < handle
       %
       % return: name Main name for the variable/parameter.
       %         options Options to set for the variable/parameter.
-      
-      expression = '(\w*)\((.+)\)';
 
+      % TODO:
+      % Look for no name no arguments syntaxis: 1+b==a
+      if ~any(strfind(arg, '('))
+        name = arg;
+        options{1} = [];
+        return
+      end
+
+      % Look for no name no arguments syntaxis: 1+b==a*(1+c)
+      expression = '(.*?)\(';
+      [tokens,matches] = regexp(arg,expression,'tokens','match');
+
+      if ~isempty(tokens) && any(isspace(tokens{1}{1}))
+        name = '';
+        options{1} = arg;
+        return
+      end
+
+
+      % Look for the normal syntaxis: name(arg1=true,arg2=fals)
+      expression = '(\w*)\((.+)\)';
       [tokens,matches] = regexp(arg,expression,'tokens','match');
 
       if isempty(tokens)
@@ -305,8 +324,29 @@ classdef ModelClassParser < handle
 
       [nameEqn,options] = obj.getOptions(arg);
       
-      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',nameEqn);
+      if isempty(options{1})
+          options{1} = nameEqn;
+          nameEqn = '';
+      end
+      
+      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',nameEqn);      
+        
+      try
       fprintf(fout,'\t\t\te.eqn = ''%s'';\n',options{1});
+      catch
+          error('eqn is not defined in the options.');
+      end
+
+      for i=2:length(options)
+        % Skip empty options.
+        if isempty(options{i})
+            continue
+        end
+        
+        fprintf(fout,'\t\t\te.%s;\n',options{i});
+
+      end
+
       fprintf(fout,'\t\t\tobj.addEquation(e);\n');
       
     end % addEquation
