@@ -4,9 +4,9 @@ classdef EquationClass < handle
 
   properties
     % [char] Char array equation.
-    name
+    eqn
     % [sym] Simbolic equation.
-    nameSym
+    eqnSym
   end % properties
 
   properties (Dependent)
@@ -27,8 +27,8 @@ classdef EquationClass < handle
       %
       % param: eqn [char] String with the equation.
 
-      obj.name = eqn;
-      obj.nameSym = str2sym(eqn);
+      obj.eqn = eqn;
+      obj.eqnSym = str2sym(eqn);
 
     end % EquationClass
 
@@ -63,9 +63,9 @@ classdef EquationClass < handle
       %
       % return: out Simbolic left part of the equation.
 
-      ind_equal = strfind(obj.name,'=');
+      ind_equal = strfind(obj.eqn,'=');
 
-      out = obj.name(1:ind_equal(1)-1);
+      out = obj.eqn(1:ind_equal(1)-1);
 
       out = str2sym(out).';
     end % get.left
@@ -75,9 +75,9 @@ classdef EquationClass < handle
       %
       % return: out Simbolic rigth part of the equation.
 
-      ind_equal = strfind(obj.name,'=');
+      ind_equal = strfind(obj.eqn,'=');
 
-      out = obj.name(ind_equal(2)+1:end);
+      out = obj.eqn(ind_equal(2)+1:end);
 
       out = str2sym(out).';
     end % get.right
@@ -87,7 +87,7 @@ classdef EquationClass < handle
       %
       % return: out [sym] Variables of the equation.
 
-      out = symvar(obj.nameSym);
+      out = symvar(obj.eqnSym);
       
     end % get.vars
 
