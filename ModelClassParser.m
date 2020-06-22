@@ -171,6 +171,8 @@ classdef ModelClassParser < handle
 
       end
 
+      fprintf(fout,'\n');
+
     end % executeCommand
 
     function [name,options] = getOptions(obj,arg)
@@ -251,18 +253,19 @@ classdef ModelClassParser < handle
         if isempty(options{i})
             continue
         end
-        %expression = '(.*)=(.*)';
-        %[tokens,matches] = regexp(options{i},expression,'tokens','match');
-        %
-        %if strcmp(tokens{1}{1},'value')
-        %    fprintf(fout,'\t\t\tp.value = str2sym(''%s'');\n',tokens{1}{2});
-        %else
-        %    fprintf(fout,'\t\t\tp.%s;\n',options{i});
-        %end
-        fprintf(fout,'\t\t\tv.%s;\n',options{i});
+        expression = '(.*)=(.*)';
+        [tokens,matches] = regexp(options{i},expression,'tokens','match');
+        
+        if strcmp(tokens{1}{1},'value')
+            arg = compose('%s == %s',nameVar,tokens{1}{2});
+            obj.addEquation(arg{1},fout);
+        else
+            fprintf(fout,'\t\t\tv.%s;\n',options{i});
+        end
+        %fprintf(fout,'\t\t\tv.%s;\n',options{i});
       end
 
-      fprintf(fout,'\t\t\tobj.addVariable(v);\n\n');
+      fprintf(fout,'\t\t\tobj.addVariable(v);\n');
       
     end % addVariable
 
@@ -288,7 +291,7 @@ classdef ModelClassParser < handle
 
       end
 
-      fprintf(fout,'\t\t\tobj.addParameter(p);\n\n');
+      fprintf(fout,'\t\t\tobj.addParameter(p);\n');
       
     end % addParameter
 
@@ -301,7 +304,7 @@ classdef ModelClassParser < handle
       % return: void
       
       fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',arg);
-      fprintf(fout,'\t\t\tobj.addEquation(e);\n\n');
+      fprintf(fout,'\t\t\tobj.addEquation(e);\n');
       
     end % addEquation
 
