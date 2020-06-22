@@ -257,7 +257,7 @@ classdef ModelClassParser < handle
         [tokens,matches] = regexp(options{i},expression,'tokens','match');
         
         if strcmp(tokens{1}{1},'value')
-            arg = compose('%s == %s',nameVar,tokens{1}{2});
+            arg = compose('(%s == %s)',nameVar,tokens{1}{2});
             obj.addEquation(arg{1},fout);
         else
             fprintf(fout,'\t\t\tv.%s;\n',options{i});
@@ -302,8 +302,11 @@ classdef ModelClassParser < handle
       %      : fout File output
       %
       % return: void
+
+      [nameEqn,options] = obj.getOptions(arg);
       
-      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',arg);
+      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',nameEqn);
+      fprintf(fout,'\t\t\te.eqn = ''%s'';\n',options{1});
       fprintf(fout,'\t\t\tobj.addEquation(e);\n');
       
     end % addEquation

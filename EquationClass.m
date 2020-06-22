@@ -3,6 +3,8 @@ classdef EquationClass < handle
   %
 
   properties
+    % [char] Name of the equation.
+    name
     % [char] Char array equation.
     eqn
     % [sym] Simbolic equation.
@@ -22,13 +24,13 @@ classdef EquationClass < handle
 
   methods 
 
-    function [obj] = EquationClass(eqn)
+    function [obj] = EquationClass(name)
       %% Constructor of EquationClass.
       %
       % param: eqn [char] String with the equation.
 
-      obj.eqn = eqn;
-      obj.eqnSym = str2sym(eqn);
+      obj.name = name;
+      obj.eqn = '';
 
     end % EquationClass
 
@@ -57,6 +59,37 @@ classdef EquationClass < handle
       end
       
     end % getFreeVars
+
+    function [] = set.name(obj,name)
+      %% SET.NAME Set interface for name propierty.
+      %
+      % param: name
+      %
+      % return: void
+
+      if ~ischar(name) 
+        error('name must be a char array.');
+      end
+      
+      obj.name = name;
+      
+    end % set.name
+
+    function [] = set.eqn(obj,eqn)
+      %% SET.EQN Set interface for eqn propierty.
+      %
+      % param: eqn
+      %
+      % return: void
+
+      if ~ischar(eqn) 
+        error('eqn must be a char array.');
+      end
+
+      obj.eqn = eqn;
+      obj.eqnSym = str2sym(eqn);
+      
+    end % set.eqn
 
     function [out] =  get.left(obj)
       %% GET.LEFT Get left equal part of the equation.
