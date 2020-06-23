@@ -76,7 +76,7 @@ classdef SimulationClass < handle
       tspan = [out.t(end) out.t(end)+tadd];
 
       % Simulate
-      [out_new] = obj.simulate(tspan,x0,opt,p);
+      [out_new] = obj.simulate(tspan,x0,p,opt);
 
       % Concat new out to previous out
       out = concatStruct(out, out_new);
