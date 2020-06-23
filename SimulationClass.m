@@ -52,15 +52,19 @@ classdef SimulationClass < handle
       % Simulate
       [t,x] = obj.simulateTX(tspan,x0,p,opt);
 
+      obj.model.isReduced = false;
       % Return sim results in a struct.
       out.t = t;
-      for i = 1:length(obj.model.vars)
-        out.(obj.model.varsName{i}) = x(:,i);
+      
+      % SimulateTX changes the normal order of the states.
+      indexSwap = 1:length(obj.model.varsName);
+      indexSwap = [indexSwap(~obj.model.isSubs) indexSwap(obj.model.isSubs)];
+      
+      for i = 1:length(obj.model.varsName)
+        out.(obj.model.varsName{indexSwap(i)}) = x(:,i);
       end
 
       obj.model.isReduced = aux;
-
-      % TODO: Calculate subs variables.
 
     end % simulate
 
@@ -130,6 +134,25 @@ classdef SimulationClass < handle
       % Simulate
       %             [t,x] = ode15s(@(t,x) obj.f_model_odes(t,x,p),tspan,x0,opt);
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,fncModel),tspan,x0,opt);
+      
+      % Calculate substitution variables.
+      obj.model.isReduced = false;
+      subsVars = obj.model.vars(obj.model.isSubs).';
+      subsEqns = obj.model.eqnsRight(obj.model.isSubs);
+      
+      subsEqnsSimplified = subsEqns;
+      
+      while any(ismember(symvar(subsEqnsSimplified).', subsVars.', 'rows'))
+          subsEqnsSimplified = subs(subsEqnsSimplified,subsVars,subsEqns);
+      end
+      
+      fncSubsEqns = obj.model.symbolic2MatlabFunction(subsEqnsSimplified,'t,x,p');
+      
+      xSubs = [];
+      for i = 1:length(t)
+          xSubs = [xSubs; fncSubsEqns(t(i),x(i,:),p)];
+      end
+      x = [x xSubs];
 
     end % simulateTX
 
