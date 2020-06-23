@@ -46,6 +46,9 @@ classdef SimulationClass < handle
         opt = odeset('AbsTol',1e-8,'RelTol',1e-8);
       end
 
+      aux = obj.model.isReduced;
+      obj.model.isReduced = true;
+
       % Simulate
       [t,x] = obj.simulateTX(tspan,x0,p,opt);
 
@@ -54,6 +57,8 @@ classdef SimulationClass < handle
       for i = 1:length(obj.model.vars)
         out.(obj.model.varsName{i}) = x(:,i);
       end
+
+      obj.model.isReduced = aux;
 
       % TODO: Calculate subs variables.
 
@@ -69,6 +74,9 @@ classdef SimulationClass < handle
       %
       % return: out real. Struct with the result of the simulation.
 
+      aux = obj.model.isReduced;
+      obj.model.isReduced = true;
+
       x0 = zeros(1,length(obj.model.vars));
       for i = 1:length(obj.model.vars)
         x0(i) = out.(obj.model.varsName{i})(end);
@@ -80,6 +88,9 @@ classdef SimulationClass < handle
 
       % Concat new out to previous out
       out = concatStruct(out, out_new);
+
+      obj.model.isReduced = aux;
+
     end % simulateContinue
 
     function [t,x] =  simulateTX(obj,tspan,x0,p,opt)
