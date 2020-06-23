@@ -34,16 +34,20 @@ classdef model < ModelClass
 			p = ParameterClass('gamma12');
 			obj.addParameter(p);
 
-			e = EquationClass('d_x1 == k1    - gamma12*x1*x2 - d1*x1');
+			e = EquationClass('');
+			e.eqn = 'd_x1 == k1    - gamma12*x1*x2 - d1*x1';
 			obj.addEquation(e);
 
-			e = EquationClass('d_x2 == k2*x3 - gamma12*x1*x2 - d2*x2');
+			e = EquationClass('');
+			e.eqn = 'd_x2 == k2*x3 - gamma12*x1*x2 - d2*x2';
 			obj.addEquation(e);
 
-			e = EquationClass('d_x3 == k3*x1 - d3*x3');
+			e = EquationClass('');
+			e.eqn = 'd_x3 == k3*x1 - d3*x3';
 			obj.addEquation(e);
 
-			e = EquationClass('ref  == k3/d3');
+			e = EquationClass('');
+			e.eqn = 'ref  == k3/d3';
 			obj.addEquation(e);
 
 		end

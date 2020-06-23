@@ -121,6 +121,7 @@ m =
 
   extendedModel with properties:
 
+              isReduced: 0
                    vars: [4x1 sym]
         varsIsAlgebraic: [4x1 logical]
                varsName: {4x1 cell}
@@ -131,6 +132,7 @@ m =
                eqnsLeft: [1x4 sym]
               eqnsRight: [1x4 sym]
                    ders: [1x4 sym]
+                 isSubs: [0 0 0 0]
                  params: [1x7 sym]
             paramsValue: [NaN NaN NaN NaN NaN NaN NaN]
               variables: [1x4 VariableClass]
