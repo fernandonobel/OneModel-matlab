@@ -21,7 +21,7 @@ classdef (Abstract) ModelClass < handle
     % 'isReduced' to swicth between these two behaivours.
 
     % bool Use the extended model?
-    isReduced
+    isReduced = false
   end
 
   properties (Dependent)
@@ -73,9 +73,6 @@ classdef (Abstract) ModelClass < handle
       %% MODELCLASS Constructor of Model Class.
       %
       % return: obj ModelClass object.
-
-      % Typically we want to work without removing the substitutions.
-      isReduced = false;
 
     end % ModelClass
   end % methods
