@@ -15,13 +15,13 @@ classdef (Abstract) ModelClass < handle
     % subsitution equations are only useful for grouping terms to simplify the
     % reading of the model but these equation do not provide new relationships
     % between variables. So normally, we would like to work with the
-    % susbtitution (model not extended) but sometimes (for simulation purposes)
-    % it is better to have the full model (model extended) without out any of 
-    % these intermediate variables. For this purpose it is defined the
-    % property 'isExtended' to swicth between these two behaivours.
+    % susbtitution (model not reduced) but sometimes (for simulation purposes)
+    % it is better to have the model without out any of these intermediate 
+    % variables (model reduced). For this purpose it is defined the property 
+    % 'isReduced' to swicth between these two behaivours.
 
     % bool Use the extended model?
-    isExtended
+    isReduced
   end
 
   properties (Dependent)
@@ -75,27 +75,27 @@ classdef (Abstract) ModelClass < handle
       % return: obj ModelClass object.
 
       % Typically we want to work without removing the substitutions.
-      isExtended = false;
+      isReduced = false;
 
     end % ModelClass
   end % methods
 
   % ModelClass propierties.
   methods
-    function [] = set.isExtended(obj,isExtended)
-      %% SET.ISEXTENDED Set interface for isExtended propierty.
+    function [] = set.isReduced(obj,isReduced)
+      %% SET.ISREDUCED Set interface for isReduced propierty.
       %
-      % param: isExtended [bool] Use the extended model?.
+      % param: isReduced [bool] Use the reduced model?.
       %
       % return: void
 
-      if ~islogical(isExtended)
-        error('isExtended must be logical.');
+      if ~islogical(isReduced)
+        error('isReduced must be logical.');
       end
 
-      obj.isExtended = isExtended;
+      obj.isReduced = isReduced;
       
-    end % set.isExtended
+    end % set.isReduced
     
   end % methods
 
@@ -153,6 +153,12 @@ classdef (Abstract) ModelClass < handle
       % return: out Symbolic varibles array.
 
       out = [obj.variables.nameSym].';
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.vars
 
     function [out] =  get.varsIsAlgebraic(obj)
@@ -167,6 +173,12 @@ classdef (Abstract) ModelClass < handle
       for i = 1:length(obj.variables)
         out(i,1) = isempty(equations(i).ders);
       end
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.varsIsAlgebraic
 
     function [out] =  get.varsName(obj)
@@ -175,6 +187,12 @@ classdef (Abstract) ModelClass < handle
       % return: out {[char]} Names of the vars of the model.
       
       out = {obj.variables.name}.';
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.varsName
 
     function [out] =  get.varsIsNoNegative(obj)
@@ -191,7 +209,12 @@ classdef (Abstract) ModelClass < handle
       end
 
       out = [obj.variables.isNoNegative];
-      
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.varsNoNegative
 
     function [out] =  get.varsIndexNoNegative(obj)
@@ -206,6 +229,11 @@ classdef (Abstract) ModelClass < handle
           out(end+1) = i;
         end
       end
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
       
     end % get.varsIndexNoNegative
 
@@ -216,6 +244,12 @@ classdef (Abstract) ModelClass < handle
       % return: out [bool] varsPlot.
 
       out  = [obj.variables.isPlot];
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.varsPlot
 
     function [out] = get.varIndex(obj)
@@ -282,7 +316,7 @@ classdef (Abstract) ModelClass < handle
       end
 
       out = varIndex;
-      
+
     end % get.varIndex
 
     function [out] = getVarByName(obj,name)
@@ -304,6 +338,12 @@ classdef (Abstract) ModelClass < handle
       % return: out Symbolic equations array.
 
       out = [obj.equations(obj.varIndex).eqnSym].';
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.eqns
 
 
@@ -313,6 +353,12 @@ classdef (Abstract) ModelClass < handle
       % return: out Simbolic left part of equations.
 
       out = [obj.equations(obj.varIndex).left];
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.eqnsLeft
 
     function [out] =  get.eqnsRight(obj)
@@ -321,6 +367,12 @@ classdef (Abstract) ModelClass < handle
       % return: out Simbolic right part of equations.
 
       out = [obj.equations(obj.varIndex).right];
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.eqnsRight
 
     function [out] =  get.ders(obj)
@@ -332,6 +384,12 @@ classdef (Abstract) ModelClass < handle
         {obj.variables.name}...
         ,'Uni',false);
       out = [out{:}];
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
     end % get.ders
 
     function [out] = get.isSubs(obj)
