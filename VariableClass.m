@@ -17,6 +17,8 @@ classdef VariableClass < SymbolClass
     ylabel
     % [char] Title used for plotting.
     title
+    % [char] Plot the variable in other plots.
+    plotIn
   end % properties
 
   methods 
@@ -34,6 +36,7 @@ classdef VariableClass < SymbolClass
       obj.xlabel = 'Time (t)';
       obj.ylabel = 'Concentration [A.U.]';
       obj.title = obj.name;
+      obj.plotIn = '';
       
     end % VariableClass
 
@@ -141,6 +144,21 @@ classdef VariableClass < SymbolClass
       obj.title = title;
       
     end % set.title
+
+    function [] = set.plotIn(obj,plotIn)
+      %% SET.PLOTIN Set interface for plotIn propierty.
+      %
+      % param: plotIn
+      %
+      % return: void
+      
+      if ~ischar(plotIn) 
+        error('plotIn must be a char array.');
+      end
+      
+      obj.plotIn = plotIn;
+      
+    end % set.plotIn
 
   end % methods
   

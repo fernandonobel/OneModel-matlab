@@ -125,15 +125,17 @@ classdef SimulationPlotClass < handle
 
       obj.plotNames = cellNames;
 
+      % Plot variables in other plots defined in the plotIn propierty.
       for i = 1:length(obj.model.variables)
-        if ischar(obj.model.variables(i).isPlot)
+        if ~isempty(obj.model.variables(i).plotIn)
           try
-            obj.selectSubplotByName(obj.model.variables(i).isPlot);
+            obj.selectSubplotByName(obj.model.variables(i).plotIn);
             plot(out.t, out.(obj.model.variables(i).name));
           catch
           end
         end
       end
+
     end % plotAllStates
 
     function [] =  selectSubplotByName(obj,name)
