@@ -9,6 +9,21 @@ classdef (Abstract) ModelClass < handle
   % your models will have these utilities.
 
   % Model data.
+  properties 
+    % When defining the model it is possible to declare Varibles and Equations
+    % that are just a substitution of variables or parameters. Then this
+    % subsitution equations are only useful for grouping terms to simplify the
+    % reading of the model but these equation do not provide new relationships
+    % between variables. So normally, we would like to work with the
+    % susbtitution (model not extended) but sometimes (for simulation purposes)
+    % it is better to have the full model (model extended) without out any of 
+    % these intermediate variables. For this purpose it is defined the
+    % property 'isExtended' to swicth between these two behaivours.
+
+    % bool Use the extended model?
+    isExtended
+  end
+
   properties (Dependent)
     % [sym] Variables of the model.      
     vars                
@@ -30,6 +45,8 @@ classdef (Abstract) ModelClass < handle
     eqnsRight          
     % [sym] Derivatives of the model.
     ders                
+    % [bool] Is the equation just a substitution of vars?
+    isSubs
     % [sym] Parameters of the model.
     params              
     % [real] Default value of the parameters.
@@ -57,10 +74,32 @@ classdef (Abstract) ModelClass < handle
       %
       % return: obj ModelClass object.
 
+      % Typically we want to work without removing the substitutions.
+      isExtended = false;
+
     end % ModelClass
   end % methods
 
-  %% Symbol manipulation.
+  % ModelClass propierties.
+  methods
+    function [] = set.isExtended(obj,isExtended)
+      %% SET.ISEXTENDED Set interface for isExtended propierty.
+      %
+      % param: isExtended [bool] Use the extended model?.
+      %
+      % return: void
+
+      if ~islogical(isExtended)
+        error('isExtended must be logical.');
+      end
+
+      obj.isExtended = isExtended;
+      
+    end % set.isExtended
+    
+  end % methods
+
+  %% Model definition.
   methods
     function [] =  addVariable(obj,v)
       %% ADDVARIABLE Add a variable to the model.
@@ -294,6 +333,15 @@ classdef (Abstract) ModelClass < handle
         ,'Uni',false);
       out = [out{:}];
     end % get.ders
+
+    function [out] = get.isSubs(obj)
+      %% GET.ISSUBS is the varible or equation just a substitution?
+      %
+      % return: out [bool] isSubs.
+
+      out = [obj.equations(obj.varIndex).isSubstitution];
+      
+    end % get.isSubs
 
 
     function [out] =  get.params(obj)

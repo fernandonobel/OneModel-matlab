@@ -52,8 +52,14 @@ classdef SimulationClass < handle
       % Return sim results in a struct.
       out.t = t;
       for i = 1:length(obj.model.vars)
+        if obj.model.eqnIsSubstitution(i)
+          continue
+        end
         out.(obj.model.varsName{i}) = x(:,i);
       end
+
+      % TODO: Calculate subs variables.
+
     end % simulate
 
     function [out] =  simulateContinue(obj,tadd,out,opt,p)
@@ -457,11 +463,22 @@ classdef SimulationClass < handle
       out = sym([]);
 
       for i = 1:length(obj.model.vars)
+        if obj.model.eqnIsSubstitution(i)
+          continue
+        end
+
         if obj.model.varsIsAlgebraic(i)
           out(i,1) = obj.model.eqnsRight(i) - obj.model.eqnsLeft(i);
         else
           out(i,1) = obj.model.eqnsRight(i);
         end
+      end
+
+      subsVars = obj.model.eqnsLeft(obj.model.eqnIsSubstitution);
+      subsEqns = obj.model.eqnsRight(obj.model.eqnIsSubstitution);
+
+      while any(ismember(symvar(out).', subsVars.', 'rows'))
+        out = subs(out,subsVars,subsEqns);
       end
 
     end % get.daeModel
@@ -478,7 +495,7 @@ classdef SimulationClass < handle
     function [out] =  get.fncDaeModel(obj)
       %% GET.FNCDAEMODEL Get function that evaluates the DAE model.
       %
-      % return: out Function handler that evaluates the DAE mode.
+      % return: out Function handler that evaluates the DAE model.
 
 
       out = obj.model.symbolic2MatlabFunction(obj.daeModel,'t,x,p');
