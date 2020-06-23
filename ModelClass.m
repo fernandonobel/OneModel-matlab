@@ -323,10 +323,15 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Variable Object variable.
 
+      aux = obj.isReduced;
+      obj.isReduced = false;
+
       names = obj.varsName();
 
       out = obj.variables(strcmp(name, names));
       
+      obj.isReduced = aux;
+
     end % get.varByName
     
     function [out] =  get.eqns(obj)

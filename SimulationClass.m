@@ -59,19 +59,19 @@ classdef SimulationClass < handle
 
     end % simulate
 
-    function [out] =  simulateContinue(obj,tadd,out,opt,p)
+    function [out] =  simulateContinue(obj,tadd,out,p,opt)
       %% SIMULATECONTINUE Continue simulating an exisiting simulation result.
       %
       % param: tadd real Additional time to simulate.
       %      : out real. Output of a previous simulation.
-      %      : opt Options for the ode.
       %      : p real. Parameters.
+      %      : opt Options for the ode.
       %
       % return: out real. Struct with the result of the simulation.
 
       x0 = zeros(1,length(obj.model.vars));
       for i = 1:length(obj.model.vars)
-        x0(i) = out.(obj.model.vars_name{i})(end);
+        x0(i) = out.(obj.model.varsName{i})(end);
       end
       tspan = [out.t(end) out.t(end)+tadd];
 

@@ -13,7 +13,7 @@ classdef VariableClass < SymbolClass
     ylim
     % [char] Label for the x axis.
     xlabel
-    % [char] Label for teh y axis.
+    % [char] Label for the y axis.
     ylabel
     % [char] Title used for plotting.
     title
@@ -30,7 +30,7 @@ classdef VariableClass < SymbolClass
       obj.isNoNegative = false;
       obj.isPlot = true;
       obj.xlim = [-inf inf];
-      obj.ylim = [-inf inf];
+      obj.ylim = [0 inf];
       obj.xlabel = 'Time (t)';
       obj.ylabel = 'Concentration [A.U.]';
       obj.title = obj.name;
