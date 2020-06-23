@@ -467,13 +467,6 @@ classdef SimulationClass < handle
         end
       end
 
-      %subsVars = obj.model.eqnsLeft(obj.model.eqnIsSubstitution);
-      %subsEqns = obj.model.eqnsRight(obj.model.eqnIsSubstitution);
-
-      %while any(ismember(symvar(out).', subsVars.', 'rows'))
-      %  out = subs(out,subsVars,subsEqns);
-      %end
-
     end % get.daeModel
 
     function [out] =  get.massMatrix(obj)

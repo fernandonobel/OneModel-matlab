@@ -228,7 +228,7 @@ classdef (Abstract) ModelClass < handle
       end
 
       % Return reduced model if needed.
-      if obj.isReduced
+      if obj.isReduced && ~isempty(out)
         out = out(~obj.isSubs);
       end
       
@@ -339,6 +339,17 @@ classdef (Abstract) ModelClass < handle
       % Return reduced model if needed.
       if obj.isReduced
         out = out(~obj.isSubs);
+
+        obj.isReduced = false;
+
+        subsVars = (obj.vars(obj.isSubs)).';
+        subsEqns = obj.eqnsRight(obj.isSubs);
+
+        obj.isReduced = true;
+        
+        while any(ismember(symvar(out).', subsVars.', 'rows'))
+          out = subs(out,subsVars,subsEqns);
+        end
       end
 
     end % get.eqns
@@ -367,7 +378,18 @@ classdef (Abstract) ModelClass < handle
 
       % Return reduced model if needed.
       if obj.isReduced
+        subsEqns = out(obj.isSubs);
         out = out(~obj.isSubs);
+
+        obj.isReduced = false;
+
+        subsVars = (obj.vars(obj.isSubs)).';
+
+        obj.isReduced = true;
+        
+        while any(ismember(symvar(out).', subsVars.', 'rows'))
+          out = subs(out,subsVars,subsEqns);
+        end
       end
 
     end % get.eqnsRight
