@@ -459,19 +459,35 @@ classdef (Abstract) ModelClass < handle
       % return: out [Real] Array with the default values of the parameters.
 
       out = [obj.parameters.value];
-      
+
     end % get.paramsValue
 
+    function [out] = get.symbols(obj)
+      %% GET.SYMBOLSNAME Get symbols of the model.
+      %
+      % return: out {SymbolClass} symbols.
+
+      out = {};
+
+      for i = 1:length(obj.symbols)
+        % Skip subsitution symbols if the model is reduced.
+        if obj.symbols{i}.isSubstitution && obj.isReduced
+          continue
+        end
+
+        out{end+1} = obj.symbols{i};
+      end
+
+    end
+    
     function [out] =  get.symbolsName(obj)
-      %% GET.SYMBOLSNAME  Get symbols name.
+      %% GET.SYMBOLSNAME Get symbols name.
       %
       % return: out {[char]} Names of the symbols of the model.
       
-      out = {obj.symbols.name}.';
-
-      % Return reduced model if needed.
-      if obj.isReduced
-        out = out(~obj.isSubs);
+      out = {};
+      for i = 1:length(obj.symbols)
+        out{end} = obj.symbols{i}.name;
       end
 
     end % get.varsName
