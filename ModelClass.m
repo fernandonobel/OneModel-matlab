@@ -53,6 +53,8 @@ classdef (Abstract) ModelClass < handle
     paramsValue 
     % {[char]} Names of the symbols of the model.
     symbolsName
+    % [bool] Should the symbol be plotted?
+    symbolsIsPlot
   end % propierties (Dependent)
 
   properties (Dependent, Access = private)
@@ -169,9 +171,9 @@ classdef (Abstract) ModelClass < handle
       aux = obj.isReduced;
       obj.isReduced = false;
 
-      names = obj.varsName();
+      names = obj.symbolsName();
 
-      out = obj.variables(strcmp(name, names));
+      out = obj.symbols{strcmp(name, names)};
       
       obj.isReduced = aux;
 
@@ -487,10 +489,22 @@ classdef (Abstract) ModelClass < handle
       
       out = {};
       for i = 1:length(obj.symbols)
-        out{end} = obj.symbols{i}.name;
+        out{end+1} = obj.symbols{i}.name;
       end
 
     end % get.varsName
+
+    function [out] = get.symbolsIsPlot(obj)
+      %% GET.SYMBOLSISPLOT Should the symbol be plot?
+      %
+      % return: out [bool] symbolsIsPlot.
+
+      out = [];
+      for i = 1:length(obj.symbols)
+        out(end+1) = obj.symbols{i}.isPlot;
+      end
+      
+    end % get.symbolsIsPlot
 
   end % methods
 

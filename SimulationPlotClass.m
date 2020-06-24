@@ -61,17 +61,14 @@ classdef SimulationPlotClass < handle
       % return: void
 
       p = inputParser;
-
+      
       defaultNames = [];
-      for i = 1:length(obj.model.vars)
+      for i = 1:length(obj.model.symbolsIsPlot)
         % Check if we want to plot that state
-        if islogical(obj.model.varsPlot(i))
-          if obj.model.varsPlot(i)
-            defaultNames = strcat(defaultNames,obj.model.varsName(i)," ");
-          end
+        if obj.model.symbolsIsPlot(i)
+            defaultNames = strcat(defaultNames,obj.model.symbolsName{i}," ");
         end
       end
-
 
       defaultXY = [-1 -1];
 
