@@ -27,6 +27,8 @@ classdef SymbolClass < handle
     title
     % [char] Plot the variable in other plots.
     plotIn
+    % bool Is the symbol just a substitution of variables?
+    isSubstitution
   end % properties
 
   methods 
@@ -46,6 +48,7 @@ classdef SymbolClass < handle
       obj.ylabel = '';
       obj.title = obj.name;
       obj.plotIn = '';
+      obj.isSubstitution = false;
 
     end % SymbolClass
 
@@ -229,6 +232,20 @@ classdef SymbolClass < handle
 
     end % set.plotIn
 
+    function [] = set.isSubstitution(obj,isSubstitution)
+      %% SET.ISSUBSTITUTION Set interface for isSubstitution propierty.
+      %
+      % param: isSubstitution
+      %
+      % return: void
+      
+      if ~islogical(isSubstitution)
+        error('isSubstitution must be logical.');
+      end
+
+      obj.isSubstitution = isSubstitution;
+      
+    end % set.isSubstitution
 
   end % methods
 

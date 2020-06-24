@@ -51,6 +51,8 @@ classdef (Abstract) ModelClass < handle
     params              
     % [real] Default value of the parameters.
     paramsValue 
+    % {[char]} Names of the symbols of the model.
+    symbolsName
   end % propierties (Dependent)
 
   properties (Dependent, Access = private)
@@ -59,6 +61,8 @@ classdef (Abstract) ModelClass < handle
   end % properties (Dependent)
 
   properties % (Access = private)
+    % [SymbolClass] Arrta with all the symbols of the model.
+    symbols
     % [VariableClass] Array with all the variables of the model.
     variables
     % [ParameterClass] Array with all the parameters of the model.
@@ -110,6 +114,13 @@ classdef (Abstract) ModelClass < handle
       else
         obj.variables(end+1) = v;
       end
+
+      if isempty(obj.symbols)
+        obj.symbols{1} = v;
+      else
+        obj.symbols{end+1} = v;
+      end
+
     end % addVariable
 
     function [] =  addParameter(obj,p)
@@ -124,6 +135,13 @@ classdef (Abstract) ModelClass < handle
       else
         obj.parameters(end+1) = p;
       end
+
+      if isempty(obj.symbols)
+        obj.symbols{1} = p;
+      else
+        obj.symbols{end+1} = p;
+      end
+
     end % addParameter
 
     function [] =  addEquation(obj,e)
@@ -443,6 +461,20 @@ classdef (Abstract) ModelClass < handle
       out = [obj.parameters.value];
       
     end % get.paramsValue
+
+    function [out] =  get.symbolsName(obj)
+      %% GET.SYMBOLSNAME  Get symbols name.
+      %
+      % return: out {[char]} Names of the symbols of the model.
+      
+      out = {obj.symbols.name}.';
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+
+    end % get.varsName
 
   end % methods
 

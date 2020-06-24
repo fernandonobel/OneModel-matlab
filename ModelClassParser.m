@@ -276,6 +276,9 @@ classdef ModelClassParser < handle
         [tokens,matches] = regexp(options{i},expression,'tokens','match');
         
         if strcmp(tokens{1}{1},'value')
+            % Set variable as a substitution.
+            fprintf(fout,'\t\t\tv.isSubstitution=true;\n',options{i});
+            % And generate its correspondign equation.
             arg = compose('(%s == %s, isSubstitution = true)',nameVar,tokens{1}{2});
             obj.addEquation(arg{1},fout);
         else
