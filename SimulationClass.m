@@ -50,7 +50,7 @@ classdef SimulationClass < handle
       obj.model.isReduced = true;
 
       % Simulate
-      [t,x] = obj.simulateTX(tspan,x0,p,opt);
+      [t,x,p] = obj.simulateTX(tspan,x0,p,opt);
 
       obj.model.isReduced = false;
       % Return sim results in a struct.
@@ -64,6 +64,13 @@ classdef SimulationClass < handle
         out.(obj.model.varsName{indexSwap(i)}) = x(:,i);
       end
 
+      % Add the parameter value to the out.
+      fn = fieldnames(p);
+      
+      for i = 1:length(fn)
+          out.(fn{i}) = p.(fn{i})*ones(size(t));
+      end
+      
       obj.model.isReduced = aux;
 
     end % simulate
@@ -97,7 +104,7 @@ classdef SimulationClass < handle
 
     end % simulateContinue
 
-    function [t,x] =  simulateTX(obj,tspan,x0,p,opt)
+    function [t,x,p] =  simulateTX(obj,tspan,x0,p,opt)
       %% SIMULATETX 
       %
       % param: tspan [tStart, tEnd] Time interval for the simulation.
