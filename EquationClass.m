@@ -149,7 +149,7 @@ classdef EquationClass < handle
 
       vars = obj.vars;
 
-      expression = 'd_(\w*)';
+      expression = 'der_(\w*)';
 
       out = sym([]);
       for i = 1:length(vars)
