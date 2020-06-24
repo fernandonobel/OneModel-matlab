@@ -22,6 +22,8 @@ classdef EquationClass < handle
     vars
     % [sym] Derivatives variables in the equation.
     ders
+    % [bool] Is the equation algebraic?
+    isAlgebraic
   end % properties (Dependent)
 
   methods 
@@ -161,6 +163,27 @@ classdef EquationClass < handle
       end
 
     end % get.ders
+
+    function [out] = get.isAlgebraic(obj)
+      %% GET.ISALGEBRAIC Is the equation algebraic?
+      %
+      % return: out bool isAlgebraic
+
+      vars = obj.vars;
+
+      expression = 'der_(\w*)';
+
+      for i = 1:length(vars)
+        [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
+        if ~isempty(tokens)
+          out = false;
+          return
+        end
+      end
+      
+      out = true;
+
+    end % get.isAlgebraic
 
   end % methods
 

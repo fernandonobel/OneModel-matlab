@@ -500,11 +500,16 @@ classdef SimulationClass < handle
 
       out = sym([]);
 
-      for i = 1:length(obj.model.vars)
-        if obj.model.varsIsAlgebraic(i)
-          out(i,1) = obj.model.eqnsRight(i) - obj.model.eqnsLeft(i);
+      vars = obj.model.vars;
+      varsIsAlgebraic = obj.model.varsIsAlgebraic;
+      eqnsRight = obj.model.eqnsRight;
+      eqnsLeft = obj.model.eqnsLeft;
+
+      for i = 1:length(vars)
+        if varsIsAlgebraic(i)
+          out(i,1) = eqnsRight(i) - eqnsLeft(i);
         else
-          out(i,1) = obj.model.eqnsRight(i);
+          out(i,1) = eqnsRight(i);
         end
       end
 

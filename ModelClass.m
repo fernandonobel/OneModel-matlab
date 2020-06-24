@@ -207,7 +207,7 @@ classdef (Abstract) ModelClass < handle
       equations = [obj.equations(obj.varIndex)];
 
       for i = 1:length(obj.variables)
-        out(i,1) = isempty(equations(i).ders);
+        out(i,1) = equations(i).isAlgebraic;
       end
 
       % Return reduced model if needed.
