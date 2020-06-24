@@ -1,7 +1,7 @@
 classdef SymbolClass < handle
   %% SYMBOLCLASS This class is a base for defining symbols for the ModelClass.
   %
-  
+
   properties
     % [char] String with the name of the symbol.
     name
@@ -13,10 +13,24 @@ classdef SymbolClass < handle
     units
     % [char] Comment of the symbol.
     comment
+    % plot Should the variable be plot?
+    isPlot
+    % [Real Real] x-limits for plotting.
+    xlim
+    % [Real Real] y-limits for plotting.
+    ylim
+    % [char] Label for the x axis.
+    xlabel
+    % [char] Label for the y axis.
+    ylabel
+    % [char] Title used for plotting.
+    title
+    % [char] Plot the variable in other plots.
+    plotIn
   end % properties
-  
+
   methods 
-  
+
     function [obj] = SymbolClass(name)
       %% Constructor of ValueClass.
       %
@@ -25,6 +39,13 @@ classdef SymbolClass < handle
       obj.name = name;
       obj.nameSym = sym(name);
       obj.nameTex = name;
+      obj.isPlot = false;
+      obj.xlim = [-inf inf];
+      obj.ylim = [0 inf];
+      obj.xlabel = 'Time (t)';
+      obj.ylabel = '';
+      obj.title = obj.name;
+      obj.plotIn = '';
 
     end % SymbolClass
 
@@ -40,7 +61,7 @@ classdef SymbolClass < handle
       end
 
       obj.name = name;
-      
+
     end % set.name
 
     function [] =  set.nameSym(obj,nameSym)
@@ -55,7 +76,7 @@ classdef SymbolClass < handle
       end
 
       obj.nameSym = nameSym;
-      
+
     end % set.nameSym
 
     function [] =  set.nameTex(obj,nameTex)
@@ -64,13 +85,13 @@ classdef SymbolClass < handle
       % param: nameTex [char] String with the named used for LaTeX.
       %
       % return: void
-      
+
       if ~isstring(nameTex) && ~ischar(nameTex)
         error('nameTex must be a string.');
       end
 
       obj.nameTex = nameTex;
-      
+
     end % set.nameTex
 
     function [] = set.units(obj,units)
@@ -85,7 +106,7 @@ classdef SymbolClass < handle
       end
 
       obj.units = units;
-      
+
     end % set.units
 
     function [] = set.comment(obj,comment)
@@ -100,9 +121,115 @@ classdef SymbolClass < handle
       end
 
       obj.comment = comment;
-      
+
     end % set.comment
-   	
+
+    function [] =  set.isPlot(obj,isPlot)
+      %% SET.ISPLOT Set interface for isPlot propierty.
+      %
+      % param: isPlot
+      %
+      % return: void
+
+      if ~islogical(isPlot);
+        error('isPlot must be logical.');
+      end
+
+      obj.isPlot = isPlot;
+
+    end % set.isPlot
+
+    function [] =  set.xlim(obj,xlim)
+      %% SET.XLIM Set interface for xlim propierty.
+      %
+      % param: xlim
+      %
+      % return: void
+
+      if ~isnumeric(xlim) || sum((size(xlim) ~= [1 2]))
+        error('xlim must be numeric and [1 2] size.');
+      end
+
+      obj.xlim = xlim;
+
+    end % set.xlim
+
+    function [] =  set.ylim(obj,ylim)
+      %% SET.YLIM Set interface for ylim propierty.
+      %
+      % param: ylim
+      %
+      % return: void
+
+      if ~isnumeric(ylim) || sum((size(ylim) ~= [1 2]))
+        error('ylim must be numeric and [1 2] size.');
+      end
+
+      obj.ylim = ylim;
+
+    end % set.ylim
+
+    function [] =  set.xlabel(obj,xlabel)
+      %% SET.XLABEL Set interface for xlabel propierty.
+      %
+      % param: xlabel
+      %
+      % return: void
+
+      if ~ischar(xlabel) 
+        error('xlabel must be a char array.');
+      end
+
+      obj.xlabel = xlabel;
+
+    end % set.xlabel
+
+    function [] =  set.ylabel(obj,ylabel)
+      %% SET.YLABEL Set interface for ylabel propierty.
+      %
+      % param: ylabel
+      %
+      % return: void
+
+      if ~ischar(ylabel) 
+        error('ylabel must be a char array.');
+      end
+
+      obj.ylabel = ylabel;
+
+    end % set.title
+
+    function [] =  set.title(obj,title)
+      %% SET.TITLE Set interface for title propierty.
+      %
+      % param: title
+      %
+      % return: void
+
+      if ~ischar(title) 
+        error('title must be a char array.');
+      end
+
+      obj.title = title;
+
+    end % set.title
+
+    function [] = set.plotIn(obj,plotIn)
+      %% SET.PLOTIN Set interface for plotIn propierty.
+      %
+      % param: plotIn
+      %
+      % return: void
+
+      if ~ischar(plotIn) 
+        error('plotIn must be a char array.');
+      end
+
+      obj.plotIn = plotIn;
+
+    end % set.plotIn
+
+
   end % methods
-  
+
 end % classdef

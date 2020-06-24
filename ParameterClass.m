@@ -33,7 +33,6 @@ classdef ParameterClass < SymbolClass
       obj.value = value;
       
     end % set.value
-
     	
   end % methods
   
