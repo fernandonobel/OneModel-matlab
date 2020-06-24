@@ -140,6 +140,25 @@ classdef (Abstract) ModelClass < handle
       end
     end % addEquation
 
+    function [out] = getSymbolByName(obj,name)
+      %% GETSYMBOLBYNAME Get the Symbol (Variable or Parameter) object by its 
+      % name.
+      %
+      % param: name [char] String with the name of the Symbol.
+      %
+      % return: out Variable Object symbol.
+
+      aux = obj.isReduced;
+      obj.isReduced = false;
+
+      names = obj.varsName();
+
+      out = obj.variables(strcmp(name, names));
+      
+      obj.isReduced = aux;
+
+    end % getSymbolByName
+
   end % methods
 
   %% Model data.
@@ -315,24 +334,6 @@ classdef (Abstract) ModelClass < handle
       out = varIndex;
 
     end % get.varIndex
-
-    function [out] = getVarByName(obj,name)
-      %% GETVARBYNAME Get the Variable object by its name.
-      %
-      % param: name [char] String with the name of the varible.
-      %
-      % return: out Variable Object variable.
-
-      aux = obj.isReduced;
-      obj.isReduced = false;
-
-      names = obj.varsName();
-
-      out = obj.variables(strcmp(name, names));
-      
-      obj.isReduced = aux;
-
-    end % get.varByName
     
     function [out] =  get.eqns(obj)
       %% GET.EQNS Get symbolic equations of the model.

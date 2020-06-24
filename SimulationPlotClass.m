@@ -40,7 +40,7 @@ classdef SimulationPlotClass < handle
       grid on;
       set(groot,'DefaultTextInterpreter','latex');
       
-      v = obj.model.getVarByName(name);
+      v = obj.model.getSymbolByName(name);
 
       if ~isempty(v)
         xlim(v.xlim);
@@ -71,6 +71,7 @@ classdef SimulationPlotClass < handle
           end
         end
       end
+
 
       defaultXY = [-1 -1];
 
