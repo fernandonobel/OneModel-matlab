@@ -47,10 +47,38 @@ classdef StrSymbolic < handle
         end
 
         out{end+1} = word;
-
       end
 
     end % symvar
+
+    function [out] = subs(s,old,new)
+      %% SUBS Symbolic substitution.
+      %
+      % param: s {[char]} String with the expression.
+      %      : old {[char]} Variable to be substituted in s.
+      %      : new {[char]} New value for old.
+      %
+      % return: out {[char]} String with the substitution done.
+
+      cont = 0;
+
+      while any(strcmp(old,StrSymbolic.symvar(s)))
+
+        for i = 1:length(old)
+          s = strrep(s,old{i},new{i});
+        end
+
+        cont = cont + 1;
+
+        if cont > 50
+          error('The substitution does not converge. Check that the arguments are coherent.');
+        end
+
+      end
+
+      out = s;
+
+    end % subs
 
   end % methods
 
