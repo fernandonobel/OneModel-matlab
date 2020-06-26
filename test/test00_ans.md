@@ -55,21 +55,28 @@ ans =
  
 ans =
  
-    d_x1 == k1 - d1*x1 - gamma12*x1*x2
- d_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
-                 d_x3 == k3*x1 - d3*x3
-                          ref == k3/d3
+    der_x1 == k1 - d1*x1 - gamma12*x1*x2
+ der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
+                 der_x3 == k3*x1 - d3*x3
+                            ref == k3/d3
  
 
 out = 
 
   struct with fields:
 
-      t: [154x1 double]
-     x1: [154x1 double]
-     x2: [154x1 double]
-     x3: [154x1 double]
-    ref: [154x1 double]
+          t: [154x1 double]
+         x1: [154x1 double]
+         x2: [154x1 double]
+         x3: [154x1 double]
+        ref: [154x1 double]
+         k1: [154x1 double]
+         k2: [154x1 double]
+         k3: [154x1 double]
+         d1: [154x1 double]
+         d2: [154x1 double]
+         d3: [154x1 double]
+    gamma12: [154x1 double]
 ```
 
 # Autogenerate ode function
@@ -135,6 +142,10 @@ m =
                  isSubs: [0 0 0 0]
                  params: [1x7 sym]
             paramsValue: [NaN NaN NaN NaN NaN NaN NaN]
+            symbolsName: {1x11 cell}
+          symbolsIsPlot: [1 1 1 0 0 0 0 0 0 0 1]
+               varIndex: [1 2 3 4]
+                symbols: {1x11 cell}
               variables: [1x4 VariableClass]
              parameters: [1x7 ParameterClass]
               equations: [1x4 EquationClass]

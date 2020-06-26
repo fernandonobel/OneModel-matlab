@@ -61,9 +61,9 @@ Parameter gamma12;
 
 % Equations
 
-Equation d_x1 == k1    - gamma12*x1*x2 - d1*x1;
-Equation d_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
-Equation d_x3 == k3*x1 - d3*x3;
+Equation der_x1 == k1    - gamma12*x1*x2 - d1*x1;
+Equation der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
+Equation der_x3 == k3*x1 - d3*x3;
 ```
 
 And the `extendeModel.mc` is defines the variable and equation needed for the reference:
@@ -75,10 +75,10 @@ And the `extendeModel.mc` is defines the variable and equation needed for the re
 extends ./baseModel.mc;
 
 % Then, add a variable for the reference.
-Variable ref(isAlgebraic=true);
+Variable ref;
 
 % And add the equation to calculate the reference value.
-Equation ref  == k3/d3;
+Equation ref == k3/d3;
 ```
 
 Notice how the equation for the reference `ref == k3/d3` makes use of parameters previously defined in the `baseModel.mc`. The extended model has access to all the information defined in the base model.
@@ -125,20 +125,24 @@ classdef extendedModel < ModelClass
 			p = ParameterClass('gamma12');
 			obj.addParameter(p);
 
-			e = EquationClass('d_x1 == k1    - gamma12*x1*x2 - d1*x1');
+			e = EquationClass('');
+			e.eqn = 'der_x1 == k1    - gamma12*x1*x2 - d1*x1';
 			obj.addEquation(e);
 
-			e = EquationClass('d_x2 == k2*x3 - gamma12*x1*x2 - d2*x2');
+			e = EquationClass('');
+			e.eqn = 'der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2';
 			obj.addEquation(e);
 
-			e = EquationClass('d_x3 == k3*x1 - d3*x3');
+			e = EquationClass('');
+			e.eqn = 'der_x3 == k3*x1 - d3*x3';
 			obj.addEquation(e);
+
 
 			v = VariableClass('ref');
-			v.isAlgebraic=true;
 			obj.addVariable(v);
 
-			e = EquationClass('ref  == k3/d3');
+			e = EquationClass('');
+			e.eqn = 'ref == k3/d3';
 			obj.addEquation(e);
 
 		end

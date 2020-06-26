@@ -32,15 +32,15 @@ classdef extendedModel < ModelClass
 			obj.addParameter(p);
 
 			e = EquationClass('');
-			e.eqn = 'd_x1 == k1    - gamma12*x1*x2 - d1*x1';
+			e.eqn = 'der_x1 == k1    - gamma12*x1*x2 - d1*x1';
 			obj.addEquation(e);
 
 			e = EquationClass('');
-			e.eqn = 'd_x2 == k2*x3 - gamma12*x1*x2 - d2*x2';
+			e.eqn = 'der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2';
 			obj.addEquation(e);
 
 			e = EquationClass('');
-			e.eqn = 'd_x3 == k3*x1 - d3*x3';
+			e.eqn = 'der_x3 == k3*x1 - d3*x3';
 			obj.addEquation(e);
 
 
@@ -48,7 +48,7 @@ classdef extendedModel < ModelClass
 			obj.addVariable(v);
 
 			e = EquationClass('');
-			e.eqn = 'ref  == k3/d3';
+			e.eqn = 'ref == k3/d3';
 			obj.addEquation(e);
 
 		end

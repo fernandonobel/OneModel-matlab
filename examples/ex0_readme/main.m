@@ -16,13 +16,7 @@ s = SimulationClass(m);
 tspan = [0 10];
 
 % Parameters of the model.
-p.k1 = 1.0;
-p.k2 = 1.0;
-p.k3 = 1.0;
-p.gamma12 = 1.0;
-p.d1 = 1.0;
-p.d2 = 1.0;
-p.d3 = 1.0;
+p = []; % They are already defined in "model.mc"
 
 % Intial conditions of the model.
 x0.x1 = 0.000000;

@@ -7,4 +7,4 @@ extends ./baseModel.mc;
 Variable ref;
 
 % And add the equation to calculate the reference value.
-Equation ref  == k3/d3;
+Equation ref == k3/d3;

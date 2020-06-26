@@ -63,9 +63,9 @@ Parameter gamma12;
 
 % Equations
 
-Equation d_x1 == k1    - gamma12*x1*x2 - d1*x1;
-Equation d_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
-Equation d_x3 == k3*x1 - d3*x3;
+Equation der_x1 == k1    - gamma12*x1*x2 - d1*x1;
+Equation der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
+Equation der_x3 == k3*x1 - d3*x3;
 Equation ref  == k3/d3;
 ```
 
@@ -92,10 +92,10 @@ ans =
  
 ans =
  
-    d_x1 == k1 - d1*x1 - gamma12*x1*x2
- d_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
-                 d_x3 == k3*x1 - d3*x3
-                          ref == k3/d3
+    der_x1 == k1 - d1*x1 - gamma12*x1*x2
+ der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
+                 der_x3 == k3*x1 - d3*x3
+                            ref == k3/d3
 
 ```
 
@@ -140,11 +140,18 @@ out =
 
   struct with fields:
 
-      t: [154x1 double]
-     x1: [154x1 double]
-     x2: [154x1 double]
-     x3: [154x1 double]
-    ref: [154x1 double]
+          t: [154x1 double]
+         x1: [154x1 double]
+         x2: [154x1 double]
+         x3: [154x1 double]
+        ref: [154x1 double]
+         k1: [154x1 double]
+         k2: [154x1 double]
+         k3: [154x1 double]
+         d1: [154x1 double]
+         d2: [154x1 double]
+         d3: [154x1 double]
+    gamma12: [154x1 double]
 ```
 
 ## 3. Plot simulation results
