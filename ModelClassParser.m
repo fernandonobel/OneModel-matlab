@@ -167,7 +167,7 @@ classdef ModelClassParser < handle
           obj.extendsModel(arg,fout);
 
         otherwise
-          disp('Error');
+          error('%s is not a valid command for ModelClass models.',cmd);
 
       end
 
