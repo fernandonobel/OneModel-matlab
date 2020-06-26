@@ -20,8 +20,12 @@ classdef EquationClass < handle
     right 
     % [sym] Variables of the equation.
     vars
+    % {[char]} Variables of the equation.
+    varsStr
     % [sym] Derivatives variables in the equation.
     ders
+    % {[char]} Derivatives variables in the equation.
+    dersStr
     % [bool] Is the equation algebraic?
     isAlgebraic
   end % properties (Dependent)
@@ -144,10 +148,19 @@ classdef EquationClass < handle
       
     end % get.vars
 
+    function [out] = get.varsStr(obj)
+      %% GET.VARSSTR Variables of the equation.
+      %
+      % return: out {[char]} Variables of the equation.
+
+      out = StrSymbolic.symvar(obj.eqn);
+      
+    end % get.vars
+
     function [out] = get.ders(obj)
       %% GET.DERS Get the variables that have a derivative in the equation.
       %
-      % return: out Derivative variables.
+      % return: out [sym] Derivative variables.
 
       vars = obj.vars;
 
@@ -158,6 +171,26 @@ classdef EquationClass < handle
         [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
         if ~isempty(tokens)
           out(end+1) = sym(tokens{1});
+          matches;
+        end
+      end
+
+    end % get.ders
+
+    function [out] = get.dersStr(obj)
+      %% GET.DERS Get the variables that have a derivative in the equation.
+      %
+      % return: out {[char]} Derivative variables.
+
+      vars = obj.vars;
+
+      expression = 'der_(\w*)';
+
+      out = {};
+      for i = 1:length(vars)
+        [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
+        if ~isempty(tokens)
+          out{end+1} = tokens{1}{1};
           matches;
         end
       end

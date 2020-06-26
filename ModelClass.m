@@ -311,14 +311,14 @@ classdef (Abstract) ModelClass < handle
       % First match equations with derivatives to the corresponding free
       % variable.
       for i = 1:length(obj.equations)
-        ders = obj.equations(i).ders;
+        ders = obj.equations(i).dersStr;
 
         if isempty(ders)
           continue;
         end
 
         for j = 1:length(obj.variables)
-          if strcmp(char(ders),obj.variables(j).name)
+          if strcmp(ders,obj.variables(j).name)
             eqnIndex(i) = j;
             varIndex(j) = i;
           end
@@ -327,7 +327,7 @@ classdef (Abstract) ModelClass < handle
       end
 
       % Then match the algebraic equation with the remaining freeVariables.
-      knownVars = [obj.parameters.nameSym obj.variables(eqnIndex(eqnIndex>0)).nameSym];
+      knownVars = {obj.parameters.name obj.variables(eqnIndex(eqnIndex>0)).name};
 
       while ~isempty(find(eqnIndex==0))
         for i = 1:length(obj.equations)
@@ -337,7 +337,7 @@ classdef (Abstract) ModelClass < handle
           end
           
           % Check the number of free variables in the equantion.
-          eqnVars = obj.equations(i).vars;
+          eqnVars = obj.equations(i).varsStr;
           eqnVars = eqnVars(~ismember(eqnVars,knownVars));
 
           % If there is only one free var.
