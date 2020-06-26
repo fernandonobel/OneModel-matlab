@@ -57,7 +57,8 @@ classdef (Abstract) ModelClass < handle
     symbolsIsPlot
   end % propierties (Dependent)
 
-  properties (Dependent, Access = private)
+  %properties (Dependent, Access = private)
+  properties (Dependent, Access = public)
     % [int] Index that match each variable with the related equation.
     varIndex 
   end % properties (Dependent)
