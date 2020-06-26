@@ -343,8 +343,9 @@ classdef (Abstract) ModelClass < handle
           % If there is only one free var.
           if length(eqnVars) == 1
             % We have a match!
-            eqnIndex(i) = find(ismember([obj.variables.nameSym],[eqnVars]));
-            varIndex(find(ismember([obj.variables.nameSym],[eqnVars]))) = i;
+            ind = find(ismember({obj.variables.name},eqnVars));
+            eqnIndex(i) = ind;
+            varIndex(ind) = i;
             % And add the var to known vars.
             knownVars(end+1) = eqnVars;
           end
