@@ -211,7 +211,23 @@ classdef ModelClassParser < handle
         options = [];
       else
         name = tokens{1}{1};
-        options = split(tokens{1}{2},',');
+        
+        arg = tokens{1}{2};
+        expression = ',(?![^\(]*\))';
+        ind = regexp(arg,expression);
+        
+        if ~isempty(ind) 
+            options{1} = arg(1:ind(1)-1);
+            
+            for i = 1:length(ind)-1
+                options{i+1} = arg(ind(i)+1:ind(i+1)-1);
+            end
+            
+            options{end+1} = arg(ind(end)+1:end);
+        else
+            options{1} = arg;
+        end
+        
       end
 
       for i=1:length(options)
