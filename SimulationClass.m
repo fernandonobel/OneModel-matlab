@@ -153,11 +153,12 @@ classdef SimulationClass < handle
           subsEqnsSimplified = subs(subsEqnsSimplified,subsVars,subsEqns);
       end
       
+      obj.model.isReduced = true;
       fncSubsEqns = obj.model.symbolic2MatlabFunction(subsEqnsSimplified,'t,x,p');
       
       xSubs = [];
       for i = 1:length(t)
-          xSubs = [xSubs; fncSubsEqns(t(i),x(i,:),p)];
+          xSubs = [xSubs; fncSubsEqns(t(i),x(i,:)',p)];
       end
       x = [x xSubs];
 

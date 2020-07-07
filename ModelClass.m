@@ -325,6 +325,23 @@ classdef (Abstract) ModelClass < handle
         end
 
       end
+      
+      % Now match substitution variables with the substitution equation.
+      for i = 1:length(obj.equations)
+        
+        % Skip not subsitution equations.
+        if ~obj.equations(i).isSubstitution
+          continue;
+        end
+        
+        for j = 1:length(obj.variables)
+          if strcmp(obj.equations(i).varsStr(1),obj.variables(j).name)
+            eqnIndex(i) = j;
+            varIndex(j) = i;
+          end
+        end
+
+      end
 
       % Then match the algebraic equation with the remaining freeVariables.
       knownVars = {obj.parameters.name obj.variables(eqnIndex(eqnIndex>0)).name};
@@ -444,7 +461,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out [bool] isSubs.
 
-      out = [obj.equations(obj.varIndex).isSubstitution];
+      out = [obj.variables.isSubstitution];
       
     end % get.isSubs
 
