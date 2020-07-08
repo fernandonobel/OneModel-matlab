@@ -7,7 +7,7 @@ classdef SimulationClass < handle
     model
   end % properties
 
-  properties (Dependent)
+  properties 
     % DAE model.
     daeModel                       
     % Mass matrix for DAE.
@@ -530,8 +530,13 @@ classdef SimulationClass < handle
       %
       % return: out Function handler that evaluates the DAE model.
 
+      if isempty(obj.fncDaeModel)
+        out = obj.model.symbolic2MatlabFunction(obj.daeModel,'t,x,p');
+        obj.fncDaeModel = out;
+      else
+        out = obj.fncDaeModel;
+      end
 
-      out = obj.model.symbolic2MatlabFunction(obj.daeModel,'t,x,p');
     end % get.fncDaeModel
 
   end % methods
