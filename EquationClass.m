@@ -14,10 +14,12 @@ classdef EquationClass < handle
   end % properties
 
   properties (Dependent)
-    % [left] Left part of the equation.
+    % [sym] Left part of the equation.
     left
-    % [right] Right part of the equation.
+    % [sym] Right part of the equation.
     right 
+    % [char] Right part of the equation.
+    rightStr
     % [sym] Variables of the equation.
     vars
     % {[char]} Variables of the equation.
@@ -130,7 +132,7 @@ classdef EquationClass < handle
     function [out] =  get.right(obj)
       %% GET.RIGHT Get right equal part of the equation.
       %
-      % return: out Simbolic rigth part of the equation.
+      % return: out Simbolic right part of the equation.
 
       ind_equal = strfind(obj.eqn,'=');
 
@@ -138,6 +140,18 @@ classdef EquationClass < handle
 
       out = str2sym(out).';
     end % get.right
+
+    function [out] =  get.rightStr(obj)
+      %% GET.RIGHT Get right equal part of the equation.
+      %
+      % return: out [char] String right part of the equation.
+
+      ind_equal = strfind(obj.eqn,'=');
+
+      out = obj.eqn(ind_equal(2)+1:end);
+
+    end % get.right
+
 
     function [out] = get.vars(obj)
       %% GET.VARS Variables of the equation.

@@ -132,15 +132,12 @@ classdef SimulationClass < handle
         error('The number of initial conditions do not match with the number of states');
       end
 
-      % Save the fncModel to avoid recalculate it as it is a Dependet parameter.
-      fncModel = obj.fncDaeModel;
-
       % Combine the user parameters with the deaults of the model.
       p = obj.combineParam(p);
 
       % Simulate
       %             [t,x] = ode15s(@(t,x) obj.f_model_odes(t,x,p),tspan,x0,opt);
-      [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,fncModel),tspan,x0,opt);
+      [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
       
       % Calculate substitution variables.
       obj.model.isReduced = false;
@@ -520,8 +517,14 @@ classdef SimulationClass < handle
       %% GET.MASSMATRIX get Mass matrix for DAE.
       %
       % return: out [[real]] Mass matrix.
-
-      out = diag(1-obj.model.varsIsAlgebraic);
+      
+      if isempty(obj.massMatrix)
+          out = diag(1-obj.model.varsIsAlgebraic);
+          obj.massMatrix = out;
+      else
+          out = obj.massMatrix;
+      end
+      
     end % get.massMatrix
 
 
