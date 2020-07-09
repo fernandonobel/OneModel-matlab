@@ -10,10 +10,14 @@ classdef SimulationClass < handle
   properties 
     % DAE model.
     daeModel                       
+    % Substitution vars model.
+    subsModel
     % Mass matrix for DAE.
     massMatrix                         
     % Function that evaluates fast the DAE model.
     fncDaeModel                     
+    % Function that evaluates fast the substitution vars model.
+    fncSubsModel
   end % properties (Dependent)
 
   %% Contructors.
@@ -55,22 +59,22 @@ classdef SimulationClass < handle
       obj.model.isReduced = false;
       % Return sim results in a struct.
       out.t = t;
-      
+
       % SimulateTX changes the normal order of the states.
       indexSwap = 1:length(obj.model.varsName);
       indexSwap = [indexSwap(~obj.model.isSubs) indexSwap(obj.model.isSubs)];
-      
+
       for i = 1:length(obj.model.varsName)
         out.(obj.model.varsName{indexSwap(i)}) = x(:,i);
       end
 
       % Add the parameter value to the out.
       fn = fieldnames(p);
-      
+
       for i = 1:length(fn)
-          out.(fn{i}) = p.(fn{i})*ones(size(t));
+        out.(fn{i}) = p.(fn{i})*ones(size(t));
       end
-      
+
       obj.model.isReduced = aux;
 
     end % simulate
@@ -138,24 +142,10 @@ classdef SimulationClass < handle
       % Simulate
       %             [t,x] = ode15s(@(t,x) obj.f_model_odes(t,x,p),tspan,x0,opt);
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
-      
-      % Calculate substitution variables.
-      obj.model.isReduced = false;
-      subsVars = obj.model.vars(obj.model.isSubs).';
-      subsEqns = obj.model.eqnsRight(obj.model.isSubs);
-      
-      subsEqnsSimplified = subsEqns;
-      
-      while any(ismember(symvar(subsEqnsSimplified).', subsVars.', 'rows'))
-          subsEqnsSimplified = subs(subsEqnsSimplified,subsVars,subsEqns);
-      end
-      
-      obj.model.isReduced = true;
-      fncSubsEqns = obj.model.symbolic2MatlabFunction(subsEqnsSimplified,'t,x,p');
-      
+
       xSubs = [];
       for i = 1:length(t)
-          xSubs = [xSubs; fncSubsEqns(t(i),x(i,:)',p)];
+        xSubs = [xSubs; obj.fncSubsModel(t(i),x(i,:)',p)];
       end
       x = [x xSubs];
 
@@ -513,18 +503,39 @@ classdef SimulationClass < handle
 
     end % get.daeModel
 
+    function [out] = get.subsModel(obj)
+      %% GET.SUBSMODEL Get the substitution model, the equations that evaluate the
+      % substitution variables from the state variables.
+      %
+      % return: out [sym] subsModel.
+
+      % Calculate substitution variables.
+      obj.model.isReduced = false;
+      subsVars = obj.model.vars(obj.model.isSubs).';
+      subsEqns = obj.model.eqnsRight(obj.model.isSubs);
+
+      out = subsEqns;
+
+      while any(ismember(symvar(out).', subsVars.', 'rows'))
+        out = subs(out,subsVars,subsEqns);
+      end
+
+      obj.model.isReduced = true;
+
+    end % get.subsModel
+
     function [out] =  get.massMatrix(obj)
       %% GET.MASSMATRIX get Mass matrix for DAE.
       %
       % return: out [[real]] Mass matrix.
-      
+
       if isempty(obj.massMatrix)
-          out = diag(1-obj.model.varsIsAlgebraic);
-          obj.massMatrix = out;
+        out = diag(1-obj.model.varsIsAlgebraic);
+        obj.massMatrix = out;
       else
-          out = obj.massMatrix;
+        out = obj.massMatrix;
       end
-      
+
     end % get.massMatrix
 
 
@@ -541,6 +552,20 @@ classdef SimulationClass < handle
       end
 
     end % get.fncDaeModel
+
+    function [out] = get.fncSubsModel(obj)
+      %% GET.FNCSUBSMODEL Get function that evaluates the subsModel.
+      %
+      % return: out Function handler that evaluates the subsModel.
+
+      if isempty(obj.fncSubsModel)
+        out = obj.model.symbolic2MatlabFunction(obj.subsModel,'t,x,p');
+        obj.fncSubsModel = out;
+      else
+        out = obj.fncSubsModel;
+      end
+
+    end % get.fncSubsModel
 
   end % methods
 
