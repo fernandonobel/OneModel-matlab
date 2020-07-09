@@ -136,11 +136,10 @@ classdef SimulationClass < handle
         error('The number of initial conditions do not match with the number of states');
       end
 
-      % Combine the user parameters with the deaults of the model.
+      % Combine the user parameters with the defaults of the model.
       p = obj.combineParam(p);
 
       % Simulate
-      %             [t,x] = ode15s(@(t,x) obj.f_model_odes(t,x,p),tspan,x0,opt);
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
 
       xSubs = [];
@@ -166,8 +165,11 @@ classdef SimulationClass < handle
       out = [];
       pDefault = [];
 
+      
+      paramsName = obj.model.paramsName;
+
       for i = 1:length(obj.model.params)
-        pDefault.(char(obj.model.params(i))) = obj.model.paramsValue(i);
+        pDefault.(paramsName{i}) = obj.model.paramsValue(i);
       end
 
       f = fieldnames(pDefault);
@@ -181,7 +183,7 @@ classdef SimulationClass < handle
 
         % Check if the parameter has been initialized.
         if isnan(out.(f{i}))
-          error('Value of ''%s'' was not defined.', f{i});
+          error('Value of ''%s'' is not defined.', f{i});
         end
       end
 

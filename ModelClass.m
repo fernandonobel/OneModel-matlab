@@ -49,6 +49,8 @@ classdef (Abstract) ModelClass < handle
     isSubs
     % [sym] Parameters of the model.
     params              
+    % {[char]} Names of the parameters of the model.
+    paramsName
     % [real] Default value of the parameters.
     paramsValue 
     % {[char]} Names of the symbols of the model.
@@ -473,6 +475,15 @@ classdef (Abstract) ModelClass < handle
 
       out = [obj.parameters.nameSym];
     end % get.params
+
+    function [out] =  get.paramsName(obj)
+      %% GET.PARASNAME  Get params name.
+      %
+      % return: out {[char]} Names of the params of the model.
+      
+      out = {obj.parameters.name}.';
+
+    end % get.paramsName
 
     function [out] = get.paramsValue(obj)
       %% GET.PARAMSVALUE Get the defautl value of the parameters of the model.
