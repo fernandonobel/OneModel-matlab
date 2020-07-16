@@ -10,6 +10,8 @@ classdef SimulationClass < handle
   properties 
     % DAE model.
     daeModel                       
+    % Albegraic model.
+    algebraicModel
     % Substitution vars model.
     subsModel
     % Mass matrix for DAE.
@@ -135,6 +137,10 @@ classdef SimulationClass < handle
       if length(x0) ~= length(obj.model.vars)
         error('The number of initial conditions do not match with the number of states');
       end
+
+      % Check if the initial conditions are compatible.
+
+      obj.algebraicModel;
 
       % Combine the user parameters with the defaults of the model.
       p = obj.combineParam(p);
@@ -504,6 +510,15 @@ classdef SimulationClass < handle
       end
 
     end % get.daeModel
+
+    function [out] = get.algebraicModel(obj)
+      %% GET.ALGEBRAICMODEL Get the algebraic equations of the model.
+      %
+      % return: out [sym] Algebraic model.
+      
+      out = obj.daeModel(obj.model.varsIsAlgebraic);
+      
+    end % get.algebraicModel
 
     function [out] = get.subsModel(obj)
       %% GET.SUBSMODEL Get the substitution model, the equations that evaluate the
