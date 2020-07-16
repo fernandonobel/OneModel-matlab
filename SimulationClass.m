@@ -143,9 +143,6 @@ classdef SimulationClass < handle
         error('The number of initial conditions do not match with the number of states');
       end
 
-      % Check if the initial conditions are compatible.
-      initialConditionWrapper(obj,0,[2 3],x0,p);
-
       % Simulate
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
 
@@ -597,7 +594,12 @@ classdef SimulationClass < handle
       %
       % return: out Function handler that evaluates the algebraic model.
 
-      out = obj.model.symbolic2MatlabFunction(obj.algebraicModel,'t,x,p');
+      if isempty(obj.fncAlgebraicModel)
+        out = obj.model.symbolic2MatlabFunction(obj.algebraicModel,'t,x,p');
+        obj.fncAlgebraicModel = out;
+      else
+        out = obj.fncAlgebraicModel;
+      end
 
     end % get.fncAlgebraicModel
 
