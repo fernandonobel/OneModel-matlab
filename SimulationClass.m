@@ -18,6 +18,8 @@ classdef SimulationClass < handle
     massMatrix                         
     % Function that evaluates fast the DAE model.
     fncDaeModel                     
+    % Function that evaluates fast the algebraic model.
+    fncAlgebraicModel                     
     % Function that evaluates fast the substitution vars model.
     fncSubsModel
   end % properties (Dependent)
@@ -133,17 +135,16 @@ classdef SimulationClass < handle
         x0 = obj.stateArrayFromNamedStruct(x0);
       end
 
+      % Combine the user parameters with the defaults of the model.
+      p = obj.combineParam(p);
+
       % Check if the initial conditions match the number of states.
       if length(x0) ~= length(obj.model.vars)
         error('The number of initial conditions do not match with the number of states');
       end
 
       % Check if the initial conditions are compatible.
-
-      obj.algebraicModel;
-
-      % Combine the user parameters with the defaults of the model.
-      p = obj.combineParam(p);
+      initialConditionWrapper(obj,0,[2 3],x0,p);
 
       % Simulate
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
@@ -215,7 +216,7 @@ classdef SimulationClass < handle
     end % stateArrayFromNamedStruct
 
     function [out] =  noNegativeWrapper(obj,t,x,p,func)
-      %% NONEGATIVEWRAPPER Chek that the states don't become negative if the
+      %% NONEGATIVEWRAPPER Check that the states don't become negative if the
       % state is set to noNegative.
       %
       % param: t real Time.
@@ -236,6 +237,27 @@ classdef SimulationClass < handle
         end
       end
     end % noNegativeWrapper
+
+    function [out] = initialConditionWrapper(obj,t,xAlgebraic,x0,p)
+      %% INITIALCONDITIONWRAPPER Combines the initial conditions to be
+      % compatible with fsolve funtions.
+      %
+      % param: t real Time.
+      %      : xAlgebraic [real] Algebraic initial condition in a row vector.
+      %      : x0 [real] Initial condition vector as used in simulatTX. It
+      %        contains both the algebraic and derivatives intial conditions.
+      %      : p real. Parameters.
+      %
+      % return: out [real] Output of the algebraic model that should be zero.
+      
+      x0Ders = x0.*~obj.model.varsIsAlgebraic';
+
+      ind = find(obj.model.varsIsAlgebraic);
+      x(ind) = xAlgebraic;
+      
+      out = obj.fncAlgebraicModel(t,(x0Ders+x)',p);
+      
+    end % initialConditionWrapper
 
     function [] =  createOdeFunction(obj,name)
       %% CREATEODEFUNCTION Create a matlab function that evaluates the ODE 
@@ -569,6 +591,15 @@ classdef SimulationClass < handle
       end
 
     end % get.fncDaeModel
+
+    function [out] = get.fncAlgebraicModel(obj)
+      %% GET.FNCALGEBRAICMODEL Get function that evaluates the algebraic model.
+      %
+      % return: out Function handler that evaluates the algebraic model.
+
+      out = obj.model.symbolic2MatlabFunction(obj.algebraicModel,'t,x,p');
+
+    end % get.fncAlgebraicModel
 
     function [out] = get.fncSubsModel(obj)
       %% GET.FNCSUBSMODEL Get function that evaluates the subsModel.
