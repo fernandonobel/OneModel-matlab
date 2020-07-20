@@ -16,13 +16,7 @@ s = SimulationClass(m);
 tspan = [0 10];
 
 % Parameters of the model.
-p.k1 = 1.0;
-p.k2 = 1.0;
-p.k3 = 1.0;
-p.gamma12 = 1.0;
-p.d1 = 1.0;
-p.d2 = 1.0;
-p.d3 = 1.0;
+p = []; % They are already defined in "model.mc"
 
 % Intial conditions of the model.
 x0.x1 = 0.000000;
@@ -112,9 +106,7 @@ dxdt(2,1) = -p.d2.*x(2,:)+p.k2.*x(3,:)-p.gamma12.*x(1,:).*x(2,:);
 dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
 
 % der(ref) (Algebraic state)
-dxdt(4,1) = -x(4,:)+p.k3./p.d3;
 
-end
 ```
 
 # Extends a model
@@ -141,6 +133,7 @@ m =
                    ders: [1x4 sym]
                  isSubs: [0 0 0 0]
                  params: [1x7 sym]
+             paramsName: {7x1 cell}
             paramsValue: [NaN NaN NaN NaN NaN NaN NaN]
             symbolsName: {1x11 cell}
           symbolsIsPlot: [1 1 1 0 0 0 0 0 0 0 1]
