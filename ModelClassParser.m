@@ -403,6 +403,8 @@ classdef ModelClassParser < handle
       %
       % return: void
       
+      fprintf(fout,'\t\tobj.checkValidModel();\n');
+
       fprintf(fout,'\t\tend\n');
       fprintf(fout,'\tend\n');
       fprintf(fout,'end\n');

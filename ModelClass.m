@@ -182,6 +182,27 @@ classdef (Abstract) ModelClass < handle
 
     end % getSymbolByName
 
+    function [] = checkValidModel(obj)
+      %% CHECKVALIDMODEL Check if the model is valid. 
+      % This involves: 
+      %   (1) duplicate use of symbols names.
+      %
+      % return: void
+
+
+      % (1) Check if there is duplicate use of symbols names.
+      [U, I] = unique(obj.symbolsName, 'first');
+
+      if length(obj.symbolsName) ~= length(U)
+        % There are duplicates.
+        duplicateNames = obj.symbolsName;
+        duplicateNames(I) = [];
+        
+        error('The symbol name "%s" is duplicated in the model. Please change the name in one of its definitions.', duplicateNames{1});
+      end
+      
+    end % checkValidModel
+
   end % methods
 
   %% Model data.

@@ -45,13 +45,13 @@ classdef extendedModel < ModelClass
 
 
 			v = VariableClass('ref');
-			v.xlim = [0 2];
 			obj.addVariable(v);
 
 			e = EquationClass('');
 			e.eqn = 'ref == k3/d3';
 			obj.addEquation(e);
 
+		obj.checkValidModel();
 		end
 	end
 end
