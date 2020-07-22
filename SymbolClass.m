@@ -43,7 +43,7 @@ classdef SymbolClass < handle
       obj.nameTex = name;
       obj.isPlot = false;
       obj.xlim = [-inf inf];
-      obj.ylim = [0 inf];
+      obj.ylim = [-inf inf];
       obj.xlabel = 'Time (t)';
       obj.ylabel = '';
       obj.title = obj.name;
