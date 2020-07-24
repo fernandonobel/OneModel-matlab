@@ -13,6 +13,8 @@ classdef SymbolClass < handle
     units
     % [char] Comment of the symbol.
     comment
+    % [char] Reference where the symbol value is from.
+    reference
     % plot Should the variable be plot?
     isPlot
     % [Real Real] x-limits for plotting.
@@ -126,6 +128,21 @@ classdef SymbolClass < handle
       obj.comment = comment;
 
     end % set.comment
+
+    function [] = set.reference(obj,in)
+      %% SET.REFERENCE Set interface for reference propierty.
+      %
+      % param: in [char] Reference.
+      %
+      % return: void
+
+      if ~isstring(in) && ~ischar(in)
+        error('reference must be a string.');
+      end
+
+      obj.reference = in;
+      
+    end % set.reference
 
     function [] =  set.isPlot(obj,isPlot)
       %% SET.ISPLOT Set interface for isPlot propierty.
