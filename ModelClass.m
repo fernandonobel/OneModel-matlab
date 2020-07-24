@@ -31,6 +31,8 @@ classdef (Abstract) ModelClass < handle
     varsIsAlgebraic
     % {[char]} Names of the vars of the model.
     varsName
+    % [real] Initial condition of the vars.
+    varsStart
     % [bool] Is an no negative state?
     varsIsNoNegative
     % [int] Index of variables that are no negative.
@@ -254,6 +256,20 @@ classdef (Abstract) ModelClass < handle
       end
 
     end % get.varsName
+
+    function [out] = get.varsStart(obj)
+      %% GET.VARSSTART Get vars start.
+      %
+      % return: out [real] Initial condition values.
+      
+      out = [obj.variables.start];
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+      
+    end % get.varsStart
 
     function [out] =  get.varsIsNoNegative(obj)
       %% GET.VARSNONEGATIVE Get no negative vars.

@@ -130,6 +130,9 @@ classdef SimulationClass < handle
 
       opt = odeset(opt,'Mass',obj.massMatrix);
 
+      % Combine the user initial conditions with the defaults of the model.
+      x0 = obj.combineInitialCondition(x0);
+      
       % Check format of x0
       if isstruct(x0)
         x0 = obj.stateArrayFromNamedStruct(x0);
@@ -154,11 +157,49 @@ classdef SimulationClass < handle
 
     end % simulateTX
 
+    function [out] = combineInitialCondition(obj,x0)
+      %% COMBINEINITIALCONDITION Combines the value of the initial conditions
+      % defined in the model with the x0 defined for the simulation.
+      %
+      % Variables defined in ModelClass have a start property, this value is
+      % used as a default value if the user does not provide a value for that
+      % Variable in the x0 struct passed to the simulation.
+      %
+      % param: x0 Initial condition introduced by the user.
+      %
+      % return: out
+
+      out = [];
+      x0Default = [];
+
+      varsName = obj.model.varsName;
+
+      for i = 1:length(obj.model.vars)
+        x0Default.(varsName{i}) = obj.model.varsStart(i);
+      end
+
+      f = fieldnames(x0Default);
+
+      for i = 1:length(f)
+        try 
+          out.(f{i}) = x0.(f{i});
+        catch
+          out.(f{i}) = x0Default.(f{i});
+        end
+
+        % Check if the parameter has been initialized.
+        if isnan(out.(f{i}))
+          error('Initial condition of ''%s'' is not defined.', f{i});
+        end
+      end
+      
+    end % combineInitialCondition
+
     function [out] = combineParam(obj,p)
       %% COMBINEPARAM Combines the value of the parameters defined in the model
       % with the parameters p defined for the simulation.
       %
-      % Parameters defined in ModelClass have a value protierty, this value is
+      % Parameters defined in ModelClass have a value property, this value is
       % used as a default value if the user does not provide a value for that
       % Parameter in the p struct passed to the simulation.
       %
@@ -187,7 +228,7 @@ classdef SimulationClass < handle
 
         % Check if the parameter has been initialized.
         if isnan(out.(f{i}))
-          error('Value of ''%s'' is not defined.', f{i});
+          error('Start of ''%s'' is not defined.', f{i});
         end
       end
 
@@ -205,8 +246,7 @@ classdef SimulationClass < handle
         try
           out(i) = x0.(obj.model.varsName{i});
         catch
-          % By default initial states are zero.
-          out(i) = 0.0;
+          error('initial condition was not defined.');
         end
       end
 

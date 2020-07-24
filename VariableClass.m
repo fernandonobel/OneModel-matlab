@@ -19,6 +19,7 @@ classdef VariableClass < SymbolClass
       obj = obj@SymbolClass(name);
       obj.isNoNegative = false;
       obj.isPlot = true;
+      obj.start = 0;
       
     end % VariableClass
 
