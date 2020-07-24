@@ -15,6 +15,8 @@ classdef SymbolClass < handle
     comment
     % [char] Reference where the symbol value is from.
     reference
+    % [real] Range of valid values for the symbol.
+    range
     % plot Should the variable be plot?
     isPlot
     % [Real Real] x-limits for plotting.
@@ -143,6 +145,21 @@ classdef SymbolClass < handle
       obj.reference = in;
       
     end % set.reference
+
+    function [] = set.range(obj,in)
+      %% SET.RANGE Set interface for range propierty.
+      %
+      % param: in [real] Range [min max].
+      %
+      % return: void
+      
+      if ~isnumeric(in) || sum((size(in) ~= [1 2]))
+        error('range must be numeric and [1 2] size.');
+      end
+
+      obj.range = in;
+      
+    end % set.range
 
     function [] =  set.isPlot(obj,isPlot)
       %% SET.ISPLOT Set interface for isPlot propierty.
