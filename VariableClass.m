@@ -5,6 +5,8 @@ classdef VariableClass < SymbolClass
   properties
     % bool Is the variable no negative?
     isNoNegative
+    % real Initial condition value.
+    start
   end % properties
 
   methods 
@@ -34,6 +36,21 @@ classdef VariableClass < SymbolClass
       obj.isNoNegative = isNoNegative;
       
     end % set.isNoNegative
+
+    function [] = set.start(obj,in)
+      %% SET.START Set interface for start propierty.
+      %
+      % param: in real Initial condition.
+      %
+      % return: void
+      
+      if ~isnumeric(in) || length(in) ~= 1
+        error('start must be a real number.');
+      end
+
+      obj.start = in;
+      
+    end % set.start
 
   end % methods
   
