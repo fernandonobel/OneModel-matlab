@@ -266,7 +266,7 @@ classdef ModelClassParser < handle
       %      : fout File output
       %
       % return: void
-
+      
       [nameVar,options] = obj.getOptions(arg);
       
       fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
@@ -278,8 +278,14 @@ classdef ModelClassParser < handle
         end
         expression = '(.*)=(.*)';
         [tokens,matches] = regexp(options{i},expression,'tokens','match');
-        
-        if strcmp(tokens{1}{1},'value')
+
+        % Get the option to execute
+        option = tokens{1}{1};
+
+        % And remove spaces at begging and at end.
+        option = obj.removeSpace(option);
+
+        if strcmp(option,'value')
             % Set variable as a substitution.
             fprintf(fout,'\t\t\tv.isSubstitution=true;\n',options{i});
             % And generate its correspondign equation.
