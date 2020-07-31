@@ -96,9 +96,9 @@ classdef SimulationClass < handle
       aux = obj.model.isReduced;
       obj.model.isReduced = true;
 
-      x0 = zeros(1,length(obj.model.vars));
+      x0 = [];
       for i = 1:length(obj.model.vars)
-        x0(i) = out.(obj.model.varsName{i})(end);
+        x0.(obj.model.varsName{i}) = out.(obj.model.varsName{i})(end);
       end
       tspan = [out.t(end) out.t(end)+tadd];
 
