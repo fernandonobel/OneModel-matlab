@@ -29,7 +29,7 @@ Download this repository into the directory of your choice. Then within MATLAB g
 
 # Documentation
 
-ModelClass has a documentation placed in the following [link](doc/README.md).
+ModelClass has a documentation manual placed in the following [link](doc/manual.pdf).
 
 # General workflow
 
@@ -38,8 +38,6 @@ This section will explain the general workflow of using ModelClass. An example w
 ## 1. Defining a model with the ModelClass syntax
 
 The first step is to code the information of the model we want to work with in the ModelClass syntax. This syntax is similar to OpenModelica and it allows us to define a lot information about the model (variables, equations, comments, references, etc.). 
-
-The ModelClass syntax allows us to define three types of objects:.
 
 The ModelClass syntax consist on a set of predefined commands that will define some information in the model. The basic three commands are:  `Parameter`, which defines a value that will not vary during simulation time; `Variable`, which defines a value that could change during simulation time; and `Equation`, which defines a relationship between parameters and variables. The `Variable` can be defined as algebraic or as dynamic. The use of a command is typically as follows:
 
@@ -69,7 +67,13 @@ The option `opt1` will be set to the value `value1`, and note the `,` between di
 Parameter A(value = 1.0);
 ```
 
-We will create a parameter `A` and its value property will be set to `1.0`.
+, will create a parameter `A` and its value property will be set to `1.0`.
+
+The ModelClass models should be defined in a file with the extension `.mc`. This files cannot have Matlab code, they must use the ModelClass sintaxis.
+
+Everything written after a `%` until the next new line is considered as a comment.
+This way the line `% Variables` will not define information of the model, but it will improve the readability of the model.
+It is recommended to properly comment on the models.
 
 For example, a ModelClass model defined with this syntax will look something like this (./examples/ex0_readme/model.mc):
 
@@ -97,18 +101,6 @@ Equation der_x1 == k1    - gamma12*x1*x2 - d1*x1;
 Equation der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
 Equation der_x3 == k3*x1 - d3*x3;
 ```
-
-The ModelClass models should be defined in a file with the extension `.mc`. This files cannot have Matlab code, they must use the ModelClass sintaxis.
-
-Everything written after a `%` until the next new line is considered as a comment.
-This way the line `% Variables` will not define information of the model, but it will improve the readability of the model.
-It is recommended to properly comment on the models.
-
-There are multiple ways we can choose for obtaining a ModelClass model: (i) the most basic one is to write ourselves a class that extends the ModelClass and then use functions for defining the model, (ii) we can also define our model as chemical reactions and then use the parser of Jose Luis and (iii) we can extend a previous ModelClass model defined and extend it in a OpenModelica style (we can even combine different models into a single one).
-
-It is expected that in the future there be more ways of generating ModelClass models. And this is one of the advantages of using this framework, the model are easier to code than coding ODE function directly and after that we can reuse ModelClass easily.
-
-A ModelClass model will look something like this (./examples/ex0_readme/model.mc):
 
 and the models are initialized with the following method:
 
