@@ -641,4 +641,16 @@ classdef (Abstract) ModelClass < handle
  
   end % methods
 
+  methods (Static)
+    function [] = version(~)
+      %% VERSION Prints the version of the ModelClass software.
+      %
+      % return: void
+
+      disp('v0.4.1');
+      
+    end % version
+    
+  end % methods
+
 end % classdef
