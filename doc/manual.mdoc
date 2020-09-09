@@ -9,7 +9,7 @@ toc: true
 
 This manual was written for the version **0.4.1** of ModelClass. Please check your local version of ModelClass using the following command:
 ```MATLAB
-ModelClass.version
+ModelClass.version()
 ```
 , then if your local version does not match, please upgrade to the latest version in the GitHub repository.
 
