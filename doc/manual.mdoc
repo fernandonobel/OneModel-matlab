@@ -5,8 +5,27 @@ date: \today
 toc: true
 ---
 
-# Introduction
+# Manual version
 
+This manual was written for the version 
+```sh exec --no-code --raw
+git describe --abbrev=0
+```
+of ModelClass. Please check your local version of ModelClass using the following command:
+```MATLAB
+ModelClass.version
+```
+, then if your local version does not match, please upgrade to the latest version in the GitHub repository.
+
+# Introduction to ModelClass
+
+ModelClass is a MATLAB class which simplifies working with ODE models. The main objetive is to simplify the process of coding and simulating an ODE model, and therefore reducing the time spent in this task. With ModelClass one can program ODE models from the symbolic equations and then simulate directly. This class provides also some functionality like OpenModelica (i.e. extendable classes, simulation of DAE models, etc).
+
+Apart from that, ModelClass provides us more classes for different tasks. For example, there is a class for mathematical analysis that can calculate equilibrium points, linearize the model, and calculate eigenvalues from the model defined in ModelClass. On other hand, there is class for a contractivity test to check whether a model is contractive or no.
+
+Lastly it is even possible to define ModelClass models from chemical reactions directly and then perform QSSA analysis and simulate.
+
+For more information please contact *fersann1@upv.es*.
 
 # Extends
 
@@ -16,7 +35,7 @@ When we use the keyword `extends` with the filename of a base model, the parser 
 
 This way we can reuse model for building new models that expand the original functionality, and it a change is made in the original model, it will be also done in the extended models. This helps the maintenance of the models and reduces the time spent programming.
 
-# Usage
+## Usage
 
 When defining a ModelClass `.mc`, we can use the following structure for extending a base model:
 
@@ -43,7 +62,7 @@ extends /home/username/MATLAB/model.m;
 
 NOTE: It is best to declare the `extends` at the beginning of the ModelClass model.
 
-# Example
+## Example
 
 In `./examples/ex1_extends` there is a example code for using the `extends` keyword.
 
