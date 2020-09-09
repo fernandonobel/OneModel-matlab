@@ -8,7 +8,9 @@ toc: true
 # Manual version
 
 This manual was written for the version 
+**
 v0.4.1
+**
 of ModelClass. Please check your local version of ModelClass using the following command:
 ```MATLAB
 ModelClass.version
