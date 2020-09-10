@@ -647,7 +647,17 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
 
-      disp('v0.4.1');
+      [filepath, name, ext]  = fileparts(which('ModelClass.m'));
+
+      pathVersion = [filepath '/version'];
+
+      fid = fopen(pathVersion);
+
+      tline = fgetl(fid);
+
+      fclose(fid);
+
+      disp([tline ' Fernando Nóbel (fersann1@upv.es)']);
       
     end % version
     
