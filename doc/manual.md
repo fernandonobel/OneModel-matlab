@@ -15,7 +15,11 @@ ModelClass.version()
 ```
 , then if your local version does not match, please upgrade to the latest version in the GitHub repository.
 
-# Introduction to ModelClass
+# Introduction
+
+MATLAB is powerful piece of software with many specialized toolboxes, but it lacks tools that simplify the process of developing mathematical models.
+On the other hand, OpenModelica does a great job of defining models and making them reusable, however OpenModelica is restricted for simulation purposes only.
+ModelClass is a toolbox for MATLAB that replicates part of the OpenModelica functionality in native MATLAB, in this way, you can work effectively with models in MATLAB without dependencies to other pieces of software.
 
 ModelClass is a MATLAB class which simplifies working with ODE models. The main objetive is to simplify the process of coding and simulating an ODE model, and therefore reducing the time spent in this task. With ModelClass one can program ODE models from the symbolic equations and then simulate directly. This class provides also some functionality like OpenModelica (i.e. extendable classes, simulation of DAE models, etc).
 
@@ -24,6 +28,81 @@ Apart from that, ModelClass provides us more classes for different tasks. For ex
 Lastly it is even possible to define ModelClass models from chemical reactions directly and then perform QSSA analysis and simulate.
 
 For more information please contact *fersann1@upv.es*.
+
+# Getting started
+
+## Installing from GitHub
+
+The code of ModelClass is allocated in the following GitHub [repository](https://github.com/sb2cl/ModelClass).
+
+It is recommended to install the latest version of ModelClass, the available version of the software can be found in the [releases](https://github.com/sb2cl/ModelClass/releases) in the GitHub repository.
+
+Download the code and unzip it in the directory of your choice.
+
+Then within MATLAB go to *HOME/ENVIROMENT >> Set path* and add the directory of the repository and the *utils* directory to the list (if they aren't already).
+
+## A minimal example
+
+The following code show a minimal example of defining and simulating a model of the antithetic controller. It consists in two files: (i) the definition of the model as a *.mc* file and (ii) the main script that will simulate the model.
+
+(i) model.mc
+```MATLAB
+% Variables
+
+Variable x1;
+Variable x2;
+Variable x3;
+Variable ref(value = k3/d3);
+
+% Parameters
+
+Parameter k1(value = 1.0);
+Parameter k2(value = 1.0);
+Parameter k3(value = 1.0);
+Parameter d1(value = 1.0);
+Parameter d2(value = 1.0);
+Parameter d3(value = 1.0);
+Parameter gamma12(value = 1.0);
+
+% Equations
+
+Equation der_x1 == k1    - gamma12*x1*x2 - d1*x1;
+Equation der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
+Equation der_x3 == k3*x1 - d3*x3;
+```
+
+(ii) main.m
+```MATLAB
+% Initialize an object of the model.
+m = loadModelClass('model');
+
+% Initialize a SimulationClass object with the model data.
+s = SimulationClass(m);
+
+% Simulation time span.
+tspan = [0 10];
+
+% Parameters of the model.
+p = []; % They are already defined in "model.mc"
+
+% Intial conditions of the model.
+x0.x1 = 0.000000;
+x0.x2 = 0.000000;
+x0.x3 = 0.000000;
+
+% Options for the solver.
+opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
+
+% Simulate the model.
+[out] = s.simulate(tspan,x0,p,opt);
+
+% Initialize a SimulationPlotClass object with the model data.
+sp = SimulationPlotClass(m);
+
+% Plot the result of the simulation.
+sp.plotAllStates(out);
+```
+
 
 # Extends
 
