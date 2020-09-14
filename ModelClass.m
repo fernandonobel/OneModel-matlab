@@ -471,6 +471,10 @@ classdef (Abstract) ModelClass < handle
 
         obj.isReduced = true;
         
+        if isempty(subsVars)
+            return;
+        end
+        
         while any(ismember(symvar(out).', subsVars.', 'rows'))
           out = subs(out,subsVars,subsEqns);
         end

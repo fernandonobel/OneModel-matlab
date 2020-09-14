@@ -73,7 +73,11 @@ classdef SimulationClass < handle
       end
 
       % Add the parameter value to the out.
-      fn = fieldnames(p);
+      if isempty(p)
+          fn = [];
+      else
+        fn = fieldnames(p);
+      end
 
       for i = 1:length(fn)
         out.(fn{i}) = p.(fn{i})*ones(size(t));
@@ -596,8 +600,12 @@ classdef SimulationClass < handle
 
       out = subsEqns;
 
-      while any(ismember(symvar(out).', subsVars.', 'rows'))
-        out = subs(out,subsVars,subsEqns);
+      if ~isempty(subsVars)
+        
+        while any(ismember(symvar(out).', subsVars.', 'rows'))
+          out = subs(out,subsVars,subsEqns);
+        end
+      
       end
 
       obj.model.isReduced = true;
