@@ -383,7 +383,7 @@ classdef (Abstract) ModelClass < handle
       end
 
       % Then match the algebraic equation with the remaining freeVariables.
-      knownVars = {obj.parameters.name obj.variables(eqnIndex(eqnIndex>0)).name};
+      knownVars = [obj.paramsName(:)' {obj.variables(eqnIndex(eqnIndex>0)).name}];
 
       while ~isempty(find(eqnIndex==0))
         for i = 1:length(obj.equations)
@@ -518,7 +518,11 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out {[char]} Names of the params of the model.
       
-      out = {obj.parameters.name}.';
+      if isempty(obj.parameters)
+        out = {''};
+      else
+        out = {obj.parameters.name}.';
+      end
 
     end % get.paramsName
 
