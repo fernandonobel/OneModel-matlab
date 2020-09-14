@@ -8,7 +8,7 @@ toc: true
 # Manual version
 
 This manual was written for the version **
-v0.4.1
+v0.4.2
 ** of ModelClass. Please check your local version of ModelClass using the following command:
 ```MATLAB
 ModelClass.version()
@@ -43,7 +43,7 @@ Then within MATLAB go to *HOME/ENVIROMENT >> Set path* and add the directory of 
 
 ## A minimal example
 
-The following code show a minimal example of defining and simulating a model of the antithetic controller. It consists in two files: (i) the definition of the model as a *.mc* file and (ii) the main script that will simulate the model.
+The following code show a minimal example of defining and simulating a model of the antithetic controller. It consists in two files: (i) the definition of the model as a *.mc* file and (ii) the main script that will simulate the model. 
 
 (i) model.mc
 ```MATLAB
@@ -102,7 +102,6 @@ sp = SimulationPlotClass(m);
 % Plot the result of the simulation.
 sp.plotAllStates(out);
 ```
-
 
 # Extends
 
@@ -259,3 +258,13 @@ end
 , where we can confirm that the base model has been successfully extended.
 
 Finally, at this point we can work as usually with the model `extendedModel.mc`, and we could even extended it to create a `extendedExtendedModel.md`!
+
+# Simulate until steady state
+
+Sometimes it is necessary just to simulate until the steady state is reached. We can set manually an `Event` in the ODE options for this. However, the following command will do that for us:
+
+```MATLAB
+opt = s.optSteadyState(opt,p);
+```
+
+

@@ -154,3 +154,13 @@ m = loadModelClass('extendedModel');
 , where we can confirm that the base model has been successfully extended.
 
 Finally, at this point we can work as usually with the model `extendedModel.mc`, and we could even extended it to create a `extendedExtendedModel.md`!
+
+# Simulate until steady state
+
+Sometimes it is necessary just to simulate until the steady state is reached. We can set manually an `Event` in the ODE options for this. However, the following command will do that for us:
+
+```MATLAB
+opt = s.optSteadyState(opt,p);
+```
+
+
