@@ -160,6 +160,51 @@ classdef SimulationClass < handle
       x = [x xSubs];
 
     end % simulateTX
+    
+    function [value,isterminal,direction] =  eventSteadyState(obj,t,x,p,tol)
+      %% EVALUATEDERIVATIVE This function is an Event for ode that will stop the
+      % simulation when the steady state is reached.
+      %
+      % param: t real Time for the evaluation.
+      %      : x [real] State vector.
+      %      : p real. Parameters.
+      %      : tol rel Tolerance for determining the steady state.
+      %
+      % return: [value,isteminal,direction] Return data need for an Event.
+
+      % Evaluate the derivatives.
+      dxdt = obj.fncDaeModel(t,x,p);
+
+      dxdt = sum(abs(dxdt));
+
+      if dxdt < tol
+        value = 0; % Stop the simulation.
+      else
+        value = 1; % Keep on with simulation.
+      end
+
+      isterminal = 1; % Stop the integration
+      direction = 0; % Negative direction only
+
+    end % simulateTX
+
+    function [opt] = optSteadyState(obj,opt,p,tol)
+      %% OPTSTEADYSTATE Set the event for simulating until steady state is
+      % reached
+      %
+      % param: opt Options for the ODE function.
+      %      : p real. Struct with the parameters of the model.
+      %      : tol real Tolerance for determining the steady state.
+      %
+      % return: opt Options with the event for steady state.
+
+      if ~exist('tol','var')
+        tol = 0.001;
+      end
+      
+      opt = odeset(opt,'Events',@(t,y) obj.eventSteadyState(t,y,p,tol));
+
+    end % optSteadyState
 
     function [out] = combineInitialCondition(obj,x0)
       %% COMBINEINITIALCONDITION Combines the value of the initial conditions
