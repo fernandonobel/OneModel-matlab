@@ -510,7 +510,12 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic parameters array.
 
-      out = [obj.parameters.nameSym];
+      if isempty(obj.parameters)
+        out = [];
+      else
+        out = [obj.parameters.nameSym];
+      end
+      
     end % get.params
 
     function [out] =  get.paramsName(obj)
