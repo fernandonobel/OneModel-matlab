@@ -217,7 +217,11 @@ classdef SimulationClass < handle
         pDefault.(paramsName{i}) = obj.model.paramsValue(i);
       end
 
-      f = fieldnames(pDefault);
+      if isempty(pDefault)
+        f = [];
+      else
+        f = fieldnames(pDefault);
+      end
 
       for i = 1:length(f)
         try 
