@@ -202,6 +202,9 @@ classdef SimulationClass < handle
         tol = 0.001;
       end
       
+      % Combine the user parameters with the defaults of the model.
+      p = obj.combineParam(p);
+      
       opt = odeset(opt,'Events',@(t,y) obj.eventSteadyState(t,y,p,tol));
 
     end % optSteadyState
