@@ -259,12 +259,54 @@ end
 
 Finally, at this point we can work as usually with the model `extendedModel.mc`, and we could even extended it to create a `extendedExtendedModel.md`!
 
-# Simulate until steady state
+# SimulationClass
 
-Sometimes it is necessary just to simulate until the steady state is reached. We can set manually an `Event` in the ODE options for this. However, the following command will do that for us:
+## Simulate until steady state
+
+Sometimes it is handy to just simulate until the steady state is reached. We can set manually an `Event` in the ODE options for this. However, the following command will do that for us:
 
 ```MATLAB
-opt = s.optSteadyState(opt,p);
+opt = s.optSteadyState(opt,p,tol);
 ```
 
+,where `opt` is the options for the ODE solver, `p` is the struct of paramters used in the simulation and `tol` is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than `tol`. If `tol` is not defined, it will be set to `0.001`.
 
+Here is a minimal example of how to use the `optSteadyState` function:
+
+(i) the `model.mc` code:
+```MATLAB
+Variable x(start = 0);
+Equation der_x == 1 - x;
+```
+
+and (ii) the `main.m` code:
+```MATLAB
+% Init the model and the tools for simulating
+
+m = loadModelClass('model');
+s = SimulationClass(m);
+sp = SimulationPlotClass(m);
+
+% Define intial state, parameters.
+x0 = [];
+p = [];
+
+% Simulation time span (note that we have set a huge time span).
+tspan = [0 100000]; 
+
+% Define the options for the simulator.
+opt = odeset('AbsTol', 1e-10, 'RelTol', 1e-10);
+
+% Define the tolerance to determine the steady state.
+tol = 0.01;
+
+% Set the event for ending the simulation when steady state is reached.
+opt = s.optSteadyState(opt,p,tol);
+
+% Simulate the model.
+[out] = s.simulate(tspan,x0,p,opt);
+
+% Plot the result and see that the simulation has been stop way before the 
+% defined time span.
+sp.plotAllStates(out);
+```
