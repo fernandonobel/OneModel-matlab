@@ -1,12 +1,12 @@
 classdef model < ModelClass
 	methods
 		function [obj] = model()
-			v = VariableClass('t');
+			v = VariableClass('x');
 			v.start = 0;
 			obj.addVariable(v);
 
 			e = EquationClass('');
-			e.eqn = 'der_t == 1 - t';
+			e.eqn = 'der_x == 1 - x';
 			obj.addEquation(e);
 
 		obj.checkValidModel();
