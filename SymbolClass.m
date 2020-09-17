@@ -88,6 +88,11 @@ classdef SymbolClass < handle
       if exist(name)
           error('the name of the symbol is not valid: it is a keyword of MATLAB.');
       end
+      
+      % Check if the name is 't' ('t' is the time in the simulation).
+      if strcmp(name,'t')
+          error('the name of the symbol is not valid: ''t'' must be reserved for the time in the simulation.');
+      end
 
       obj.name = name;
 
