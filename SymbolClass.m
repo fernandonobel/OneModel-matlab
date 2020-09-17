@@ -66,6 +66,23 @@ classdef SymbolClass < handle
       if ~isstring(name) && ~ischar(name)
         error('name must be a string.');
       end
+      
+      % Check if name is a valid name for a symbol.
+      
+      % Check if the name is empty.
+      if isempty(name)
+          error('the name of the symbol is empty.');
+      end
+      
+      % Find non-word symbols.
+      if ~isempty(regexp(name,'\W','ONCE'))
+          error('the name of the symbol is not valid: it contains no-word characters.');
+      end
+      
+      % Check if the name starts with a number.
+      if ~isempty(regexp(name(1),'[0-9]','ONCE'))
+          error('the name oh the symbol is not valid: it starts with a number.');
+      end
 
       obj.name = name;
 

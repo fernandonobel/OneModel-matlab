@@ -603,7 +603,7 @@ classdef (Abstract) ModelClass < handle
             ind = false(size(sf));
             % Search for everything but words.
             % Words cannot start with a number but they can contain numbers.
-            ind(regexp(aux,'\W|(?<=[0-9])[a-zA-Z]')) = true;
+            ind(regexp(aux,'\W')) = true;
             aux(ind)= ' ';
             % Remove numbers that follow an empty space.
             while 1
