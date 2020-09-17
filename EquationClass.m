@@ -40,7 +40,7 @@ classdef EquationClass < handle
       % param: eqn [char] String with the equation.
 
       obj.name = name;
-      obj.eqn = '';
+      % obj.eqn = '1==1';
       obj.isSubstitution = false;
 
     end % EquationClass
@@ -81,7 +81,7 @@ classdef EquationClass < handle
       if ~ischar(name) 
         error('name must be a char array.');
       end
-      
+
       obj.name = name;
       
     end % set.name
@@ -95,6 +95,22 @@ classdef EquationClass < handle
 
       if ~ischar(eqn) 
         error('eqn must be a char array.');
+      end
+
+      % Check if '= 'is used instead of '=='.
+      expression = '(?<!=)=(?!=)';
+      [tokens,matches] = regexp(eqn,expression,'tokens','match');
+      if ~isempty(matches)
+          error('''='' sign is used for variable assignation, use ''=='' instead in Equations.');
+      end
+      
+      % Chek if there is one and only one '=='.
+      expression = '==';
+      [tokens,matches] = regexp(eqn,expression,'tokens','match');
+      if isempty(matches)
+          error('there must be one ''=='' in the Equation.');
+      elseif length(matches) > 1
+          error('there must be only one ''=='' in the Equation.');
       end
 
       obj.eqn = eqn;
