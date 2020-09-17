@@ -83,6 +83,11 @@ classdef SymbolClass < handle
       if ~isempty(regexp(name(1),'[0-9]','ONCE'))
           error('the name oh the symbol is not valid: it starts with a number.');
       end
+      
+      % Check if the name is a keyword of matlab.
+      if exist(name)
+          error('the name of the symbol is not valid: it is a keyword of MATLAB.');
+      end
 
       obj.name = name;
 
