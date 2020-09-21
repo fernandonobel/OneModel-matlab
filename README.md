@@ -204,7 +204,7 @@ We could use ModelClass as our main workflow for working with models. However th
 
 With the following code you can generate the ODE function and the driver script:
 
-```MATLAB
+```MATLAB 
 
 % Create an ode function of the model.
 s.createOdeFunction();
@@ -212,7 +212,6 @@ s.createOdeFunction();
 s.createDriverOdeFunction();
 
 ```
-
 
 , the contents of the generated ODE funtion (./examples/ex0_readme/modelOdeFun.m) are:
 

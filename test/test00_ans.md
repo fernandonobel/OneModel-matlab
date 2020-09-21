@@ -124,6 +124,7 @@ m =
                    vars: [4x1 sym]
         varsIsAlgebraic: [4x1 logical]
                varsName: {4x1 cell}
+              varsStart: [0 0 0 0]
        varsIsNoNegative: [0 0 0 0]
     varsIndexNoNegative: []
                varsPlot: [1 1 1 1]
