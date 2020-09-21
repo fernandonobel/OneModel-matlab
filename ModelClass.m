@@ -620,12 +620,24 @@ classdef (Abstract) ModelClass < handle
                 words = (split(aux(i:end)));
                 word = words{1};
                 
+                % Remove builtin variables.
                 if (exist(word,'builtin')==5)
                     continue;
                 end
                 
+                % Remove the time varible.
                 if (strcmp(word,'t'))
                     continue;
+                end
+                
+                % Remove the exponencial.
+                if word(1) == 'e' 
+                    if length(word) == 1
+                        continue;
+                    end
+                    if ~isnan(str2double(word(2:end)))
+                        continue;
+                    end
                 end
                 
                 sf = insertAfter(sf,i-1+offset,"p.");
