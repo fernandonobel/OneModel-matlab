@@ -605,7 +605,10 @@ classdef (Abstract) ModelClass < handle
       % Add 'p.' to all symbols.
       ind = false(size(sf));
       for i = 1:length(names)
-        ind(strfind(sf,names{i})) = true;
+        aux = strfind(sf,names{i});
+        for j = 1:length(aux)
+            ind(aux(j):aux(j)+length(names{i})-1) = true;
+        end
       end
       lastInd = false;
       for i = length(sf):-1:1
