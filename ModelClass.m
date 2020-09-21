@@ -102,9 +102,9 @@ classdef (Abstract) ModelClass < handle
       end
 
       obj.isReduced = isReduced;
-      
+
     end % set.isReduced
-    
+
   end % methods
 
   %% Model definition.
@@ -179,7 +179,7 @@ classdef (Abstract) ModelClass < handle
       names = obj.symbolsName();
 
       out = obj.symbols{strcmp(name, names)};
-      
+
       obj.isReduced = aux;
 
     end % getSymbolByName
@@ -199,10 +199,10 @@ classdef (Abstract) ModelClass < handle
         % There are duplicates.
         duplicateNames = obj.symbolsName;
         duplicateNames(I) = [];
-        
+
         error('The symbol name "%s" is duplicated in the model. Please change the name in one of its definitions.', duplicateNames{1});
       end
-      
+
     end % checkValidModel
 
   end % methods
@@ -247,7 +247,7 @@ classdef (Abstract) ModelClass < handle
       %% GET.VARSNAME  Get vars name.
       %
       % return: out {[char]} Names of the vars of the model.
-      
+
       out = {obj.variables.name}.';
 
       % Return reduced model if needed.
@@ -261,14 +261,14 @@ classdef (Abstract) ModelClass < handle
       %% GET.VARSSTART Get vars start.
       %
       % return: out [real] Initial condition values.
-      
+
       out = [obj.variables.start];
 
       % Return reduced model if needed.
       if obj.isReduced
         out = out(~obj.isSubs);
       end
-      
+
     end % get.varsStart
 
     function [out] =  get.varsIsNoNegative(obj)
@@ -310,7 +310,7 @@ classdef (Abstract) ModelClass < handle
       if obj.isReduced && ~isempty(out)
         out = out(~obj.isSubs);
       end
-      
+
     end % get.varsIndexNoNegative
 
 
@@ -364,15 +364,15 @@ classdef (Abstract) ModelClass < handle
         end
 
       end
-      
+
       % Now match substitution variables with the substitution equation.
       for i = 1:length(obj.equations)
-        
+
         % Skip not subsitution equations.
         if ~obj.equations(i).isSubstitution
           continue;
         end
-        
+
         for j = 1:length(obj.variables)
           if strcmp(obj.equations(i).varsStr(1),obj.variables(j).name)
             eqnIndex(i) = j;
@@ -391,7 +391,7 @@ classdef (Abstract) ModelClass < handle
           if eqnIndex(i) > 0
             continue
           end
-          
+
           % Check the number of free variables in the equantion.
           eqnVars = obj.equations(i).varsStr;
           eqnVars = eqnVars(~ismember(eqnVars,knownVars));
@@ -412,7 +412,7 @@ classdef (Abstract) ModelClass < handle
       out = varIndex;
 
     end % get.varIndex
-    
+
     function [out] =  get.eqns(obj)
       %% GET.EQNS Get symbolic equations of the model.
       %
@@ -430,7 +430,7 @@ classdef (Abstract) ModelClass < handle
         subsEqns = obj.eqnsRight(obj.isSubs);
 
         obj.isReduced = true;
-        
+
         while any(ismember(symvar(out).', subsVars.', 'rows'))
           out = subs(out,subsVars,subsEqns);
         end
@@ -470,11 +470,11 @@ classdef (Abstract) ModelClass < handle
         subsVars = (obj.vars(obj.isSubs)).';
 
         obj.isReduced = true;
-        
+
         if isempty(subsVars)
-            return;
+          return;
         end
-        
+
         while any(ismember(symvar(out).', subsVars.', 'rows'))
           out = subs(out,subsVars,subsEqns);
         end
@@ -505,7 +505,7 @@ classdef (Abstract) ModelClass < handle
       % return: out [bool] isSubs.
 
       out = [obj.variables.isSubstitution];
-      
+
     end % get.isSubs
 
 
@@ -519,14 +519,14 @@ classdef (Abstract) ModelClass < handle
       else
         out = [obj.parameters.nameSym];
       end
-      
+
     end % get.params
 
     function [out] =  get.paramsName(obj)
       %% GET.PARASNAME  Get params name.
       %
       % return: out {[char]} Names of the params of the model.
-      
+
       if isempty(obj.parameters)
         out = {''};
       else
@@ -561,12 +561,12 @@ classdef (Abstract) ModelClass < handle
       end
 
     end
-    
+
     function [out] =  get.symbolsName(obj)
       %% GET.SYMBOLSNAME Get symbols name.
       %
       % return: out {[char]} Names of the symbols of the model.
-      
+
       out = {};
       for i = 1:length(obj.symbols)
         out{end+1} = obj.symbols{i}.name;
@@ -583,7 +583,7 @@ classdef (Abstract) ModelClass < handle
       for i = 1:length(obj.symbols)
         out(end+1) = obj.symbols{i}.isPlot;
       end
-      
+
     end % get.symbolsIsPlot
 
   end % methods
@@ -591,79 +591,51 @@ classdef (Abstract) ModelClass < handle
   %% Utils
   methods
     function [f_exp] = symbolic2MatlabFunction(obj,exp,newHeader)
-            % Convert a general symbrootLocusSweep(obj,p_ini,p_end,varargin)olic expression into a well formated
-            % matlab function.
-            
-            % Convert symbolic ODE into a function.
-            f = matlabFunction(exp);
-            % Convert function into string.
-            sf = func2str(f);
-            aux = sf;
-            % Add 'p.' to all state and parameters.
-            ind = false(size(sf));
-            % Search for everything but words.
-            % Words cannot start with a number but they can contain numbers.
-            ind(regexp(aux,'\W')) = true;
-            aux(ind)= ' ';
-            % Remove numbers that follow an empty space.
-            while 1
-                ind_old = ind;
-                ind(regexp(aux,'(?<=\s)\d')) = true;
-                aux(ind)= ' ';
-                offset = 0;
-                if ~sum(ind ~= ind_old)
-                    break;
-                end
-            end
-            
-            for i = regexp(aux,'\w*')
-                words = (split(aux(i:end)));
-                word = words{1};
-                
-                % Remove builtin variables.
-                if (exist(word,'builtin')==5)
-                    continue;
-                end
-                
-                % Remove the time varible.
-                if (strcmp(word,'t'))
-                    continue;
-                end
-                
-                % Remove the exponencial.
-                if word(1) == 'e' 
-                    if length(word) == 1
-                        continue;
-                    end
-                    if ~isnan(str2double(word(2:end)))
-                        continue;
-                    end
-                end
-                
-                sf = insertAfter(sf,i-1+offset,"p.");
-                offset = offset +2;
-                
-            end
-            % Remove the header.
-            sf = extractAfter(sf,min(strfind(sf,')')));
-            % Add the new header.
-            sf = strcat('@(',newHeader,')',sf);
-            
-            % Replace the name of each var for x(i).
-            for i = 1:length(obj.vars)
-                expr = strcat('p\.',obj.varsName{i},'\>');
-                [start,final]=regexp(sf,expr);
-                start = flip(start);
-                final = flip(final);
-                for j = 1:size(start,2)
-                    sf = replaceBetween(sf,start(j),final(j),strcat('x(', num2str(i),',:)'));
-                end
-            end
-            % Convert the final string into a func.
-            f_exp = str2func(sf);
+      % Convert a general symbrootLocusSweep(obj,p_ini,p_end,varargin)olic expression into a well formated
+      % matlab function.
 
-        end % symbolic2MatlabFunction
- 
+      % Convert symbolic ODE into a function.
+      f = matlabFunction(exp);
+      % Convert function into string.
+      sf = func2str(f);
+
+      % Get the name of all the symbols (variables and parameters).
+      names = StrSymbolic.symvar(sf);
+
+      % Add 'p.' to all symbols.
+      ind = false(size(sf));
+      for i = 1:length(names)
+        ind(strfind(sf,names{i})) = true;
+      end
+      lastInd = false;
+      for i = length(sf):-1:1
+        % Add the p. to the string.
+        if lastInd == true && ind(i) == false
+          sf = insertAfter(sf,i,'p.');
+        end
+        lastInd = ind(i);
+      end      
+
+      % Remove the header.
+      sf = extractAfter(sf,min(strfind(sf,')')));
+      % Add the new header.
+      sf = strcat('@(',newHeader,')',sf);
+
+      % Replace the name of each var for x(i).
+      for i = 1:length(obj.vars)
+        expr = strcat('p\.',obj.varsName{i},'\>');
+        [start,final]=regexp(sf,expr);
+        start = flip(start);
+        final = flip(final);
+        for j = 1:size(start,2)
+          sf = replaceBetween(sf,start(j),final(j),strcat('x(', num2str(i),',:)'));
+        end
+      end
+      % Convert the final string into a func.
+      f_exp = str2func(sf);
+
+    end % symbolic2MatlabFunction
+
   end % methods
 
   methods (Static)
@@ -683,9 +655,9 @@ classdef (Abstract) ModelClass < handle
       fclose(fid);
 
       disp([tline ' Fernando Nóbel (fersann1@upv.es)']);
-      
+
     end % version
-    
+
   end % methods
 
 end % classdef

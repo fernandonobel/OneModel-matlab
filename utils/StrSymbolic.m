@@ -38,15 +38,38 @@ classdef StrSymbolic < handle
         words = (split(aux(i:end)));
         word = words{1};
 
+        % Remove builtin variables.
         if (exist(word,'builtin')==5)
           continue;
         end
 
+        % Remove the time variable.
         if (strcmp(word,'t'))
           continue;
         end
 
-        out{end+1} = word;
+        % Remove the exponencial.
+        if word(1) == 'e' 
+          if length(word) == 1
+            continue;
+          end
+          if ~isnan(str2double(word(2:end)))
+            continue;
+          end
+        end
+
+        % Check if var was already find.
+        findName = false;
+        for j = 1:length(out)
+          if strcmp(out{j},word)
+            findName = true;
+            break;
+          end
+        end
+
+        if ~findName
+          out{end+1} = word;
+        end
       end
 
     end % symvar
