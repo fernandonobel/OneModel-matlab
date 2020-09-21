@@ -93,6 +93,17 @@ classdef SymbolClass < handle
       if strcmp(name,'t')
           error('the name of the symbol is not valid: ''t'' must be reserved for the time in the simulation.');
       end
+ 
+      % Check if the name is 'e' or 'e\d*' (it mess up with the exponential
+      % notation of numbers.
+      if name(1) == 'e' 
+          if length(name) == 1
+            error('the name of the symbol is not valid: ''e'' must be reserved for the cientific notation of numbers.');
+          end
+          if ~isnan(str2double(name(2:end)))
+            error(['the name of the symbol is not valid: ''' name ''' must be reserved for the cientific notation of numbers.']);
+          end
+      end
 
       obj.name = name;
 
