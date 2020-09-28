@@ -722,7 +722,7 @@ classdef (Abstract) ModelClass < handle
 
     end % checkVersion
 
-    function [] = update(obj)
+    function [] = update(~)
       %% UPDATE Update the ModelClass code to the latest in the main repository.
       %
       % return: void
@@ -757,6 +757,9 @@ classdef (Abstract) ModelClass < handle
       disp('Remove old files.');
       rmdir('./ModelClass','s');
       
+      addpath('./ModelClass');
+      addpath('./ModelClass/utils');
+      
       % Move to that location the lastest code.
       disp('Move the lastest files.');
       movefile('./ModelClass-master','./ModelClass');
@@ -771,7 +774,7 @@ classdef (Abstract) ModelClass < handle
       disp('Clean installation files.');
       delete('latest.zip');
       
-      % Move to the initial path.
+      % Come back to the initial path.
       cd(pathInitial);
       
       disp('');
