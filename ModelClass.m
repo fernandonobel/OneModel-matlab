@@ -739,7 +739,7 @@ classdef (Abstract) ModelClass < handle
       % Download the latest version of the code.
       disp('Downloading the latest version of ModelClass...');
       websave('./latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
-      disp('Dowload end.');
+      disp('Download end.');
       
       % Unzip the code.
       disp('Unzip the code...');
