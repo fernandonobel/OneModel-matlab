@@ -114,7 +114,7 @@ m.vars
 m.eqns
 ```
 
-```
+```MATLAB
  
 ans =
  
@@ -131,7 +131,6 @@ ans =
                  der_x3 == k3*x1 - d3*x3
                             ref == k3/d3
  
-
 ```
 
 ## 2. Simulate the ModelClass model
@@ -164,7 +163,7 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 out
 ```
 
-```
+```MATLAB
 
 out = 
 
@@ -182,7 +181,6 @@ out =
          d2: [154x1 double]
          d3: [154x1 double]
     gamma12: [154x1 double]
-
 
 ```
 
