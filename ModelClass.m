@@ -746,10 +746,10 @@ classdef (Abstract) ModelClass < handle
       disp('Unzip end');
       
       % Move the .git if it exists.
-      if exist('./ModelClass/.git', 'dir')
+      if exist([path '/.git'], 'dir')
           disp('Founded .git folder.');
           disp('Saved the .git folder.');
-          movefile('./ModelClass/.git','./git-tmp');
+          movefile([path '/.git'],'./git-tmp');
       end
 
       % Remove the old code.
@@ -760,16 +760,16 @@ classdef (Abstract) ModelClass < handle
       
       % Move to that location the lastest code.
       disp('Move the lastest files.');
-      movefile('./ModelClass-master','./ModelClass');
+      movefile('./ModelClass-master',path);
       
       % Restore the path for this session.
-      addpath('./ModelClass');
-      addpath('./ModelClass/utils');
+      addpath(path);
+      addpath([path '/utils']);
       
       % Move back the .git folder if it exists.
       if exist('./git-tmp', 'dir')
           disp('Move back the .git folder.');
-          movefile('./git-tmp','./ModelClass/.git');
+          movefile('./git-tmp',[path '/.git']);
       end
       
       % Clean-up.
