@@ -754,9 +754,11 @@ classdef (Abstract) ModelClass < handle
       end
 
       % Remove the old code.
+      disp('Remove old files.');
       rmdir('./ModelClass','s');
       
       % Move to that location the lastest code.
+      disp('Move the lastest files.');
       movefile('./ModelClass-master','./ModelClass');
       
       % Move back the .git folder if it exists.
@@ -764,6 +766,9 @@ classdef (Abstract) ModelClass < handle
           disp('Move back the .git folder.');
           movefile('./git-tmp','./ModelClass/.git');
       end
+      
+      % Clean-up.
+      delete('latest.zip');
       
       % Move to the initial path.
       cd(pathInitial);
