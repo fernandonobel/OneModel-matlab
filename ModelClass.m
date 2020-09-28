@@ -760,7 +760,10 @@ classdef (Abstract) ModelClass < handle
       
       % Move to that location the lastest code.
       disp('Move the lastest files.');
+      try
       movefile('./ModelClass-master',path);
+      catch
+      end
       
       % Restore the path for this session.
       addpath(path);
