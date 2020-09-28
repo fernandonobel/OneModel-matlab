@@ -727,6 +727,9 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
       
+      % Get the initial path.
+      pathInitial = pwd();
+      
       % Get the absoulute path.
       [path, name, ext]  = fileparts(which('ModelClass.m'));
       
@@ -761,6 +764,9 @@ classdef (Abstract) ModelClass < handle
           disp('Move back the .git folder.');
           movefile('./git-tmp','./ModelClass/.git');
       end
+      
+      % Move to the initial path.
+      cd(pathInitial);
       
     end % update
 
