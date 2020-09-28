@@ -736,8 +736,21 @@ classdef (Abstract) ModelClass < handle
       disp('Unzip the code...');
       unzip('../latest.zip','../');
       disp('Unzip end');
+      
+      % Move the .git if it exists.
+      if exist('./.git', 'dir')
+          disp('Founded .git folder.');
+          disp('Saved the .git folder.');
+          movefile('./.git','../git-tmp');
+      end
 
-      movefile('../ModelClass-master/*','../ModelClass');
+      % movefile('../ModelClass-master/*','../ModelClass');
+      
+      % Move back the .git folder if it exists.
+      if exist('../git-tmp', 'dir')
+          disp('Move back the .git folder.');
+          movefile('../git-tmp','./.git');
+      end
       
     end % update
 
