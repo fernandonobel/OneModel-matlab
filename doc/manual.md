@@ -282,7 +282,6 @@ Equation der_x == 1 - x;
 and (ii) the `main.m` code:
 ```MATLAB
 % Init the model and the tools for simulating
-
 m = loadModelClass('model');
 s = SimulationClass(m);
 sp = SimulationPlotClass(m);
@@ -298,6 +297,7 @@ tspan = [0 100000];
 opt = odeset('AbsTol', 1e-10, 'RelTol', 1e-10);
 
 % Define the tolerance to determine the steady state.
+% Try changing this value to see its effect.
 tol = 0.01;
 
 % Set the event for ending the simulation when steady state is reached.
