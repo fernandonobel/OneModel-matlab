@@ -754,7 +754,7 @@ classdef (Abstract) ModelClass < handle
       end
 
       % Remove the old code.
-      rmdir('./ModelClass/*','s');
+      rmdir('./ModelClass','s');
       
       % Move to that location the lastest code.
       movefile('./ModelClass-master','./ModelClass');
