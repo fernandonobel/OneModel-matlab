@@ -667,7 +667,6 @@ classdef (Abstract) ModelClass < handle
         % Check if the head is a reference or no.
         if strcmp(head(1:5),'ref: ')
           % It is a reference.
-          disp('Reference');
           pathRef = [filepath '/.git/' head(6:end)];
           fid = fopen(pathRef);
           commit = fgetl(fid);
