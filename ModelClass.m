@@ -744,7 +744,11 @@ classdef (Abstract) ModelClass < handle
           movefile('./.git','../git-tmp');
       end
 
-      % movefile('../ModelClass-master/*','../ModelClass');
+      % Remove the old code.
+      rmdir('../ModelClass','s');
+      
+      % Move to that location the lastest code.
+      movefile('../ModelClass-master','../ModelClass');
       
       % Move back the .git folder if it exists.
       if exist('../git-tmp', 'dir')
