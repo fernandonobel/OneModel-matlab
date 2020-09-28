@@ -757,12 +757,13 @@ classdef (Abstract) ModelClass < handle
       disp('Remove old files.');
       rmdir('./ModelClass','s');
       
-      addpath('./ModelClass');
-      addpath('./ModelClass/utils');
-      
       % Move to that location the lastest code.
       disp('Move the lastest files.');
       movefile('./ModelClass-master','./ModelClass');
+      
+      % Restore the path for this session.
+      addpath('./ModelClass');
+      addpath('./ModelClass/utils');
       
       % Move back the .git folder if it exists.
       if exist('./git-tmp', 'dir')
