@@ -740,11 +740,6 @@ classdef (Abstract) ModelClass < handle
       websave('./latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
       disp('Download end.');
       
-      % Unzip the code.
-      disp('Unzip the code...');
-      unzip('./latest.zip','./ModelClass-master-tmp');
-      disp('Unzip end');
-      
       % Move the .git if it exists.
       if exist([path '/.git'], 'dir')
           disp('Founded .git folder.');
@@ -758,9 +753,14 @@ classdef (Abstract) ModelClass < handle
       rmdir(path,'s'); % This generates a warnig and messes up with the path.
       warning('on');
       
+      % Unzip the code.
+      disp('Unzip the code...');
+      unzip('./latest.zip','.');
+      disp('Unzip end');
+      
       % Move to that location the lastest code.
       disp('Move the lastest files.');
-      movefile('./ModelClass-master-tmp',path);
+      movefile('./ModelClass-master',path);
       
       % Restore the path for this session.
       addpath(path);
