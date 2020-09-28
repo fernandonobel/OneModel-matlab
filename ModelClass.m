@@ -727,33 +727,39 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
       
+      % Get the absoulute path.
+      [path, name, ext]  = fileparts(which('ModelClass.m'));
+      
+      cd(path);
+      cd('..');
+      
       % Download the latest version of the code.
       disp('Downloading the latest version of ModelClass...');
-      websave('../latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
+      websave('./latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
       disp('Dowload end.');
       
       % Unzip the code.
       disp('Unzip the code...');
-      unzip('../latest.zip','../');
+      unzip('./latest.zip','./');
       disp('Unzip end');
       
       % Move the .git if it exists.
-      if exist('./.git', 'dir')
+      if exist('./ModelClass/.git', 'dir')
           disp('Founded .git folder.');
           disp('Saved the .git folder.');
-          movefile('./.git','../git-tmp');
+          movefile('./ModelClass/.git','./git-tmp');
       end
 
       % Remove the old code.
-      delete('./*')
+      delete('./ModelClass/*')
       
       % Move to that location the lastest code.
-      movefile('../ModelClass-master','../ModelClass');
+      movefile('./ModelClass-master','./ModelClass');
       
       % Move back the .git folder if it exists.
-      if exist('../git-tmp', 'dir')
+      if exist('./git-tmp', 'dir')
           disp('Move back the .git folder.');
-          movefile('../git-tmp','./.git');
+          movefile('./git-tmp','./ModelClass/.git');
       end
       
     end % update
