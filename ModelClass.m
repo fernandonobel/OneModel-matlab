@@ -649,17 +649,97 @@ classdef (Abstract) ModelClass < handle
 
       [filepath, name, ext]  = fileparts(which('ModelClass.m'));
 
+      % Get the version from the version file.
       pathVersion = [filepath '/version'];
-
       fid = fopen(pathVersion);
-
-      tline = fgetl(fid);
-
+      versionNumber = fgetl(fid);
       fclose(fid);
 
-      disp([tline ' Fernando Nóbel (fersann1@upv.es)']);
+      % Get the commit number if .git is present.
+      commit = '';
+      pathHead = [filepath '/.git/HEAD'];
+      if isfile(pathHead)
+        % File exists.
+        fid = fopen(pathHead);
+        head = fgetl(fid);
+        fclose(fid);
+
+        % Check if the head is a reference or no.
+        if strcmp(head(1:5),'ref: ')
+          % It is a reference.
+          disp('Reference');
+          pathRef = [filepath '/.git/' head(6:end)];
+          fid = fopen(pathRef);
+          commit = fgetl(fid);
+        else
+          % It is the commit hash.
+          commit = head;
+        end
+
+        commit = [' ' commit(1:7)];
+      end
+
+      disp([versionNumber commit '   -   Fernando Nóbel (fersann1@upv.es)']);
 
     end % version
+
+    function [isOutdated] = checkVersion(~)
+      %% CHECKVERSION Check if the local version of ModelClass is outdated.
+      %
+      % return: isOutdated bool True if the local version is outdated.
+
+      % Get the local version.
+      [filepath, name, ext]  = fileparts(which('ModelClass.m'));
+      pathVersion = [filepath '/version'];
+      fid = fopen(pathVersion);
+      versionLocal = fgetl(fid);
+      fclose(fid);
+      versionLocal = regexp(versionLocal,'v(\d*).(\d*).(\d*)','tokens');
+      versionLocal = versionLocal{1};
+
+      % Get the latest version.
+      versionLatest = webread('https://raw.githubusercontent.com/FernandoNobel/ModelClass/master/version');
+      versionLatest = regexp(versionLatest,'v(\d*).(\d*).(\d*)','tokens');
+      versionLatest = versionLatest{1};
+
+      % Compare the latest and local  versions.
+
+      isOutdated = false;
+
+      if str2num(versionLatest{1}) > str2num(versionLocal{1})
+        isOutdated = true;
+      elseif str2num(versionLatest{2}) > str2num(versionLocal{2})
+        isOutdated = true;
+      elseif str2num(versionLatest{3}) > str2num(versionLocal{3})
+        isOutdated = true;
+      end
+
+      if isOutdated
+        warning('The local version of ModelClass is outdated, please update to the latest version.');
+      else
+        disp('The local version of ModelClass is up to date.');
+      end
+
+    end % checkVersion
+
+    function [] = update(obj)
+      %% UPDATE Update the ModelClass code to the latest in the main repository.
+      %
+      % return: void
+      
+      % Download the latest version of the code.
+      disp('Downloading the latest version of ModelClass...');
+      websave('../latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
+      disp('Dowload end.');
+      
+      % Unzip the code.
+      disp('Unzip the code...');
+      unzip('../latest.zip','../');
+      disp('Unzip end');
+
+      movefile('../ModelClass-master/*','../ModelClass');
+      
+    end % update
 
   end % methods
 
