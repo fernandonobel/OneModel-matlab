@@ -768,10 +768,14 @@ classdef (Abstract) ModelClass < handle
       end
       
       % Clean-up.
+      disp('Clean installation files.');
       delete('latest.zip');
       
       % Move to the initial path.
       cd(pathInitial);
+      
+      disp('');
+      disp('ModelClass has been successfully updated!');
       
     end % update
 
