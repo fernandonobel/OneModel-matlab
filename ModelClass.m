@@ -755,7 +755,7 @@ classdef (Abstract) ModelClass < handle
       % Remove the old code.
       disp('Remove old files.');
       warning('off');
-      rmdir('./ModelClass','s'); % This generates a warnig and messes up with the path.
+      rmdir(path,'s'); % This generates a warnig and messes up with the path.
       warning('on');
       
       % Move to that location the lastest code.
