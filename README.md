@@ -115,6 +115,7 @@ m.eqns
 ```
 
 ```
+ 
 ans =
  
   x1
@@ -129,6 +130,7 @@ ans =
  der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
                  der_x3 == k3*x1 - d3*x3
                             ref == k3/d3
+ 
 
 ```
 
@@ -163,6 +165,7 @@ out
 ```
 
 ```
+
 out = 
 
   struct with fields:
@@ -179,6 +182,8 @@ out =
          d2: [154x1 double]
          d3: [154x1 double]
     gamma12: [154x1 double]
+
+
 ```
 
 ## 3. Plot simulation results

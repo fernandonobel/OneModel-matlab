@@ -8,12 +8,19 @@ toc: true
 # Manual version
 
 This manual was written for the version **
-v0.4.2
+v0.4.3
 ** of ModelClass. Please check your local version of ModelClass using the following command:
-```MATLAB
-ModelClass.version()
+```MATLAB 
+ModelClass.version();
 ```
-, then if your local version does not match, please upgrade to the latest version in the GitHub repository.
+
+and it should return something similar to this:
+
+```MATLAB
+v0.4.3 1a49349   -   Fernando Nóbel (fersann1@upv.es)
+```
+
+, then if your local version does not match, please update to the latest version in the GitHub repository.
 
 # Introduction
 
@@ -40,6 +47,39 @@ It is recommended to install the latest version of ModelClass, the available ver
 Download the code and unzip it in the directory of your choice.
 
 Then within MATLAB go to *HOME/ENVIROMENT >> Set path* and add the directory of the repository and the *utils* directory to the list (if they aren't already).
+
+## Keep the sowftware up-to-date
+
+The ModelClass is currently in active development, so it is recommended to keep this software up to date. The `master` branch in the Github repository contains the latest stable version of the software
+
+ModelClass has an integrated command to check if a newer version of it is available in the repository:
+```MATLAB
+ModelClass.checkVersion();
+```
+
+and it should return the following message if the local code is updated,
+
+```MATLAB
+The local version of ModelClass is up to date.
+```
+
+or the follwing message if if the local code is outdated:
+
+```MATLAB
+The local version of ModelClass is outdated, please update to the latest version.
+```
+
+There are two ways to update your local code of ModelClass.
+
+The first one is to manually download the latest release of the code in the repository in the `master` branch.
+
+The second one is to execute the following command:
+
+```MATLAB
+ModelClass.update();
+```
+
+and it will update the local code to the latest release in the repository automatically.
 
 ## A minimal example
 
@@ -102,6 +142,16 @@ sp = SimulationPlotClass(m);
 % Plot the result of the simulation.
 sp.plotAllStates(out);
 ```
+
+# ModelClass
+
+## ModelClass methods
+
+### version()
+
+### checkVersion()
+
+### update()
 
 # Extends
 
