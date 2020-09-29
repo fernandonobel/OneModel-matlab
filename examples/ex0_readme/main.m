@@ -1,7 +1,7 @@
 %% 1. Model definition.
 
 % Initialize an object of the model.
-m = loadModelClass('model');
+m = ModelClass.load('model.mc');
 
 % Display variables and equations of the model.
 m.vars

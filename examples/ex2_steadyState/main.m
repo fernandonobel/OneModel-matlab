@@ -1,5 +1,5 @@
 % Init the model and the tools for simulating
-m = loadModelClass('model');
+m = ModelClass.load('model.mc');
 s = SimulationClass(m);
 sp = SimulationPlotClass(m);
 

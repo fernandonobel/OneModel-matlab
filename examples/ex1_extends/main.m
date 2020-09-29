@@ -1,7 +1,7 @@
 %% Simulate the extended model.
 
 % Initialize an object of the base model.
-m = loadModelClass('extendedModel');
+m = ModelClass.load('extendedModel.mc');
 
 % Initialize a SimulationClass object with the model data.
 s = SimulationClass(m);

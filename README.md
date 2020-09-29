@@ -33,11 +33,13 @@ ModelClass has a documentation manual placed in the following [link](doc/manual.
 
 # General workflow
 
-This section will explain the general workflow of using ModelClass. An example will be presented to illustrate each of the steps of the workflow, and this example can be found in the following [link](./examples/ex0_readme).
+This section will explain the general workflow of using ModelClass. An example will be presented to illustrate each of the steps of the workflow, and the code used in this example can be found in the following [link](./examples/ex0_readme).
 
 ## 1. Defining a model with the ModelClass syntax
 
 The first step is to code the information of the model we want to work with in the ModelClass syntax. This syntax is similar to OpenModelica and it allows us to define a lot information about the model (variables, equations, comments, references, etc.). 
+
+Therefore the first step is to create a file with the `.mc` extension (this is the extension used to defined ModelClass models). This file will containg all the information of our model, and we have to use the ModelClass syntax. The `.mc` files cannnot have Matlb code.
 
 The ModelClass syntax consist on a set of predefined commands that will define some information in the model. The basic three commands are:  `Parameter`, which defines a value that will not vary during simulation time; `Variable`, which defines a value that could change during simulation time; and `Equation`, which defines a relationship between parameters and variables. The `Variable` can be defined as algebraic or as dynamic. The use of a command is typically as follows:
 
@@ -67,9 +69,7 @@ The option `opt1` will be set to the value `value1`, and note the `,` between di
 Parameter A(value = 1.0);
 ```
 
-, will create a parameter `A` and its value property will be set to `1.0`.
-
-The ModelClass models should be defined in a file with the extension `.mc`. This files cannot have Matlab code, they must use the ModelClass sintaxis.
+, will create a parameter `A` and its `value` property will be set to `1.0`.
 
 Everything written after a `%` until the next new line is considered as a comment.
 This way the line `% Variables` will not define information of the model, but it will improve the readability of the model.
@@ -102,12 +102,12 @@ Equation der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2;
 Equation der_x3 == k3*x1 - d3*x3;
 ```
 
-and the models are initialized with the following method:
+and the models are initialized with the following function:
 
 ```MATLAB
 
 % Initialize an object of the model.
-m = loadModelClass('model');
+m = ModelClass.load('model.mc');
 
 % Display variables and equations of the model.
 m.vars

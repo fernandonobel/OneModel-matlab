@@ -1,7 +1,7 @@
 ```MATLAB
 
 % Initialize an object of the model.
-m = loadModelClass('model');
+m = ModelClass.load('model.mc');
 
 % Display variables and equations of the model.
 m.vars
@@ -39,6 +39,7 @@ s.createDriverOdeFunction();
 ```
 
 ```
+ 
 ans =
  
   x1
@@ -71,6 +72,7 @@ out =
          d2: [154x1 double]
          d3: [154x1 double]
     gamma12: [154x1 double]
+
 ```
 
 # Autogenerate ode function
@@ -112,10 +114,11 @@ dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
 # Extends a model
 
 ```MATLAB
-m = loadModelClass('extendedModel')
+m = ModelClass.load('extendedModel.mc')
 ```
 
 ```
+
 m = 
 
   extendedModel with properties:
@@ -143,4 +146,5 @@ m =
               variables: [1x4 VariableClass]
              parameters: [1x7 ParameterClass]
               equations: [1x4 EquationClass]
+
 ```

@@ -642,6 +642,33 @@ classdef (Abstract) ModelClass < handle
   end % methods
 
   methods (Static)
+    function [out] = load(filename)
+      %% LOAD Load a ModelClass model.
+      %
+      % param: name Name of the model to load.
+      %
+      % return: out ModelClass object.
+
+      if ~isfile(filename)
+          error(['The file "' filename '" does not exist.']);
+      end
+
+      aux = regexp(filename,'(\w*).(\w*)','tokens');
+
+      name = aux{1}{1};
+      extension = aux{1}{2};
+      
+      if ~strcmp(extension,'mc')
+          error('The file must have ''.mc'' extension.');
+      end
+      
+      mp = ModelClassParser(filename);
+      mp.parse();
+    
+      out = feval(name);
+    
+    end % load
+
     function [] = version(~)
       %% VERSION Prints the version of the ModelClass software.
       %
