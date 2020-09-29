@@ -16,8 +16,8 @@ ModelClass.version();
 
 and it should return something similar to this:
 
-```MATLAB
-v0.4.3 1a49349   -   Fernando Nóbel (fersann1@upv.es)
+```
+v0.4.3 4c898f7   -   Fernando Nóbel (fersann1@upv.es)
 ```
 
 , then if your local version does not match, please update to the latest version in the GitHub repository.
@@ -79,7 +79,9 @@ The second one is to execute the following command:
 ModelClass.update();
 ```
 
-and it will update the local code to the latest release in the repository automatically.
+and it will update the local code to the latest release in the repository automatically. 
+
+Note: if you have `git` installed locally, it is advisable to use `git pull origin master` to update your local repository as the `ModelClass.updated();` could potentially mess up with the `.git` folder.
 
 ## A minimal example
 
