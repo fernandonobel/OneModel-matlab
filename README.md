@@ -114,7 +114,7 @@ m.vars
 m.eqns
 ```
 
-```MATLAB
+```
  
 ans =
  
@@ -163,7 +163,7 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 out
 ```
 
-```MATLAB
+```
 
 out = 
 
