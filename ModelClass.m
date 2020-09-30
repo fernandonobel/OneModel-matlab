@@ -385,7 +385,15 @@ classdef (Abstract) ModelClass < handle
       % Then match the algebraic equation with the remaining freeVariables.
       knownVars = [obj.paramsName(:)' {obj.variables(eqnIndex(eqnIndex>0)).name}];
 
-      while ~isempty(find(eqnIndex==0))
+      remainingIndex_last = sum(eqnIndex==0);
+      
+      while true       
+        % Exit the loop if all the indexes have been set.
+        if remainingIndex_last == 0
+            break
+        end
+        
+        % Try to set more indexes.
         for i = 1:length(obj.equations)
           % If the equation has an index, skip it.
           if eqnIndex(i) > 0
@@ -405,8 +413,18 @@ classdef (Abstract) ModelClass < handle
             % And add the var to known vars.
             knownVars(end+1) = eqnVars;
           end
-
         end
+        
+        % Calculate the index remaining to be set.
+        remainingIndex = sum(eqnIndex==0);
+        
+        % If there wasn't an advance looking for indexes.
+        if remainingIndex == remainingIndex_last
+            % Throw an error.
+            error('There is an error in the model definition.');
+        end
+        
+        remainingIndex_last = remainingIndex;
       end
 
       out = varIndex;
