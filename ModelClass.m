@@ -335,7 +335,7 @@ classdef (Abstract) ModelClass < handle
       % return: out [int] varIndex
 
       % It is necessay to order the eqns to math the order of the vars. This way
-      % the process of simualtion is simplified a lot.
+      % the process of simulation is simplified a lot.
 
       % The number of free variables must match the number of equations.
       if length(obj.variables) ~= length(obj.equations)
@@ -421,7 +421,11 @@ classdef (Abstract) ModelClass < handle
         % If there wasn't an advance looking for indexes.
         if remainingIndex == remainingIndex_last
             % Throw an error.
-            error('There is an error in the model definition.');
+            errorVars = [];
+            for i = 1:length(eqnVars)
+                errorVars = [errorVars '"' eqnVars{i} '" '];
+            end
+            error('The model is not well defined, plase check the definition and equations of the following Variables: %s',errorVars);
         end
         
         remainingIndex_last = remainingIndex;
