@@ -649,10 +649,6 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out ModelClass object.
 
-      if ~isfile(filename)
-          error(['The file "' filename '" does not exist.']);
-      end
-
       aux = regexp(filename,'(\w*).(\w*)','tokens');
 
       name = aux{1}{1};
@@ -661,7 +657,11 @@ classdef (Abstract) ModelClass < handle
       if ~strcmp(extension,'mc')
           error('The file must have ''.mc'' extension.');
       end
-      
+
+      if ~isfile(filename)
+          error(['The file "' filename '" does not exist.']);
+      end
+
       mp = ModelClassParser(filename);
       mp.parse();
     
