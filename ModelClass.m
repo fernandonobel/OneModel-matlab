@@ -526,7 +526,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out [bool] isSubs.
 
-      out = [obj.variables.isSubstitution];
+      out = [obj.equations(obj.varIndex).isSubstitution];
 
     end % get.isSubs
 
@@ -573,6 +573,7 @@ classdef (Abstract) ModelClass < handle
 
       out = {};
 
+      % TODO: this code will not work, isSubstitution is a equation propierty.
       for i = 1:length(obj.symbols)
         % Skip subsitution symbols if the model is reduced.
         if obj.symbols{i}.isSubstitution && obj.isReduced
