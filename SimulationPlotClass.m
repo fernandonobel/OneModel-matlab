@@ -44,7 +44,14 @@ classdef SimulationPlotClass < handle
 
       if ~isempty(v)
         xlim(v.xlim);
-        ylim(v.ylim);
+
+        % if the data is all positive and 
+        if all(out.(name) >= 0) && all(v.ylim == [-inf inf])
+          ylim([0 inf]);
+        else
+          ylim(v.ylim);
+        end
+
         xlabel(v.xlabel);
         ylabel(v.ylabel);
         title(v.title);
