@@ -62,19 +62,19 @@ classdef (Abstract) ModelClass < handle
   end % propierties (Dependent)
 
   %properties (Dependent, Access = private)
-  properties (Dependent, Access = public)
+  properties (Dependent, Access = private)
     % [int] Index that match each variable with the related equation.
     varIndex 
   end % properties (Dependent)
 
   properties % (Access = private)
-    % [SymbolClass] Arrta with all the symbols of the model.
+    % [SymbolClass] Array with all the symbols of the model.
     symbols
     % [VariableClass] Array with all the variables of the model.
     variables
     % [ParameterClass] Array with all the parameters of the model.
     parameters
-    % [EquationClass] Array with all the equationf of the model.
+    % [EquationClass] Array with all the equations of the model.
     equations
   end % Propierties (Access = private)
 
@@ -203,6 +203,10 @@ classdef (Abstract) ModelClass < handle
         error('The symbol name "%s" is duplicated in the model. Please change the name in one of its definitions.', duplicateNames{1});
       end
 
+      % (2) Reorganize the equations to match the corresponding variable.
+      obj.equations = [obj.equations(obj.varIndex)];
+
+
     end % checkValidModel
 
   end % methods
@@ -230,10 +234,8 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Boolean array.
 
-      equations = [obj.equations(obj.varIndex)];
-
       for i = 1:length(obj.variables)
-        out(i,1) = equations(i).isAlgebraic;
+        out(i,1) = obj.equations(i).isAlgebraic;
       end
 
       % Return reduced model if needed.
@@ -440,7 +442,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Symbolic equations array.
 
-      out = [obj.equations(obj.varIndex).eqnSym].';
+      out = [obj.equations.eqnSym].';
 
       % Return reduced model if needed.
       if obj.isReduced
@@ -466,7 +468,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Simbolic left part of equations.
 
-      out = [obj.equations(obj.varIndex).left];
+      out = [obj.equations.left];
 
       % Return reduced model if needed.
       if obj.isReduced
@@ -480,7 +482,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Simbolic right part of equations.
 
-      out = [obj.equations(obj.varIndex).right];
+      out = [obj.equations.right];
 
       % Return reduced model if needed.
       if obj.isReduced
@@ -526,7 +528,7 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out [bool] isSubs.
 
-      out = [obj.equations(obj.varIndex).isSubstitution];
+      out = [obj.equations.isSubstitution];
 
     end % get.isSubs
 
