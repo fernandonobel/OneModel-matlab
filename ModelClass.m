@@ -85,6 +85,11 @@ classdef (Abstract) ModelClass < handle
       %
       % return: obj ModelClass object.
 
+      obj.variables = VariableClass.empty();
+      obj.parameters = ParameterClass.empty();
+      obj.symbols = SymbolClass.empty();
+      obj.equations = EquationClass.empty();
+
     end % ModelClass
   end % methods
 
@@ -116,17 +121,8 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
 
-      if isempty(obj.variables)
-        obj.variables = v;
-      else
-        obj.variables(end+1) = v;
-      end
-
-      if isempty(obj.symbols)
-        obj.symbols{1} = v;
-      else
-        obj.symbols{end+1} = v;
-      end
+      obj.variables(end+1) = v;
+      obj.symbols{end+1} = v;
 
     end % addVariable
 
@@ -137,17 +133,8 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
 
-      if isempty(obj.parameters)
-        obj.parameters = p;
-      else
-        obj.parameters(end+1) = p;
-      end
-
-      if isempty(obj.symbols)
-        obj.symbols{1} = p;
-      else
-        obj.symbols{end+1} = p;
-      end
+      obj.parameters(end+1) = p;
+      obj.symbols{end+1} = p;
 
     end % addParameter
 
@@ -158,11 +145,8 @@ classdef (Abstract) ModelClass < handle
       %
       % return: void
 
-      if isempty(obj.equations)
-        obj.equations = e;
-      else
-        obj.equations(end+1) = e;
-      end
+      obj.equations(end+1) = e;
+
     end % addEquation
 
     function [out] = getSymbolByName(obj,name)
