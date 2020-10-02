@@ -141,7 +141,6 @@ m =
             paramsValue: [NaN NaN NaN NaN NaN NaN NaN]
             symbolsName: {1x11 cell}
           symbolsIsPlot: [1 1 1 0 0 0 0 0 0 0 1]
-               varIndex: [1 2 3 4]
                 symbols: {1x11 cell}
               variables: [1x4 VariableClass]
              parameters: [1x7 ParameterClass]
