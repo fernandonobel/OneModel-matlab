@@ -45,7 +45,8 @@ classdef SimulationPlotClass < handle
       if ~isempty(v)
         xlim(v.xlim);
 
-        % if the data is all positive and 
+        % When [-inf inf] is used, sometimes the ylim shows bsa for exclusive 
+        % positive data non zero.
         if all(out.(name) >= 0) && all(v.ylim == [-inf inf])
           ylim([0 inf]);
         else
