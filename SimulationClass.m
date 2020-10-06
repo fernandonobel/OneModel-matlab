@@ -160,6 +160,40 @@ classdef SimulationClass < handle
       x = [x xSubs];
 
     end % simulateTX
+
+    function [out] = steadyState(obj,x0,p,opt)
+      %% STEADYSTATE Calculates numerically the steady state value of the model.
+      %
+      % param: x0 real. Struct with the intial condition.
+      %        p  real. Struct with the parameters values.
+      %        opt Options for the fsolve.
+      %
+      % return: out Steady state values.
+
+      % If opt not defined, use a default opt.
+      if nargin < 4
+        opt = [];
+      end
+
+      % Combine the user initial conditions with the defaults of the model.
+      x0 = obj.combineInitialCondition(x0);
+
+      % Check format of x0
+      if isstruct(x0)
+        x0 = obj.stateArrayFromNamedStruct(x0);
+      end
+
+      % Combine the user parameters with the defaults of the model.
+      p = obj.combineParam(p);
+
+      % Check if the initial conditions match the number of states.
+      if length(x0) ~= length(obj.model.vars)
+        error('The number of initial conditions do not match with the number of states');
+      end
+
+      out = fsolve(@(x) obj.noNegativeWrapper(0,x,p,obj.fncDaeModel),x0,opt);
+      
+    end % steadyState
     
     function [value,isterminal,direction] =  eventSteadyState(obj,t,x,p,tol)
       %% EVALUATEDERIVATIVE This function is an Event for ode that will stop the
