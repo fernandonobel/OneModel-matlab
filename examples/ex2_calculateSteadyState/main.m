@@ -22,4 +22,4 @@ opt = odeset('AbsTol', 1e-10, 'RelTol', 1e-10);
 % Plot the result and see that the simulation has been stop way before the 
 % defined time span.
 sp.plotAllStates(out);
-plot(out.t(end),out_ss,'o');
+plot(out.t(end),out_ss.x,'o');

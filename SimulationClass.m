@@ -153,6 +153,7 @@ classdef SimulationClass < handle
       % Simulate
       [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
 
+      % Calculate the susbtitution variables.
       xSubs = [];
       for i = 1:length(t)
         xSubs = [xSubs; obj.fncSubsModel(t(i),x(i,:)',p)];
@@ -169,6 +170,9 @@ classdef SimulationClass < handle
       %        opt Options for the fsolve.
       %
       % return: out Steady state values.
+
+      aux = obj.model.isReduced;
+      obj.model.isReduced = true;
 
       % If opt not defined, use a default opt.
       if nargin < 4
@@ -191,8 +195,37 @@ classdef SimulationClass < handle
         error('The number of initial conditions do not match with the number of states');
       end
 
-      out = fsolve(@(x) obj.noNegativeWrapper(0,x,p,obj.fncDaeModel),x0,opt);
-      
+      % Use fsolve to calculate the steady state.
+      x_ss = fsolve(@(x) obj.noNegativeWrapper(0,x,p,obj.fncDaeModel),x0,opt);
+
+      obj.model.isReduced = false;
+
+      % Calculate the susbtitution variables.
+      x_ss = [x_ss obj.fncSubsModel(0,x_ss',p)];
+
+      % SimulateTX changes the normal order of the states.
+      indexSwap = 1:length(obj.model.varsName);
+      indexSwap = [indexSwap(~obj.model.isSubs) indexSwap(obj.model.isSubs)];
+
+      out = [];
+
+      for i = 1:length(obj.model.varsName)
+        out.(obj.model.varsName{indexSwap(i)}) = x_ss(:,i);
+      end
+
+      % Add the parameter value to the out.
+      if isempty(p)
+          fn = [];
+      else
+        fn = fieldnames(p);
+      end
+
+      for i = 1:length(fn)
+        out.(fn{i}) = p.(fn{i});
+      end
+
+      obj.model.isReduced = aux;
+
     end % steadyState
     
     function [value,isterminal,direction] =  eventSteadyState(obj,t,x,p,tol)
