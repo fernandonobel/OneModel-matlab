@@ -176,7 +176,8 @@ classdef SimulationClass < handle
 
       % If opt not defined, use a default opt.
       if nargin < 4
-        opt = [];
+%         opt = [];
+        opt = optimoptions('fsolve','MaxFunEvals',50000,'MaxIter',50000);
       end
 
       % Combine the user initial conditions with the defaults of the model.
@@ -196,7 +197,7 @@ classdef SimulationClass < handle
       end
 
       % Use fsolve to calculate the steady state.
-      x_ss = fsolve(@(x) obj.noNegativeWrapper(0,x,p,obj.fncDaeModel),x0,opt);
+      x_ss = fsolve(@(x) obj.noNegativeWrapper(0,x',p,obj.fncDaeModel),x0,opt);
 
       obj.model.isReduced = false;
 
