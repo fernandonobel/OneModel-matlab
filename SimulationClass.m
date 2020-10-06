@@ -203,7 +203,7 @@ classdef SimulationClass < handle
       % Calculate the susbtitution variables.
       x_ss = [x_ss obj.fncSubsModel(0,x_ss',p)];
 
-      % SimulateTX changes the normal order of the states.
+      % The fsolve changes the normal order of the states.
       indexSwap = 1:length(obj.model.varsName);
       indexSwap = [indexSwap(~obj.model.isSubs) indexSwap(obj.model.isSubs)];
 
