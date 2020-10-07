@@ -17,7 +17,7 @@ opt = odeset('AbsTol', 1e-10, 'RelTol', 1e-10);
 [out] = s.simulate(tspan,x0,p,opt);
 
 % Calculate the steady state.
-[out_ss] = s.steadyState(x0,p);
+[out_ss] = s.simulateSteadyState(x0,p);
 
 % Plot the result and see that the simulation has been stop way before the 
 % defined time span.

@@ -162,70 +162,35 @@ classdef SimulationClass < handle
 
     end % simulateTX
 
-    function [out] = steadyState(obj,x0,p,opt)
-      %% STEADYSTATE Calculates numerically the steady state value of the model.
+    function [out] = simulateSteadyState(obj,x0,p,tol,opt)
+      %% STEADYSTATE Simulates until the steady state is reached.
       %
       % param: x0 real. Struct with the intial condition.
       %        p  real. Struct with the parameters values.
+      %        tol real Tolerance for determining steady state.
       %        opt Options for the fsolve.
       %
       % return: out Steady state values.
-
-      aux = obj.model.isReduced;
-      obj.model.isReduced = true;
-
-      % If opt not defined, use a default opt.
+      
       if nargin < 4
-%         opt = [];
-        opt = optimoptions('fsolve','MaxFunEvals',50000,'MaxIter',50000);
+        tol = [];
+      end
+      
+      if nargin < 5
+        opt = [];
       end
 
-      % Combine the user initial conditions with the defaults of the model.
-      x0 = obj.combineInitialCondition(x0);
+      % Set the event for ending the simulation when steady state is reached.
+      opt = obj.optSteadyState(opt,p,tol);
 
-      % Check format of x0
-      if isstruct(x0)
-        x0 = obj.stateArrayFromNamedStruct(x0);
-      end
-
-      % Combine the user parameters with the defaults of the model.
-      p = obj.combineParam(p);
-
-      % Check if the initial conditions match the number of states.
-      if length(x0) ~= length(obj.model.vars)
-        error('The number of initial conditions do not match with the number of states');
-      end
-
-      % Use fsolve to calculate the steady state.
-      x_ss = fsolve(@(x) obj.noNegativeWrapper(0,x',p,obj.fncDaeModel),x0,opt);
-
-      obj.model.isReduced = false;
-
-      % Calculate the susbtitution variables.
-      x_ss = [x_ss obj.fncSubsModel(0,x_ss',p)];
-
-      % The fsolve changes the normal order of the states.
-      indexSwap = 1:length(obj.model.varsName);
-      indexSwap = [indexSwap(~obj.model.isSubs) indexSwap(obj.model.isSubs)];
-
-      out = [];
-
-      for i = 1:length(obj.model.varsName)
-        out.(obj.model.varsName{indexSwap(i)}) = x_ss(:,i);
-      end
-
-      % Add the parameter value to the out.
-      if isempty(p)
-          fn = [];
-      else
-        fn = fieldnames(p);
-      end
-
+      % Run the simulation endlessly.
+      out = obj.simulate([0 +inf],x0,p,opt);
+      
+      % Return only the last value of the simulation;
+      fn = fieldnames(out);
       for i = 1:length(fn)
-        out.(fn{i}) = p.(fn{i});
-      end
-
-      obj.model.isReduced = aux;
+          out.(fn{i}) = out.(fn{i})(end);
+      end 
 
     end % steadyState
     
@@ -266,8 +231,8 @@ classdef SimulationClass < handle
       %
       % return: opt Options with the event for steady state.
 
-      if ~exist('tol','var')
-        tol = 0.001;
+      if ~exist('tol','var') || isempty(tol)
+        tol = 1e-6;
       end
       
       % Combine the user parameters with the defaults of the model.
