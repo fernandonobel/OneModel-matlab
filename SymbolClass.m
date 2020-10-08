@@ -152,6 +152,12 @@ classdef SymbolClass < handle
 
       obj.units = units;
 
+      % If the ylabel is not defined.
+      if strcmp(obj.ylabel,'')
+        % Use the units.
+        obj.ylabel = ['[' obj.units ']'];
+      end
+
     end % set.units
 
     function [] = set.comment(obj,comment)
