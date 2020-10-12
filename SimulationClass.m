@@ -162,12 +162,13 @@ classdef SimulationClass < handle
 
     end % simulateTX
 
-    function [out] = simulateSteadyState(obj,x0,p,tol,opt)
+    function [out] = simulateSteadyState(obj,x0,p,tol,mTime,opt)
       %% STEADYSTATE Simulates until the steady state is reached.
       %
       % param: x0 real. Struct with the intial condition.
       %        p  real. Struct with the parameters values.
       %        tol real Tolerance for determining steady state.
+      %        mTime real Maximum simulation time in seconds.
       %        opt Options for the fsolve.
       %
       % return: out Steady state values.
@@ -177,11 +178,17 @@ classdef SimulationClass < handle
       end
       
       if nargin < 5
+        mTime = 1;
+      end
+
+      if nargin < 6
         opt = [];
       end
 
+      sTime = tic;
+
       % Set the event for ending the simulation when steady state is reached.
-      opt = obj.optSteadyState(opt,p,tol);
+      opt = obj.optSteadyState(opt,p,tol,sTime,mTime);
 
       % Run the simulation endlessly.
       out = obj.simulate([0 +inf],x0,p,opt);
@@ -194,17 +201,33 @@ classdef SimulationClass < handle
 
     end % steadyState
     
-    function [value,isterminal,direction] =  eventSteadyState(obj,t,x,p,tol)
+    function [value,isterminal,direction] =  eventSteadyState(obj,t,x,p,tol,sTime,mTime)
       %% EVALUATEDERIVATIVE This function is an Event for ode that will stop the
       % simulation when the steady state is reached.
+      %
+      % If the simulation last more than mTime, stop the simulation. This avoids
+      % endless simulations.
       %
       % param: t real Time for the evaluation.
       %      : x [real] State vector.
       %      : p real. Parameters.
       %      : tol rel Tolerance for determining the steady state.
+      %      : sTime Start time returned with tic().
+      %      : mTime real Maximum simulation time in seconds.
       %
       % return: [value,isteminal,direction] Return data need for an Event.
 
+      if nargin < 6
+        sTime = -1;
+      end
+
+      if nargin < 7
+        mTime = 1;
+      end
+
+      if toc(sTime) > mTime
+        error('The simulation for finding the steady state takes more time to compute that the maximum time limit which is set to %s seconds.',num2str(mTime));
+      end
       % Evaluate the derivatives.
       dxdt = obj.fncDaeModel(t,x,p);
 
@@ -221,24 +244,34 @@ classdef SimulationClass < handle
 
     end % simulateTX
 
-    function [opt] = optSteadyState(obj,opt,p,tol)
+    function [opt] = optSteadyState(obj,opt,p,tol,sTime,mTime)
       %% OPTSTEADYSTATE Set the event for simulating until steady state is
       % reached
       %
       % param: opt Options for the ODE function.
       %      : p real. Struct with the parameters of the model.
       %      : tol real Tolerance for determining the steady state.
+      %      : sTime Start time returned with tic().
+      %      : mTime real Maximum simulation time in seconds.
       %
       % return: opt Options with the event for steady state.
 
       if ~exist('tol','var') || isempty(tol)
         tol = 1e-6;
       end
-      
+
+      if nargin < 5
+        sTime = -1;
+      end
+
+      if nargin < 6
+        mTime = 1;
+      end
+  
       % Combine the user parameters with the defaults of the model.
       p = obj.combineParam(p);
       
-      opt = odeset(opt,'Events',@(t,y) obj.eventSteadyState(t,y,p,tol));
+      opt = odeset(opt,'Events',@(t,y) obj.eventSteadyState(t,y,p,tol,sTime,mTime));
 
     end % optSteadyState
 
