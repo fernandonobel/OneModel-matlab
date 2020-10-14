@@ -85,7 +85,7 @@ classdef SymbolClass < handle
       end
       
       % Check if the name is a keyword of matlab.
-      if exist(name)
+      if exist(name,'builtin')
           error('the name of the symbol is not valid: it is a keyword of MATLAB.');
       end
       
