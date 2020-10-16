@@ -8,7 +8,7 @@ toc: true
 # Manual version
 
 This manual was written for the version **
-v0.4.4
+v0.4.5
 ** of ModelClass. Please check your local version of ModelClass using the following command:
 ```MATLAB 
 ModelClass.version();
@@ -17,7 +17,7 @@ ModelClass.version();
 and it should return something similar to this:
 
 ```
-v0.4.4 c5ad969   -   Fernando Nóbel (fersann1@upv.es)
+v0.4.5 4a6f0df   -   Fernando Nóbel (fersann1@upv.es)
 ```
 
 , then if your local version does not match, please update to the latest version in the GitHub repository.
@@ -313,7 +313,9 @@ Finally, at this point we can work as usually with the model `extendedModel.mc`,
 
 # SimulationClass
 
-## Simulate until steady state
+## Steady state
+
+### Simulate until steady state
 
 Sometimes it is handy to just simulate until the steady state is reached. We can set manually an `Event` in the ODE options for this. However, the following command will do that for us:
 
@@ -321,7 +323,19 @@ Sometimes it is handy to just simulate until the steady state is reached. We can
 opt = s.optSteadyState(opt,p,tol);
 ```
 
-,where `opt` is the options for the ODE solver, `p` is the struct of paramters used in the simulation and `tol` is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than `tol`. If `tol` is not defined, it will be set to `0.001`.
+,where `opt` is the options for the ODE solver, `s` is the SimulationClass object of the model, `p` is the struct of paramters used in the simulation and `tol` is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than `tol`. If `tol` is not defined, it will be set to `1e-6`.
+
+### Get the steady state
+
+The following method calculates the steady state value of the model directly:
+
+```MATLAB
+[out] = s.simulateSteadyState(x0,p);
+```
+
+, `s` is the SimulationClass object of the model, `x0` is the struct of initial conditions, `p` is the struct of paramters used in the simulation and `tol` is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than `tol`. If `tol` is not defined, it will be set to `1e-6`.
+
+### Example 
 
 Here is a minimal example of how to use the `optSteadyState` function:
 
@@ -333,7 +347,7 @@ Equation der_x == 1 - x;
 
 and (ii) the `main.m` code:
 ```MATLAB
-% Init the model and the tools for simulating
+%% Init the model and the tools for simulating
 m = ModelClass.load('model.mc');
 s = SimulationClass(m);
 sp = SimulationPlotClass(m);
@@ -342,23 +356,52 @@ sp = SimulationPlotClass(m);
 x0 = [];
 p = [];
 
-% Simulation time span (note that we have set a huge time span).
-tspan = [0 100000]; 
-
 % Define the options for the simulator.
-opt = odeset('AbsTol', 1e-10, 'RelTol', 1e-10);
+opt = odeset('AbsTol', 1e-3, 'RelTol', 1e-6);
+
+%% Simulate normally the model.
+% This way, we need to define a long enough time span to reach the steady
+% state.
+
+% Simulation time span.
+tspan = [0 10]; 
+
+% Simulate.
+[out_1] = s.simulate(tspan,x0,p,opt);
+
+%% Simulate until steady state is reached.
+% We are going to define an event to stop the simulation when the steady
+% state is reached.
+
+% We do not need to worry about simulation time span, as it will stop due
+% to the event.
+tspan = [0 +inf]; 
 
 % Define the tolerance to determine the steady state.
 % Try changing this value to see its effect.
-tol = 0.01;
+tol = 1e-1;
 
 % Set the event for ending the simulation when steady state is reached.
 opt = s.optSteadyState(opt,p,tol);
 
-% Simulate the model.
-[out] = s.simulate(tspan,x0,p,opt);
+% Simulate.
+[out_2] = s.simulate(tspan,x0,p,opt);
 
-% Plot the result and see that the simulation has been stop way before the 
+%% Calculate the steady state.
+% We can use this method to calculate the steady state directly.
+
+% Get the steady state.
+[out_3] = s.simulateSteadyState(x0,p);
+
+%% Plot the result and see that the simulation has been stop way before the 
 % defined time span.
-sp.plotAllStates(out);
+figure(1);
+clf(1);
+
+hold on;
+grid on;
+plot(out_1.t,out_1.x,'LineWidth',1.5);
+plot(out_2.t,out_2.x,'--','LineWidth',2.5);
+plot(out.t(end),out_3.x,'o','LineWidth',1.5);
+legend('simulate','optSteadyState','simulateSteadyState','Location','SouthEast');
 ```
