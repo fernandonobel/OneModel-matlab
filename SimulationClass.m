@@ -225,8 +225,10 @@ classdef SimulationClass < handle
         mTime = 1;
       end
 
-      if toc(sTime) > mTime
-        error('The simulation for finding the steady state takes more time to compute that the maximum time limit which is set to %s seconds.',num2str(mTime));
+      if sTime ~= -1
+        if toc(sTime) > mTime
+          error('The simulation for finding the steady state takes more time to compute that the maximum time limit which is set to %s seconds.',num2str(mTime));
+        end
       end
       % Evaluate the derivatives.
       dxdt = obj.fncDaeModel(t,x,p);
