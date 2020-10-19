@@ -69,6 +69,9 @@ classdef ModelClassParser < handle
       % Aux buffer for preparing the lines to execute.
       aux = '';
 
+      % Variable to store the current command to execute.
+      cmd = '';
+
       while ischar(tline)
         % Remove commented text in lines.
         tline = obj.removeComments(tline);
@@ -76,29 +79,54 @@ classdef ModelClassParser < handle
         % Remove empty lines.
         if isempty(tline)
           tline = fgetl(fid);
-          continue
+          continue;
         end
 
         % Process char by char the line readed.
         for i = 1:length(tline)
           aux(end+1) = tline(i);
 
+          % If we did not find a command.
+          if strcmp(cmd,'')
+            % Look for it.
+            [tokens] = regexp(aux,'\s*(\w*) ','tokens');
+            if ~isempty(tokens)
+              if ~strcmp(tokens{1}{1},'')
+              cmd = tokens{1}{1};
 
-          % Is the line complete?
-          if aux(end) == ';'
-            % Process the line.
-            [cmd,arg] = obj.getCmdArgLine(aux);
-            obj.executeCommand(cmd,arg,fout);
-
-            % Reset the aux for new lines.
-            aux = '';
+              % Check if it is a valid command.
+              try
+                feval(cmd,obj);
+              catch
+                error('%s is not a valid command for ModelClass models.',cmd);
+              end
+              end
+            end
           end
 
+          % If we have found a command
+          if ~strcmp(cmd,'')
+            % Collect all the argument data needed for the command.
+            % Check if we have collecte all the argument in aux.
+
+            % Is the argument complete?
+            if feval(cmd,obj,aux)
+              % Execute the comand.
+              feval(cmd,obj,aux,fout);
+              fprintf(fout,'\n');
+
+              % Reset the aux for new lines.
+              aux = '';
+              % Reset the cmd for new commands.
+              cmd = '';
+            end
+          end
         end
 
+        % Read the next line in the document.
         tline = fgetl(fid);
       end
-      
+
       % Check if something is remaining in aux after finishing the model.
       if ~all(isspace(aux)) && ~isempty(aux)
         error('Not found ; in the last line of the model.');
@@ -122,53 +150,40 @@ classdef ModelClassParser < handle
 
     end % removeComments
 
-    function [cmd, arg] = getCmdArgLine(obj,tline)
-      %% GETCMDARGLINE Get the command and argument of a line.
+    function [arg] = getArgument(obj,tline)
+      %% GETARGUMENT Get the command and argument of a line.
       % argument.
       %
       % param: tline Line of the model to interprect.
       %
-      % return: void
-
-      cmd = [];
+      % return: arg The argument of the command.
+      
       arg = [];
 
-      expression = '\s*(\w*)\s(.+);';
+      expression = '\s*\w*\s(.+);';
 
       [tokens,matches] = regexp(tline,expression,'tokens','match');
 
       if ~isempty(tokens)
-        cmd = tokens{1}{1};
-        arg = tokens{1}{2};
+        arg = tokens{1}{1};
       end
 
-    end % getCmdArgLine
+    end % getArgument
 
-    function [] = executeCommand(obj,cmd,arg,fout)
+    function [] = executeCommand(obj,cmd,arg,fid,fout)
       %% EXECUTECOMMAND Execute a command to build the ModelClass file.
       %
       % param: cmd Command to execute.
       %        arg Argument for the command to execute.
+      %        fin File input with the model .mc definitions.
       %        fout File output.
       %
       % return: void
 
-      switch cmd
-        case 'Variable'
-          obj.addVariable(arg,fout);
-
-        case 'Parameter'
-          obj.addParameter(arg,fout);
-
-        case 'Equation'
-          obj.addEquation(arg,fout);
-
-        case 'extends'
-          obj.extendsModel(arg,fout);
-
-        otherwise
-          error('%s is not a valid command for ModelClass models.',cmd);
-
+      try
+        feval(cmd,obj,arg,fout);
+      catch
+        error('%s is not a valid command for ModelClass models.',cmd);
       end
 
       fprintf(fout,'\n');
@@ -211,27 +226,27 @@ classdef ModelClassParser < handle
         options = [];
       else
         name = tokens{1}{1};
-        
+
         arg = tokens{1}{2};
         expression = ',(?![^\(]*\))';
         ind = regexp(arg,expression);
-        
+
         if ~isempty(ind) 
-            options{1} = arg(1:ind(1)-1);
-            
-            for i = 1:length(ind)-1
-                options{i+1} = arg(ind(i)+1:ind(i+1)-1);
-            end
-            
-            options{end+1} = arg(ind(end)+1:end);
+          options{1} = arg(1:ind(1)-1);
+
+          for i = 1:length(ind)-1
+            options{i+1} = arg(ind(i)+1:ind(i+1)-1);
+          end
+
+          options{end+1} = arg(ind(end)+1:end);
         else
-            options{1} = arg;
+          options{1} = arg;
         end
-        
+
       end
 
       for i=1:length(options)
-         options{i} = obj.removeSpace(options{i});
+        options{i} = obj.removeSpace(options{i});
       end
 
     end % getOptions
@@ -243,151 +258,21 @@ classdef ModelClassParser < handle
       % param: in String with spaces.
       %
       % return: out String without unnecessary spaces.
-      
+
       % Remove space at the beggining or end of the string.
       expression = '^[ \t]+|[ \t]+$';
       splits = regexp(in,expression,'split');
-      
+
       % Save option without the empty splits.
       for i = 1:length(splits)
-          if ~isempty(splits{i}) 
-              in = splits{i};
-          end
+        if ~isempty(splits{i}) 
+          in = splits{i};
+        end
       end
-      
+
       out = in;
-      
+
     end % removeSpace
-
-    function [] = addVariable(obj,arg,fout)
-      %% ADDVARIABLE Add a varible to the Model Class.
-      %
-      % param: arg Arguments
-      %      : fout File output
-      %
-      % return: void
-      
-      [nameVar,options] = obj.getOptions(arg);
-      
-      fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
-
-      for i=1:length(options)
-        % Skip empty options.
-        if isempty(options{i})
-            continue
-        end
-        expression = '(.*)=(.*)';
-        [tokens,matches] = regexp(options{i},expression,'tokens','match');
-
-        % Get the option to execute
-        option = tokens{1}{1};
-
-        % And remove spaces at begging and at end.
-        option = obj.removeSpace(option);
-
-        if strcmp(option,'value')
-            % Set variable as a substitution.
-            fprintf(fout,'\t\t\tv.isSubstitution=true;\n',options{i});
-            % And generate its correspondign equation.
-            arg = compose('(%s == %s, isSubstitution = true)',nameVar,tokens{1}{2});
-            obj.addEquation(arg{1},fout);
-        else
-            fprintf(fout,'\t\t\tv.%s;\n',options{i});
-        end
-        %fprintf(fout,'\t\t\tv.%s;\n',options{i});
-      end
-
-      fprintf(fout,'\t\t\tobj.addVariable(v);\n');
-      
-    end % addVariable
-
-    function [] = addParameter(obj,arg,fout)
-      %% ADDPARAMETER Add a parameter to the Model Class.
-      %
-      % param: arg Arguments
-      %      : fout File output
-      %
-      % return: void
-
-      [nameParam,options] = obj.getOptions(arg);
-
-      fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
-
-      for i=1:length(options)
-        % Skip empty options.
-        if isempty(options{i})
-            continue
-        end
-        
-        fprintf(fout,'\t\t\tp.%s;\n',options{i});
-
-      end
-
-      fprintf(fout,'\t\t\tobj.addParameter(p);\n');
-      
-    end % addParameter
-
-    function [] = addEquation(obj,arg,fout)
-      %% ADDEQUATION Add an equation to the Model Class.
-      %
-      % param: arg Arguments
-      %      : fout File output
-      %
-      % return: void
-
-      [nameEqn,options] = obj.getOptions(arg);
-      
-      if isempty(options{1})
-          options{1} = nameEqn;
-          nameEqn = '';
-      end
-      
-      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',nameEqn);      
-        
-      try
-      fprintf(fout,'\t\t\te.eqn = ''%s'';\n',options{1});
-      catch
-          error('eqn is not defined in the options.');
-      end
-
-      for i=2:length(options)
-        % Skip empty options.
-        if isempty(options{i})
-            continue
-        end
-        
-        fprintf(fout,'\t\t\te.%s;\n',options{i});
-
-      end
-
-      fprintf(fout,'\t\t\tobj.addEquation(e);\n');
-      
-    end % addEquation
-
-    function [] = extendsModel(obj,arg,fout)
-      %% EXTENDSMODEL Extends the actual model with the information of a base
-      % model
-      %
-      % param: arg Arguments
-      %      : fout File output
-      %
-      % return: void
-
-      % Check if base model exists.
-      if ~isfile(arg)
-        error(...
-        'The file "%s" does not exists. Check the filename and the path.',arg)
-      end
-
-      % Open the base model.
-      obj.avoidRecursion(arg);
-      fBase = fopen(arg);
-
-      obj.executeFileLines(fBase,fout);
-
-      fclose(fBase);
-      
-    end % extendsModel
 
     function [] = addHeader(obj,fout)
       %% ADDHEADER Add the header to the Matlab Class.
@@ -395,11 +280,11 @@ classdef ModelClassParser < handle
       % param: fout File output.
       %
       % return: void
-      
+
       fprintf(fout,'classdef %s < ModelClass\n',obj.basename);
       fprintf(fout,'\tmethods\n');
       fprintf(fout,'\t\tfunction [obj] = %s()\n',obj.basename);
-      
+
     end % addHeader
 
     function [] = addFooter(obj,fout)
@@ -408,13 +293,13 @@ classdef ModelClassParser < handle
       % param: fout File output.
       %
       % return: void
-      
+
       fprintf(fout,'\t\tobj.checkValidModel();\n');
 
       fprintf(fout,'\t\tend\n');
       fprintf(fout,'\tend\n');
       fprintf(fout,'end\n');
-      
+
     end % addFooter
 
     function [] = avoidRecursion(obj,filename)
@@ -432,8 +317,276 @@ classdef ModelClassParser < handle
       end
 
       obj.filenameExtended{end+1} = name;
-      
+
     end % avoidRecursion
+
+  end %methods
+
+  methods
+
+    function [out] = Variable(obj,arg,fout)
+      %% VARIABLE Add a varible to the Model Class.
+      % If fout is not provided, it will just return true if the arg is complete.
+      %
+      % [out] = Variable(obj,arg,fout)
+      %
+      % param: arg Arguments
+      %      : fout File output
+      %
+      % return: out True if arg has all the information needed.
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        out = [];
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if arg(end) == ';'
+        % The argument is complete.
+        out = true;
+      else
+        % The argument is incomplete.
+        out = false;
+      end
+
+      % Check if fout is not provided.
+      if ~exist('fout','var')
+        % Then, do not execute the rest of the function.
+        return;
+      end
+
+      % Execute the function beacuse we have fout.
+      arg = obj.getArgument(arg);
+      
+      [nameVar,options] = obj.getOptions(arg);
+
+      fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
+
+      for i=1:length(options)
+        % Skip empty options.
+        if isempty(options{i})
+          continue
+        end
+        expression = '(.*)=(.*)';
+        [tokens,matches] = regexp(options{i},expression,'tokens','match');
+
+        % Get the option to execute
+        option = tokens{1}{1};
+
+        % And remove spaces at begging and at end.
+        option = obj.removeSpace(option);
+
+        if strcmp(option,'value')
+          % Set variable as a substitution.
+          fprintf(fout,'\t\t\tv.isSubstitution=true;\n',options{i});
+          % And generate its correspondign equation.
+          arg = compose('(%s == %s, isSubstitution = true)',nameVar,tokens{1}{2});
+          obj.Equation(arg{1},fout);
+        else
+          fprintf(fout,'\t\t\tv.%s;\n',options{i});
+        end
+        %fprintf(fout,'\t\t\tv.%s;\n',options{i});
+      end
+
+      fprintf(fout,'\t\t\tobj.addVariable(v);\n');
+
+    end % Variable
+
+    function [out] = Parameter(obj,arg,fout)
+      %% PARAMETER Add a parameter to the Model Class.
+      %
+      % param: arg Arguments
+      %      : fout File output
+      %
+      % return: out True if arg has all the information needed.
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        out = [];
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if arg(end) == ';'
+        % The argument is complete.
+        out = true;
+      else
+        % The argument is incomplete.
+        out = false;
+      end
+
+      % Check if fout is not provided.
+      if ~exist('fout','var')
+        % Then, do not execute the rest of the function.
+        return;
+      end
+
+      % Execute the function beacuse we have fout.
+
+      [nameParam,options] = obj.getOptions(arg);
+
+      fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
+
+      for i=1:length(options)
+        % Skip empty options.
+        if isempty(options{i})
+          continue
+        end
+
+        fprintf(fout,'\t\t\tp.%s;\n',options{i});
+
+      end
+
+      fprintf(fout,'\t\t\tobj.addParameter(p);\n');
+
+    end % Parameter
+
+    function [out] = Equation(obj,arg,fout)
+      %% EQUATION Add an equation to the Model Class.
+      %
+      % param: arg Arguments
+      %      : fout File output
+      %
+      % return: out True if arg has all the information needed.
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        out = [];
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if arg(end) == ';'
+        % The argument is complete.
+        out = true;
+      else
+        % The argument is incomplete.
+        out = false;
+      end
+
+      % Check if fout is not provided.
+      if ~exist('fout','var')
+        % Then, do not execute the rest of the function.
+        return;
+      end
+
+      % Execute the function beacuse we have fout.
+      arg = obj.getArgument(arg);
+      [nameEqn,options] = obj.getOptions(arg);
+
+      if isempty(options{1})
+        options{1} = nameEqn;
+        nameEqn = '';
+      end
+
+      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',nameEqn);      
+
+      try
+        fprintf(fout,'\t\t\te.eqn = ''%s'';\n',options{1});
+      catch
+        error('eqn is not defined in the options.');
+      end
+
+      for i=2:length(options)
+        % Skip empty options.
+        if isempty(options{i})
+          continue
+        end
+
+        fprintf(fout,'\t\t\te.%s;\n',options{i});
+
+      end
+
+      fprintf(fout,'\t\t\tobj.addEquation(e);\n');
+
+    end % Equation
+
+    function [out] = extends(obj,arg,fout)
+      %% EXTENDS Extends the actual model with the information of a base
+      % model
+      %
+      % param: arg Arguments
+      %      : fout File output
+      %
+      % return: out True if arg has all the information needed.
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        out = [];
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if arg(end) == ';'
+        % The argument is complete.
+        out = true;
+      else
+        % The argument is incomplete.
+        out = false;
+      end
+
+      % Check if fout is not provided.
+      if ~exist('fout','var')
+        % Then, do not execute the rest of the function.
+        return;
+      end
+
+      % Execute the function beacuse we have fout.
+
+      % Check if base model exists.
+      if ~isfile(arg)
+        error(...
+          'The file "%s" does not exists. Check the filename and the path.',arg)
+      end
+
+      % Open the base model.
+      obj.avoidRecursion(arg);
+      fBase = fopen(arg);
+
+      obj.executeFileLines(fBase,fout);
+
+      fclose(fBase);
+
+    end % extends
+
+
+    function [out] = CodeRaw(obj,arg,fout)
+      %% CODERAW Allows to execute matlab code defined in the .mc model.
+      %
+      % param: arg Arguments
+      %      : fout File output
+      %
+      % return: out True if arg has all the information needed.
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        out = [];
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if arg(end) == ';'
+        % The argument is complete.
+        out = true;
+      else
+        % The argument is incomplete.
+        out = false;
+      end
+
+      % Check if fout is not provided.
+      if ~exist('fout','var')
+        % Then, do not execute the rest of the function.
+        return;
+      end
+
+      % Execute the function beacuse we have fout.
+
+      [nameParam,options] = obj.getOptions(arg);
+
+      fprintf(fout,'1+1',nameParam);
+
+    end % CodeRaw
 
   end % methods
 
