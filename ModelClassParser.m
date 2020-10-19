@@ -92,14 +92,14 @@ classdef ModelClassParser < handle
             [tokens] = regexp(aux,'\s*(\w*) ','tokens');
             if ~isempty(tokens)
               if ~strcmp(tokens{1}{1},'')
-              cmd = tokens{1}{1};
+                cmd = tokens{1}{1};
 
-              % Check if it is a valid command.
-              try
-                feval(cmd,obj);
-              catch
-                error('%s is not a valid command for ModelClass models.',cmd);
-              end
+                % Check if it is a valid command.
+                try
+                  feval(cmd,obj);
+                catch
+                  error('%s is not a valid command for ModelClass models.',cmd);
+                end
               end
             end
           end
@@ -150,6 +150,107 @@ classdef ModelClassParser < handle
 
     end % removeComments
 
+    function [] = addHeader(obj,fout)
+      %% ADDHEADER Add the header to the Matlab Class.
+      %
+      % param: fout File output.
+      %
+      % return: void
+
+      fprintf(fout,'classdef %s < ModelClass\n',obj.basename);
+      fprintf(fout,'\tmethods\n');
+      fprintf(fout,'\t\tfunction [obj] = %s()\n',obj.basename);
+
+    end % addHeader
+
+    function [] = addFooter(obj,fout)
+      %% ADDFOOTER Add the footer to the Matlab Class.
+      %
+      % param: fout File output.
+      %
+      % return: void
+
+      fprintf(fout,'\t\tobj.checkValidModel();\n');
+
+      fprintf(fout,'\t\tend\n');
+      fprintf(fout,'\tend\n');
+      fprintf(fout,'end\n');
+
+    end % addFooter
+
+    function [] = avoidRecursion(obj,filename)
+      %% AVOIDRECURSION Check if the filename was already used to avoid
+      % recursion.
+      %
+      % param: filename Filename to check.
+      %
+      % return: void
+
+      [pathstr,name,ext] = fileparts(filename);
+
+      if any(strcmp(obj.filenameExtended,name),'all')
+        error('The file "%s" was already included in the model. The parsing of the model was stoped to avoid infinite recursion.',name);
+      end
+
+      obj.filenameExtended{end+1} = name;
+
+    end % avoidRecursion
+
+  end %methods
+
+  % Utils for building ModelClass commands.
+  methods 
+    function [isComplete,isReturn,fout,name,options] = lineCommand_init(obj,raw,fout)
+      %% LINECOMMAND_INIT This function execute the init funtionally of commmands
+      % that are ended by a ';'.
+      %
+      % param: raw  Raw data of the command.
+      %      : fout File output
+      %
+      % return: isComplete True if raw has all the information to execute the command.
+      %         isReturn True if the command has to perform a return.
+      %         fout File output
+      %         name The name of the object defined by the command.
+      %         options The options associted with the name.
+
+      if ~exist('fout','var')
+        fout = [];
+      end
+
+      name = [];
+      options = [];
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        isComplete = false;
+        isReturn = true;
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if nargin == 2
+        if raw(end) == ';'
+          % The argument is complete.
+          isComplete = true;
+        else
+          % The argument is incomplete.
+          isComplete = false;
+        end
+        isReturn = true;
+        return;
+      end
+
+      % Execute the command.
+      if nargin == 3
+        isComplete = [];
+        isReturn = false;
+
+        arg = obj.getArgument(raw);
+        [name,options] = obj.getOptions(arg);
+      end
+
+    end % initLineCommand
+
     function [arg] = getArgument(obj,tline)
       %% GETARGUMENT Get the command and argument of a line.
       % argument.
@@ -157,7 +258,7 @@ classdef ModelClassParser < handle
       % param: tline Line of the model to interprect.
       %
       % return: arg The argument of the command.
-      
+
       arg = [];
 
       expression = '\s*\w*\s(.+);';
@@ -169,26 +270,6 @@ classdef ModelClassParser < handle
       end
 
     end % getArgument
-
-    function [] = executeCommand(obj,cmd,arg,fid,fout)
-      %% EXECUTECOMMAND Execute a command to build the ModelClass file.
-      %
-      % param: cmd Command to execute.
-      %        arg Argument for the command to execute.
-      %        fin File input with the model .mc definitions.
-      %        fout File output.
-      %
-      % return: void
-
-      try
-        feval(cmd,obj,arg,fout);
-      catch
-        error('%s is not a valid command for ModelClass models.',cmd);
-      end
-
-      fprintf(fout,'\n');
-
-    end % executeCommand
 
     function [name,options] = getOptions(obj,arg)
       %% GETOPTIONS Get and process the options for the commands.
@@ -274,94 +355,29 @@ classdef ModelClassParser < handle
 
     end % removeSpace
 
-    function [] = addHeader(obj,fout)
-      %% ADDHEADER Add the header to the Matlab Class.
-      %
-      % param: fout File output.
-      %
-      % return: void
+  end % methods
 
-      fprintf(fout,'classdef %s < ModelClass\n',obj.basename);
-      fprintf(fout,'\tmethods\n');
-      fprintf(fout,'\t\tfunction [obj] = %s()\n',obj.basename);
-
-    end % addHeader
-
-    function [] = addFooter(obj,fout)
-      %% ADDFOOTER Add the footer to the Matlab Class.
-      %
-      % param: fout File output.
-      %
-      % return: void
-
-      fprintf(fout,'\t\tobj.checkValidModel();\n');
-
-      fprintf(fout,'\t\tend\n');
-      fprintf(fout,'\tend\n');
-      fprintf(fout,'end\n');
-
-    end % addFooter
-
-    function [] = avoidRecursion(obj,filename)
-      %% AVOIDRECURSION Check if the filename was already used to avoid
-      % recursion.
-      %
-      % param: filename Filename to check.
-      %
-      % return: void
-
-      [pathstr,name,ext] = fileparts(filename);
-
-      if any(strcmp(obj.filenameExtended,name),'all')
-        error('The file "%s" was already included in the model. The parsing of the model was stoped to avoid infinite recursion.',name);
-      end
-
-      obj.filenameExtended{end+1} = name;
-
-    end % avoidRecursion
-
-  end %methods
-
+  % Commands for building ModelClass models.
   methods
 
-    function [out] = Variable(obj,arg,fout)
-      %% VARIABLE Add a varible to the Model Class.
+    function [isComplete] = Variable(obj,varargin)
+      %% VARIABLE Add a variable to the Model Class.
       % If fout is not provided, it will just return true if the arg is complete.
       %
       % [out] = Variable(obj,arg,fout)
       %
-      % param: arg Arguments
+      % param: raw  Raw data of the command.
       %      : fout File output
       %
-      % return: out True if arg has all the information needed.
+      % return: isComplete True if raw has all the information needed.
 
-      % Just for checking if the function exists.
-      if nargin == 1
-        out = [];
+      [isComplete, isReturn, fout, name, options] = obj.lineCommand_init(varargin{:});
+
+      if isReturn
         return;
       end
 
-      % Check if arg has all the data we need to perform this command.
-      if arg(end) == ';'
-        % The argument is complete.
-        out = true;
-      else
-        % The argument is incomplete.
-        out = false;
-      end
-
-      % Check if fout is not provided.
-      if ~exist('fout','var')
-        % Then, do not execute the rest of the function.
-        return;
-      end
-
-      % Execute the function beacuse we have fout.
-      arg = obj.getArgument(arg);
-      
-      [nameVar,options] = obj.getOptions(arg);
-
-      fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',nameVar);
+      fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',name);
 
       for i=1:length(options)
         % Skip empty options.
@@ -381,7 +397,7 @@ classdef ModelClassParser < handle
           % Set variable as a substitution.
           fprintf(fout,'\t\t\tv.isSubstitution=true;\n',options{i});
           % And generate its correspondign equation.
-          arg = compose('(%s == %s, isSubstitution = true)',nameVar,tokens{1}{2});
+          arg = compose('(%s == %s, isSubstitution = true)',name,tokens{1}{2});
           obj.Equation(arg{1},fout);
         else
           fprintf(fout,'\t\t\tv.%s;\n',options{i});
@@ -393,40 +409,21 @@ classdef ModelClassParser < handle
 
     end % Variable
 
-    function [out] = Parameter(obj,arg,fout)
+    function [isComplete] = Parameter(obj,varargin)
       %% PARAMETER Add a parameter to the Model Class.
       %
       % param: arg Arguments
       %      : fout File output
       %
-      % return: out True if arg has all the information needed.
+      % return: isComplete True if arg has all the information needed.
 
-      % Just for checking if the function exists.
-      if nargin == 1
-        out = [];
+      [isComplete, isReturn, fout, name, options] = obj.lineCommand_init(varargin{:});
+
+      if isReturn
         return;
       end
 
-      % Check if arg has all the data we need to perform this command.
-      if arg(end) == ';'
-        % The argument is complete.
-        out = true;
-      else
-        % The argument is incomplete.
-        out = false;
-      end
-
-      % Check if fout is not provided.
-      if ~exist('fout','var')
-        % Then, do not execute the rest of the function.
-        return;
-      end
-
-      % Execute the function beacuse we have fout.
-
-      [nameParam,options] = obj.getOptions(arg);
-
-      fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',nameParam);
+      fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',name);
 
       for i=1:length(options)
         % Skip empty options.
@@ -442,45 +439,26 @@ classdef ModelClassParser < handle
 
     end % Parameter
 
-    function [out] = Equation(obj,arg,fout)
+    function [isComplete] = Equation(obj,varargin)
       %% EQUATION Add an equation to the Model Class.
       %
       % param: arg Arguments
       %      : fout File output
       %
-      % return: out True if arg has all the information needed.
+      % return: isComplete True if arg has all the information needed.
 
-      % Just for checking if the function exists.
-      if nargin == 1
-        out = [];
+      [isComplete, isReturn, fout, name, options] = obj.lineCommand_init(varargin{:});
+
+      if isReturn
         return;
       end
-
-      % Check if arg has all the data we need to perform this command.
-      if arg(end) == ';'
-        % The argument is complete.
-        out = true;
-      else
-        % The argument is incomplete.
-        out = false;
-      end
-
-      % Check if fout is not provided.
-      if ~exist('fout','var')
-        % Then, do not execute the rest of the function.
-        return;
-      end
-
-      % Execute the function beacuse we have fout.
-      arg = obj.getArgument(arg);
-      [nameEqn,options] = obj.getOptions(arg);
 
       if isempty(options{1})
-        options{1} = nameEqn;
+        options{1} = name;
         nameEqn = '';
       end
 
-      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',nameEqn);      
+      fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',name);      
 
       try
         fprintf(fout,'\t\t\te.eqn = ''%s'';\n',options{1});
@@ -502,47 +480,30 @@ classdef ModelClassParser < handle
 
     end % Equation
 
-    function [out] = extends(obj,arg,fout)
+    function [isComplete] = extends(obj,varargin)
       %% EXTENDS Extends the actual model with the information of a base
       % model
       %
       % param: arg Arguments
       %      : fout File output
       %
-      % return: out True if arg has all the information needed.
+      % return: isComplete True if arg has all the information needed.
 
-      % Just for checking if the function exists.
-      if nargin == 1
-        out = [];
+      [isComplete, isReturn, fout, name, options] = obj.lineCommand_init(varargin{:});
+
+      if isReturn
         return;
       end
-
-      % Check if arg has all the data we need to perform this command.
-      if arg(end) == ';'
-        % The argument is complete.
-        out = true;
-      else
-        % The argument is incomplete.
-        out = false;
-      end
-
-      % Check if fout is not provided.
-      if ~exist('fout','var')
-        % Then, do not execute the rest of the function.
-        return;
-      end
-
-      % Execute the function beacuse we have fout.
 
       % Check if base model exists.
-      if ~isfile(arg)
+      if ~isfile(name)
         error(...
-          'The file "%s" does not exists. Check the filename and the path.',arg)
+          'The file "%s" does not exists. Check the filename and the path.',name)
       end
 
       % Open the base model.
-      obj.avoidRecursion(arg);
-      fBase = fopen(arg);
+      obj.avoidRecursion(name);
+      fBase = fopen(name);
 
       obj.executeFileLines(fBase,fout);
 
@@ -551,40 +512,21 @@ classdef ModelClassParser < handle
     end % extends
 
 
-    function [out] = CodeRaw(obj,arg,fout)
+    function [isComplete] = CodeRaw(obj,varargin)
       %% CODERAW Allows to execute matlab code defined in the .mc model.
       %
       % param: arg Arguments
       %      : fout File output
       %
-      % return: out True if arg has all the information needed.
+      % return: isComplete True if arg has all the information needed.
 
-      % Just for checking if the function exists.
-      if nargin == 1
-        out = [];
+      [isComplete, isReturn, fout, name, options] = obj.lineCommand_init(varargin{:});
+
+      if isReturn
         return;
       end
 
-      % Check if arg has all the data we need to perform this command.
-      if arg(end) == ';'
-        % The argument is complete.
-        out = true;
-      else
-        % The argument is incomplete.
-        out = false;
-      end
-
-      % Check if fout is not provided.
-      if ~exist('fout','var')
-        % Then, do not execute the rest of the function.
-        return;
-      end
-
-      % Execute the function beacuse we have fout.
-
-      [nameParam,options] = obj.getOptions(arg);
-
-      fprintf(fout,'1+1',nameParam);
+      fprintf(fout,'1+1',name);
 
     end % CodeRaw
 
