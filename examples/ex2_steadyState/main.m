@@ -51,7 +51,7 @@ clf(1);
 
 hold on;
 grid on;
-plot(out_1.t,out_1.x,'LineWidth',1.5);
-plot(out_2.t,out_2.x,'--','LineWidth',2.5);
-plot(out.t(end),out_3.x,'o','LineWidth',1.5);
+plot(out_1.t,out_1.x);
+plot(out_2.t,out_2.x,'--','LineWidth',1.5);
+plot(out_1.t(end),out_3.x,'o');
 legend('simulate','optSteadyState','simulateSteadyState','Location','SouthEast');
