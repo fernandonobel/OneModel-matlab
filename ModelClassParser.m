@@ -455,7 +455,7 @@ classdef ModelClassParser < handle
 
       if isempty(options{1})
         options{1} = name;
-        nameEqn = '';
+        name = '';
       end
 
       fprintf(fout,'\t\t\te = EquationClass(''%s'');\n',name);      

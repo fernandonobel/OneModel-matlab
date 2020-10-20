@@ -5,7 +5,7 @@ classdef model < ModelClass
 			v.start = 0;
 			obj.addVariable(v);
 
-			e = EquationClass('der_x == 1 - x');
+			e = EquationClass('');
 			e.eqn = 'der_x == 1 - x';
 			obj.addEquation(e);
 
