@@ -64,7 +64,7 @@ classdef ModelClassParser < handle
       % return: void
 
       % Read the model line by line.
-      tline = fgetl(fid);
+      tline = fgets(fid);
 
       % Aux buffer for preparing the lines to execute.
       aux = '';
@@ -78,7 +78,7 @@ classdef ModelClassParser < handle
 
         % Remove empty lines.
         if isempty(tline)
-          tline = fgetl(fid);
+          tline = fgets(fid);
           continue;
         end
 
@@ -89,7 +89,7 @@ classdef ModelClassParser < handle
           % If we did not find a command.
           if strcmp(cmd,'')
             % Look for it.
-            [tokens] = regexp(aux,'\s*(\w*) ','tokens');
+            [tokens] = regexp(aux,'\s*(\w*)\s','tokens');
             if ~isempty(tokens)
               if ~strcmp(tokens{1}{1},'')
                 cmd = tokens{1}{1};
@@ -124,7 +124,7 @@ classdef ModelClassParser < handle
         end
 
         % Read the next line in the document.
-        tline = fgetl(fid);
+        tline = fgets(fid);
       end
 
       % Check if something is remaining in aux after finishing the model.
@@ -170,7 +170,7 @@ classdef ModelClassParser < handle
       %
       % return: void
 
-      fprintf(fout,'\t\tobj.checkValidModel();\n');
+      fprintf(fout,'\t\t\tobj.checkValidModel();\n');
 
       fprintf(fout,'\t\tend\n');
       fprintf(fout,'\tend\n');
@@ -512,23 +512,48 @@ classdef ModelClassParser < handle
     end % extends
 
 
-    function [isComplete] = CodeRaw(obj,varargin)
-      %% CODERAW Allows to execute matlab code defined in the .mc model.
+    function [isComplete] = MatlabCode(obj,raw,fout)
+      %% MATLABCODE Allows to execute matlab code defined in the .mc model.
       %
-      % param: arg Arguments
+      % param: raw Raw data.
       %      : fout File output
       %
       % return: isComplete True if arg has all the information needed.
 
-      [isComplete, isReturn, fout, name, options] = obj.lineCommand_init(varargin{:});
+      if ~exist('fout','var')
+        fout = [];
+      end
 
-      if isReturn
+      name = [];
+      options = [];
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        isComplete = false;
         return;
       end
 
-      fprintf(fout,'1+1',name);
+      % Check if arg has all the data we need to perform this command.
+      if nargin == 2
+        if endsWith(raw,'end;')
+          % The argument is complete.
+          isComplete = true;
+        else
+          % The argument is incomplete.
+          isComplete = false;
+        end
+        return;
+      end
 
-    end % CodeRaw
+      % Execute the command.
+      if nargin == 3
+        isComplete = [];
+      end
+       
+      [tokens,matches] = regexp(raw,'\s*MatlabCode\s([\s\S]*)end;','tokens','match');
+      fprintf(fout,tokens{1}{1},name);
+
+    end % MatlabCode
 
   end % methods
 
