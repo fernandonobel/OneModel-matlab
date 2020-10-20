@@ -244,7 +244,9 @@ classdef ModelClassParser < handle
       if nargin == 3
         isComplete = [];
         isReturn = false;
-
+        
+        % Remove intros.
+        raw = raw(raw~=newline);
         arg = obj.getArgument(raw);
         [name,options] = obj.getOptions(arg);
       end
@@ -397,7 +399,7 @@ classdef ModelClassParser < handle
           % Set variable as a substitution.
           fprintf(fout,'\t\t\tv.isSubstitution=true;\n',options{i});
           % And generate its correspondign equation.
-          arg = compose('(%s == %s, isSubstitution = true)',name,tokens{1}{2});
+          arg = compose(' (%s == %s, isSubstitution = true);',name,tokens{1}{2});
           obj.Equation(arg{1},fout);
         else
           fprintf(fout,'\t\t\tv.%s;\n',options{i});
