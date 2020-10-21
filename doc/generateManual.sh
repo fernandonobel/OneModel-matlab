@@ -2,10 +2,6 @@
 
 #mdoc parse manual.mdoc --md && pandoc manual.md -o manual.pdf --template ./template
 
-mdoc parse manual.tex -o manual
+mdoc parse manual.mdoc -o manual.tex
 
-xelatex manualDef.tex -pdf
-
-mv manualDef.pdf manual.pdf
-
-
+xelatex manual.tex -pdf

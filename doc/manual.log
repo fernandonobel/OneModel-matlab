@@ -1,9 +1,9 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2018.10.29)  21 OCT 2020 18:44
+This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2018.10.29)  21 OCT 2020 18:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**manualDef.tex -pdf
-(./manualDef.tex
+**manual.tex -pdf
+(./manual.tex
 LaTeX2e <2017-04-15>
 Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -1213,9 +1213,8 @@ Package caption Info: longtable package is loaded.
 
 (/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
-))
-(./manualDef.aux)
-\openout1 = `manualDef.aux'.
+)) (./manual.aux)
+\openout1 = `manual.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
 LaTeX Font Info:    ... okay on input line 31.
@@ -1237,7 +1236,7 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 31.
 LaTeX Font Info:    ... okay on input line 31.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 31.
- (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 31.
@@ -1290,9 +1289,9 @@ LaTeX Info: Redefining \ref on input line 31.
 LaTeX Info: Redefining \pageref on input line 31.
 LaTeX Info: Redefining \nameref on input line 31.
 
-(./manualDef.out) (./manualDef.out)
+(./manual.out) (./manual.out)
 \@outlinefile=\write5
-\openout5 = `manualDef.out'.
+\openout5 = `manual.out'.
 
  ABD: EveryShipout initializing macros
 \c@lstlisting=\count313
@@ -1307,56 +1306,44 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 34.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (./manualDef.toc)
+) (./manual.toc)
 \tf@toc=\write6
-\openout6 = `manualDef.toc'.
+\openout6 = `manual.toc'.
 
 
 [1
 
-]
-Overfull \hbox (128.05832pt too wide) in paragraph at lines 73--74
-[]\TU/pcr/m/n/10.95 The code of ModelClass is allocated in the following GitHub
- [repository](https://github.com/sb2cl/ModelClass). 
- []
-
-[2]
-Overfull \hbox (6.08069pt too wide) in paragraph at lines 75--76
-\TU/pcr/m/n/10.95 the software can be found in the [releases](https://github.co
-m/sb2cl/ModelClass/releases)
- []
-
-[3] [4] [5]
-Overfull \hbox (2.02922pt too wide) in paragraph at lines 220--221
+] [2] [3] [4] [5]
+Overfull \hbox (2.02922pt too wide) in paragraph at lines 222--223
 []\TU/pcr/m/n/10.95 This command will extend the file [][][] present in the pat
 h [][][][][][][][][]. 
  []
 
 [6] [7] [8] [9] [10]
-Overfull \hbox (36.22241pt too wide) in paragraph at lines 443--444
+Overfull \hbox (36.22241pt too wide) in paragraph at lines 445--446
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][]  
  []
 
 [11]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 446.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 446.
- (./manualDef.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 446.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 446.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 448.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 448.
+ (./manual.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 448.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 448.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 446.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 448.
  ) 
 Here is how much of TeX's memory you used:
- 32510 strings out of 493007
- 612348 string characters out of 6136718
- 730023 words of memory out of 5000000
- 36091 multiletter control sequences out of 15000+600000
- 536905 words of font info for 57 fonts, out of 8000000 for 9000
+ 32518 strings out of 493007
+ 612448 string characters out of 6136718
+ 729990 words of memory out of 5000000
+ 36097 multiletter control sequences out of 15000+600000
+ 536913 words of font info for 58 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 62i,6n,69p,10445b,1765s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,6n,69p,10442b,1765s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on manualDef.pdf (11 pages).
+Output written on manual.pdf (11 pages).

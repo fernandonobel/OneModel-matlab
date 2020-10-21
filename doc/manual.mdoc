@@ -1,17 +1,50 @@
----
-title: ModelClass User Manual
-author: Fernando Nóbel Santos Navarro (fersann1@upv.es)
-date: \today
-toc: true
----
+\documentclass[11pt]{article}	
+
+\usepackage[utf8]{inputenc}		% Permite usar acentos	
+\usepackage[a4paper, ]{geometry}	% Fija el tamaño de folio
+\usepackage{indentfirst}		% Identa el primer párrafo
+\usepackage{graphicx} 			% Gráficos y figuras
+\usepackage{mathtools}
+\usepackage{amssymb}			% Símbolo de conjunto real para math
+\usepackage[nottoc,numbib]{tocbibind} 	% Añade la bibliografía a toc
+\usepackage{comment}
+\usepackage{afterpage}
+\usepackage[unicode]{hyperref}
+\usepackage{longtable,booktabs}
+\usepackage{chemformula} % Chemical formulas
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode} % Matlab code highlight
+
+\usepackage{caption}
+
+\graphicspath{{/home/nobel/Sync/phd/img/}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{ModelClass User Manual}
+
+\author{Fernando Nóbel Santos Navarro (fersann1@upv.es)}
+
+\date{\today}
+
+%------------------------ Document Begin ------------------------------
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage 
+
+\setlength{\parskip}{0.5em}
 
 \section{Manual version}
 
-This manual was written for the version **
+This manual was written for the version \textbf{ 
 ```sh exec --no-code --raw
 cat ../version
 ```
-** of ModelClass. Please check your local version of ModelClass using the following command:
+} of ModelClass. Please check your local version of ModelClass using the following command:
 
 \begin{lstlisting}
 ModelClass.version();
@@ -19,9 +52,11 @@ ModelClass.version();
 
 and it should return something similar to this:
 
+\begin{lstlisting}
 ```MATLAB exec --no-code --raw
 ModelClass.version();
 ```
+\end{lstlisting}
 , then if your local version does not match, please update to the latest version in the GitHub repository.
 
 \section{Introduction}
@@ -36,19 +71,19 @@ Apart from that, ModelClass provides us more classes for different tasks. For ex
 
 Lastly it is even possible to define ModelClass models from chemical reactions directly and then perform QSSA analysis and simulate.
 
-For more information please contact *fersann1@upv.es*.
+For more information please contact \textit{fersann1@upv.es}.
 
 \section{Getting started}
 
 \subsection{Installing from GitHub}
 
-The code of ModelClass is allocated in the following GitHub [repository](https://github.com/sb2cl/ModelClass).
+The code of ModelClass is allocated in the following GitHub \href{https://github.com/sb2cl/ModelClass}{repository}.
 
-It is recommended to install the latest version of ModelClass, the available version of the software can be found in the [releases](https://github.com/sb2cl/ModelClass/releases) in the GitHub repository.
+It is recommended to install the latest version of ModelClass, the available version of the software can be found in the \href{https://github.com/sb2cl/ModelClass/releases}{releases} in the GitHub repository.
 
 Download the code and unzip it in the directory of your choice.
 
-Then within MATLAB go to *HOME/ENVIROMENT >> Set path* and add the directory of the repository and the *utils* directory to the list (if they aren't already).
+Then within MATLAB go to \textit{HOME/ENVIROMENT >> Set path} and add the directory of the repository and the \textit{utils} directory to the list (if they aren't already).
 
 \subsection{Keep the sowftware up-to-date}
 
@@ -87,7 +122,7 @@ Note: if you have \mcode{git} installed locally, it is advisable to use \mcode{g
 
 \subsection{A minimal example}
 
-The following code show a minimal example of defining and simulating a model of the antithetic controller. It consists in two files: (i) the definition of the model as a *.mc* file and (ii) the main script that will simulate the model. 
+The following code show a minimal example of defining and simulating a model of the antithetic controller. It consists in two files: (i) the definition of the model as a \mcode{.mc} file and (ii) the main script that will simulate the model. 
 
 (i) model.mc 
 
@@ -251,3 +286,5 @@ and (ii) the \mcode{main.m} code:
 \begin{lstlisting}
 @[](../examples/ex2_steadyState/main.m)
 \end{lstlisting}
+
+\end{document}
