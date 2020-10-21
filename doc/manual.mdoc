@@ -5,26 +5,26 @@ date: \today
 toc: true
 ---
 
-# Manual version
+\section{Manual version}
 
 This manual was written for the version **
 ```sh exec --no-code --raw
 cat ../version
 ```
 ** of ModelClass. Please check your local version of ModelClass using the following command:
-```MATLAB 
+
+\begin{lstlisting}
 ModelClass.version();
-```
+\end{lstlisting}
 
 and it should return something similar to this:
 
-```MATLAB exec --no-code
+```MATLAB exec --no-code --raw
 ModelClass.version();
 ```
-
 , then if your local version does not match, please update to the latest version in the GitHub repository.
 
-# Introduction
+\section{Introduction}
 
 MATLAB is powerful piece of software with many specialized toolboxes, but it lacks tools that simplify the process of developing mathematical models.
 On the other hand, OpenModelica does a great job of defining models and making them reusable, however OpenModelica is restricted for simulation purposes only.
@@ -38,9 +38,9 @@ Lastly it is even possible to define ModelClass models from chemical reactions d
 
 For more information please contact *fersann1@upv.es*.
 
-# Getting started
+\section{Getting started}
 
-## Installing from GitHub
+\subsection{Installing from GitHub}
 
 The code of ModelClass is allocated in the following GitHub [repository](https://github.com/sb2cl/ModelClass).
 
@@ -50,52 +50,54 @@ Download the code and unzip it in the directory of your choice.
 
 Then within MATLAB go to *HOME/ENVIROMENT >> Set path* and add the directory of the repository and the *utils* directory to the list (if they aren't already).
 
-## Keep the sowftware up-to-date
+\subsection{Keep the sowftware up-to-date}
 
-The ModelClass is currently in active development, so it is recommended to keep this software up to date. The `master` branch in the Github repository contains the latest stable version of the software
+The ModelClass is currently in active development, so it is recommended to keep this software up to date. The \mcode{master} branch in the Github repository contains the latest stable version of the software
 
 ModelClass has an integrated command to check if a newer version of it is available in the repository:
-```MATLAB
+\begin{lstlisting}
 ModelClass.checkVersion();
-```
+\end{lstlisting}
 
 and it should return the following message if the local code is updated,
 
-```MATLAB
+\begin{lstlisting}
 The local version of ModelClass is up to date.
-```
+\end{lstlisting}
 
 or the follwing message if if the local code is outdated:
 
-```MATLAB
+\begin{lstlisting}
 The local version of ModelClass is outdated, please update to the latest version.
-```
+\end{lstlisting}
 
 There are two ways to update your local code of ModelClass.
 
-The first one is to manually download the latest release of the code in the repository in the `master` branch.
+The first one is to manually download the latest release of the code in the repository in the \mcode{master} branch.
 
 The second one is to execute the following command:
 
-```MATLAB
+\begin{lstlisting}
 ModelClass.update();
-```
+\end{lstlisting}
 
 and it will update the local code to the latest release in the repository automatically. 
 
-Note: if you have `git` installed locally, it is advisable to use `git pull origin master` to update your local repository as the `ModelClass.updated();` could potentially mess up with the `.git` folder.
+Note: if you have \mcode{git} installed locally, it is advisable to use \mcode{git pull origin master} to update your local repository as the \mcode{ModelClass.updated();} could potentially mess up with the \mcode{.git} folder.
 
-## A minimal example
+\subsection{A minimal example}
 
 The following code show a minimal example of defining and simulating a model of the antithetic controller. It consists in two files: (i) the definition of the model as a *.mc* file and (ii) the main script that will simulate the model. 
 
-(i) model.mc
-```MATLAB
+(i) model.mc 
+
+\begin{lstlisting}
 @[](../examples/ex0_readme/model.mc)
-```
+\end{lstlisting}
 
 (ii) main.m
-```MATLAB
+
+\begin{lstlisting}
 % Initialize an object of the model.
 m = ModelClass.load('model.mc');
 
@@ -124,123 +126,128 @@ sp = SimulationPlotClass(m);
 
 % Plot the result of the simulation.
 sp.plotAllStates(out);
-```
+\end{lstlisting}
 
-# ModelClass
+\section{ModelClass}
 
-## ModelClass methods
+\subsection{ModelClass methods}
 
-### version()
+\subsubsection{version()}
 
-### checkVersion()
+\subsubsection{checkVersion()}
 
-### update()
+\subsubsection{update()}
 
-# Extends
+\section{Extends}
 
-The keyword `extends` allows us to create new ModelClass models that extends the functionality of a base class.
+The keyword \mcode{extends} allows us to create new ModelClass models that extends the functionality of a base class.
 
-When we use the keyword `extends` with the filename of a base model, the parser of the ModelClass will read all the data in the base model and it will add it to the model which we are working on. So it can be understood as pasting all the data from the base model to the new one.
+When we use the keyword \mcode{extends} with the filename of a base model, the parser of the ModelClass will read all the data in the base model and it will add it to the model which we are working on. So it can be understood as pasting all the data from the base model to the new one.
 
 This way we can reuse model for building new models that expand the original functionality, and it a change is made in the original model, it will be also done in the extended models. This helps the maintenance of the models and reduces the time spent programming.
 
-## Usage
+\subsection{Usage}
 
-When defining a ModelClass `.mc`, we can use the following structure for extending a base model:
+When defining a ModelClass \mcode{.mc}, we can use the following structure for extending a base model:
 
-```MATLAB
+\begin{lstlisting}
 extends /path/to/filename.mc;
-```
+\end{lstlisting}
 
-, where `/path/to/filename.mc` it the path with the name of the model we want to extend (it is possible to use a relative path or a absolute path). For example:
+, where \mcode{/path/to/filename.mc} it the path with the name of the model we want to extend (it is possible to use a relative path or a absolute path). For example:
 
-This command will extend the file `model.mc` present in the working directory.
-```MATLAB
+This command will extend the file \mcode{model.mc} present in the working directory.
+
+\begin{lstlisting}
 extends ./model.mc;
-```
+\end{lstlisting}
 
-This command will extend the file `model.mc` present in the parent directory of the working directory.
-```MATLAB
+This command will extend the file \mcode{model.mc} present in the parent directory of the working directory.
+
+\begin{lstlisting}
 extends ../model.mc;
-```
+\end{lstlisting}
 
-This command will extend the file `model.mc` present in the path `/home/user/MATLAB/`.
-```MATLAB
+This command will extend the file \mcode{model.mc} present in the path \mcode{/home/user/MATLAB/}.
+
+\begin{lstlisting}
 extends /home/username/MATLAB/model.m;
-```
+\end{lstlisting}
 
-NOTE: It is best to declare the `extends` at the beginning of the ModelClass model.
+NOTE: It is best to declare the \mcode{extends} at the beginning of the ModelClass model.
 
-## Example
+\subsection{Example}
 
-In `./examples/ex1_extends` there is a example code for using the `extends` keyword.
+In \mcode{./examples/ex1_extends} there is a example code for using the \mcode{extends} keyword.
 
-The example starts with a `baseModel.mc` and we would like to expand its functionality by adding a equation to show the reference dynamically.
+The example starts with a \mcode{baseModel.mc} and we would like to expand its functionality by adding a equation to show the reference dynamically.
 
-The `baseModel.mc` defines the following variables and equations:
+The \mcode{baseModel.mc} defines the following variables and equations:
 
-```MATLAB
+\begin{lstlisting}
 @[](../examples/ex1_extends/baseModel.mc)
-```
+\end{lstlisting}
 
-And the `extendeModel.mc` is defines the variable and equation needed for the reference:
+And the \mcode{extendeModel.mc} is defines the variable and equation needed for the reference:
 
-```MATLAB
+\begin{lstlisting}
 @[](../examples/ex1_extends/extendedModel.mc)
-```
+\end{lstlisting}
 
-Notice how the equation for the reference `ref == k3/d3` makes use of parameters previously defined in the `baseModel.mc`. The extended model has access to all the information defined in the base model.
+Notice how the equation for the reference \mcode{ref == k3/d3} makes use of parameters previously defined in the \mcode{baseModel.mc}. The extended model has access to all the information defined in the base model.
 
 Then if we execute the following command:
 
-```MATLAB
+\begin{lstlisting}
 m = ModelClass.load('extendedModel.mc');
-```
+\end{lstlisting}
 
-, the file `extendedModel.m` is autogenerated, and it will contain all the model information defined by `baseModel.mc` and `extendedModel.mc`. Here is shown the contents of `extendedModel.m`:
+, the file \mcode{extendedModel.m} is autogenerated, and it will contain all the model information defined by \mcode{baseModel.mc} and \mcode{extendedModel.mc}. Here is shown the contents of \mcode{extendedModel.m}:
 
-```MATLAB
+\begin{lstlisting}
 @[](../examples/ex1_extends/extendedModel.m)
-```
+\end{lstlisting}
 
 , where we can confirm that the base model has been successfully extended.
 
-Finally, at this point we can work as usually with the model `extendedModel.mc`, and we could even extended it to create a `extendedExtendedModel.md`!
+Finally, at this point we can work as usually with the model \mcode{extendedModel.mc}, and we could even extended it to create a \mcode{extendedExtendedModel.md}!
 
-# SimulationClass
+\section{SimulationClass}
 
-## Steady state
+\subsection{Steady state}
 
-### Simulate until steady state
+\subsubsection{Simulate until steady state}
 
-Sometimes it is handy to just simulate until the steady state is reached. We can set manually an `Event` in the ODE options for this. However, the following command will do that for us:
+Sometimes it is handy to just simulate until the steady state is reached. We can set manually an \mcode{Event} in the ODE options for this. However, the following command will do that for us:
 
-```MATLAB
+\begin{lstlisting}
 opt = s.optSteadyState(opt,p,tol);
-```
+\end{lstlisting}
 
-,where `opt` is the options for the ODE solver, `s` is the SimulationClass object of the model, `p` is the struct of paramters used in the simulation and `tol` is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than `tol`. If `tol` is not defined, it will be set to `1e-6`.
+,where \mcode{opt} is the options for the ODE solver, \mcode{s} is the SimulationClass object of the model, \mcode{p} is the struct of paramters used in the simulation and \mcode{tol} is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than \mcode{tol}. If \mcode{tol} is not defined, it will be set to \mcode{1e-6}.
 
-### Get the steady state
+\subsubsection{Get the steady state}
 
 The following method calculates the steady state value of the model directly:
 
-```MATLAB
+\begin{lstlisting}
 [out] = s.simulateSteadyState(x0,p);
-```
+\end{lstlisting}
 
-, `s` is the SimulationClass object of the model, `x0` is the struct of initial conditions, `p` is the struct of paramters used in the simulation and `tol` is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than `tol`. If `tol` is not defined, it will be set to `1e-6`.
+, \mcode{s} is the SimulationClass object of the model, \mcode{x0} is the struct of initial conditions, \mcode{p} is the struct of paramters used in the simulation and \mcode{tol} is the tolerance to determine the steady state. The steady state is reached when the absolute sum of all the derivatives of the model is less than \mcode{tol}. If \mcode{tol} is not defined, it will be set to \mcode{1e-6}.
 
-### Example 
+\subsubsection{Example}
 
-Here is a minimal example of how to use the `optSteadyState` function:
+Here is a minimal example of how to use the \mcode{optSteadyState} function:
 
-(i) the `model.mc` code:
-```MATLAB
+(i) the \mcode{model.mc} code:
+
+\begin{lstlisting}
 @[](../examples/ex2_steadyState/model.mc)
-```
+\end{lstlisting}
 
-and (ii) the `main.m` code:
-```MATLAB
+and (ii) the \mcode{main.m} code:
+
+\begin{lstlisting}
 @[](../examples/ex2_steadyState/main.m)
-```
+\end{lstlisting}

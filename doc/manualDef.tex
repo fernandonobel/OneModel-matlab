@@ -1,9 +1,42 @@
----
-title: ModelClass User Manual
-author: Fernando Nóbel Santos Navarro (fersann1@upv.es)
-date: \today
-toc: true
----
+\documentclass[11pt]{article}	
+
+\usepackage[utf8]{inputenc}		% Permite usar acentos	
+\usepackage[a4paper, ]{geometry}	% Fija el tamaño de folio
+\usepackage{indentfirst}		% Identa el primer párrafo
+\usepackage{graphicx} 			% Gráficos y figuras
+\usepackage{mathtools}
+\usepackage{amssymb}			% Símbolo de conjunto real para math
+\usepackage[nottoc,numbib]{tocbibind} 	% Añade la bibliografía a toc
+\usepackage{comment}
+\usepackage{afterpage}
+\usepackage[unicode]{hyperref}
+\usepackage{longtable,booktabs}
+\usepackage{chemformula} % Chemical formulas
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode} % Matlab code highlight
+
+\usepackage{caption}
+
+\graphicspath{{/home/nobel/Sync/phd/img/}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{ModelClass User Manual}
+
+\author{Fernando Nóbel Santos Navarro (fersann1@upv.es)}
+
+\date{\today}
+
+%------------------------ Document Begin ------------------------------
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage 
+
+\setlength{\parskip}{0.5em}
 
 \section{Manual version}
 
@@ -409,3 +442,5 @@ plot(out_2.t,out_2.x,'--','LineWidth',1.5);
 plot(out_1.t(end),out_3.x,'o');
 legend('simulate','optSteadyState','simulateSteadyState','Location','SouthEast');
 \end{lstlisting}
+
+\end{document}
