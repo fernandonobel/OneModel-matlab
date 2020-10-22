@@ -169,6 +169,26 @@ classdef (Abstract) ModelClass < handle
       
     end % getEquationByName
 
+    function [] = updateEquation(obj,eqn)
+      %% UPDATEEQUATION Update an equation object with new information.
+      %
+      % param: eqn New equation object to replace the old one.
+      %
+      % return: void
+
+      name = eqn.name;
+
+      aux = obj.isReduced;
+      obj.isReduced = false;
+
+      names = obj.eqnsName();
+
+      obj.equations(strcmp(name, names)) = eqn;
+
+      obj.isReduced = aux;
+      
+    end % updateEquation
+
     function [out] = getSymbolByName(obj,name)
       %% GETSYMBOLBYNAME Get the Symbol (Variable or Parameter) object by its 
       % name.
