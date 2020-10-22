@@ -41,6 +41,8 @@ classdef (Abstract) ModelClass < handle
     varsPlot
     % [sym] Equations of the model. 
     eqns                
+    % {str} Names of the equations.
+    eqnsName
     % [sym] Left part of the equations.
     eqnsLeft
     % [sym] Right part of the equations.
@@ -148,6 +150,24 @@ classdef (Abstract) ModelClass < handle
       obj.equations(end+1) = e;
 
     end % addEquation
+
+    function [out] = getEquationByName(obj,name)
+      %% GETEQUATIONBYNAME Get the Equation object by its name.
+      %
+      % param: name String with the name of the equation.
+      %
+      % return: out
+
+      aux = obj.isReduced;
+      obj.isReduced = false;
+
+      names = obj.eqnsName();
+
+      out = obj.equations(strcmp(name, names));
+
+      obj.isReduced = aux;
+      
+    end % getEquationByName
 
     function [out] = getSymbolByName(obj,name)
       %% GETSYMBOLBYNAME Get the Symbol (Variable or Parameter) object by its 
@@ -445,6 +465,20 @@ classdef (Abstract) ModelClass < handle
       end
 
     end % get.eqns
+
+    function [out] = get.eqnsName(obj)
+      %% GET.EQNSNAME Get the names of the equations.
+      %
+      % return: out Struct with the name of the equations.
+
+      out = {obj.equations.name};
+
+       % Return reduced model if needed.
+      if obj.isReduced
+        out = out(~obj.isSubs);
+      end
+      
+    end % get.eqnsName
 
 
     function [out] =  get.eqnsLeft(obj)
