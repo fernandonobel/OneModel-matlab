@@ -162,7 +162,7 @@ classdef SimulationClass < handle
 
     end % simulateTX
 
-    function [out] = simulateSteadyState(obj,x0,p,tol,mTime,opt)
+    function [out, out_tx] = simulateSteadyState(obj,x0,p,tol,mTime,opt)
       %% STEADYSTATE Simulates until the steady state is reached.
       %
       % param: x0 real. Struct with the intial condition.
@@ -172,6 +172,7 @@ classdef SimulationClass < handle
       %        opt Options for the fsolve.
       %
       % return: out Steady state values.
+      %         out_tx Output of the simulation.
       
       if nargin < 4
         tol = [];
@@ -192,6 +193,9 @@ classdef SimulationClass < handle
 
       % Run the simulation endlessly.
       out = obj.simulate([0 +inf],x0,p,opt);
+
+      % Save the simulation temporal evolution.
+      out_tx = out;
       
       % Return only the last value of the simulation;
       fn = fieldnames(out);
