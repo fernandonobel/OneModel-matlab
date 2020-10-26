@@ -118,18 +118,18 @@ m.eqns
  
 ans =
  
-  x1
-  x2
-  x3
- ref
+ x1
+ x2
+ x3
+ref
  
  
 ans =
  
-    der_x1 == k1 - d1*x1 - gamma12*x1*x2
- der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
-                 der_x3 == k3*x1 - d3*x3
-                            ref == k3/d3
+   der_x1 == k1 - d1*x1 - gamma12*x1*x2
+der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
+                der_x3 == k3*x1 - d3*x3
+                           ref == k3/d3
  
 ```
 
@@ -195,6 +195,13 @@ sp = SimulationPlotClass(m);
 
 % Plot the result of the simulation.
 sp.plotAllStates(out);
+
+% Save the plot.
+saveas(gcf,'simulationPlot.png')
+```
+
+```
+
 ```
 
 <p align="center">

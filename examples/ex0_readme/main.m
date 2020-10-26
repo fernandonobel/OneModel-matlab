@@ -39,6 +39,9 @@ sp = SimulationPlotClass(m);
 % Plot the result of the simulation.
 sp.plotAllStates(out);
 
+% Save the plot.
+saveas(gcf,'simulationPlot.png')
+
 %% 4. Function that evaluates the ODEs.
 
 % Create an ode function of the model.

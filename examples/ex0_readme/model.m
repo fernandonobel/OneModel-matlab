@@ -12,7 +12,7 @@ classdef model < ModelClass
 
 			v = VariableClass('ref');
 			v.isSubstitution=true;
-			e = EquationClass('');
+			e = EquationClass('ref_eq');
 			e.eqn = 'ref ==  k3/d3';
 			e.isSubstitution = true;
 			obj.addEquation(e);
@@ -58,7 +58,7 @@ classdef model < ModelClass
 			e.eqn = 'der_x3 == k3*x1 - d3*x3';
 			obj.addEquation(e);
 
-		obj.checkValidModel();
+			obj.checkValidModel();
 		end
 	end
 end
