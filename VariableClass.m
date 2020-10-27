@@ -1,7 +1,7 @@
 classdef VariableClass < SymbolClass
   %% VARIABLECLASS This class defines a variable value or state.
   %
-  
+
   properties
     % bool Is the variable no negative?
     isNoNegative
@@ -10,7 +10,7 @@ classdef VariableClass < SymbolClass
   end % properties
 
   methods 
-  
+
     function [obj] = VariableClass(name)
       %% Constructor of VariableClass.
       %
@@ -20,7 +20,7 @@ classdef VariableClass < SymbolClass
       obj.isNoNegative = false;
       obj.isPlot = true;
       obj.start = 0;
-      
+
     end % VariableClass
 
     function [] =  set.isNoNegative(obj,isNoNegative)
@@ -29,13 +29,13 @@ classdef VariableClass < SymbolClass
       % param: isNoNegative
       %
       % return: void
-      
+
       if ~islogical(isNoNegative)
         error('isNoNegative must be logical.');
       end
 
       obj.isNoNegative = isNoNegative;
-      
+
     end % set.isNoNegative
 
     function [] = set.start(obj,in)
@@ -44,15 +44,15 @@ classdef VariableClass < SymbolClass
       % param: in real Initial condition.
       %
       % return: void
-      
+
       if ~isnumeric(in) || length(in) ~= 1
         error('start must be a real number.');
       end
 
       obj.start = in;
-      
+
     end % set.start
 
   end % methods
-  
+
 end % classdef
