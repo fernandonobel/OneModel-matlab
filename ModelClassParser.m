@@ -526,9 +526,6 @@ classdef ModelClassParser < handle
         fout = [];
       end
 
-      name = [];
-      options = [];
-
       % Just for checking if the function exists.
       if nargin == 1
         isComplete = false;
@@ -553,9 +550,50 @@ classdef ModelClassParser < handle
       end
        
       [tokens,matches] = regexp(raw,'\s*MatlabCode\s([\s\S]*)end;','tokens','match');
-      fprintf(fout,tokens{1}{1},name);
+      fprintf(fout,tokens{1}{1});
 
     end % MatlabCode
+
+    function [isComplete] = SimOptions(obj,raw,fout)
+      %% SIMOPTIONS This command sets the options for the simulation.
+      %
+      % param: raw Raw data.
+      %      : fout File output
+      %
+      % return: isComplete
+
+      if ~exist('fout','var')
+        fout = [];
+      end
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        isComplete = false;
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if nargin == 2
+        if endsWith(raw,';')
+          % The argument is complete.
+          isComplete = true;
+        else
+          % The argument is incomplete.
+          isComplete = false;
+        end
+        return;
+      end
+
+      % Execute the command.
+      if nargin == 3
+        isComplete = [];
+      end
+       
+      [tokens,matches] = regexp(raw,'SimOptions\s*(.*);','tokens','match');
+
+      fprintf(fout,['\t\t\tobj.simOptions.' tokens{1}{1} ';']);
+      
+    end % SimOptions
 
   end % methods
 

@@ -40,8 +40,15 @@ classdef SimulationClass < handle
 
   %% Simulation methods.
   methods
-    function [out] =  simulate(obj,tspan,x0,p,opt)
+    function [out] =  simulate(obj,varargin)
       %% SIMULATE Simulate the symbolic model.
+      %
+      % simulate(obj) Simulate the symbolic model using the default values
+      % defined in the ModelClass object.
+      %
+      % simulate(obj,tspan,x0,p,opt) Simulate the symbolic model using the user
+      % defined parameters for the simulation. Is any of the arguments is [],
+      % the default value will be used.
       %
       % param: tspan [tStart, tEnd] Time interval for the simulation.
       %      : x0 [real] Initial conditions.
@@ -50,8 +57,29 @@ classdef SimulationClass < handle
       %
       % return: out real. Struct with the result of the simulation.
 
-      if nargin < 5
-        opt = odeset('AbsTol',1e-8,'RelTol',1e-8);
+      if nargin == 1
+        tspan = [];
+        x0 = [];
+        p = [];
+        opt = [];
+      else
+        tspan = varargin{1};
+        x0 = varargin{2};
+        p = varargin{3};
+        opt = varargin{4};
+      end
+
+      if isempty(tspan)
+        % Use the default value.
+        tspan = obj.model.simOptions.TimeSpan;
+      end
+
+      if isempty(opt)
+        % Use the default value.
+        opt = obj.model.simOptions.opts;
+      else
+        % Override the default value with the new one.
+        opt = odeset(obj.model.simOptions.opts,opt);
       end
 
       aux = obj.model.isReduced;

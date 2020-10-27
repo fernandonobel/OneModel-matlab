@@ -78,6 +78,8 @@ classdef (Abstract) ModelClass < handle
     parameters
     % [EquationClass] Array with all the equations of the model.
     equations
+    % SimulationOptionsClass Object with the simulation options.
+    simOptions
   end % Propierties (Access = private)
 
   %% Contructors
@@ -91,6 +93,7 @@ classdef (Abstract) ModelClass < handle
       obj.parameters = ParameterClass.empty();
       obj.symbols = SymbolClass.empty();
       obj.equations = EquationClass.empty();
+      obj.simOptions = SimulationOptionsClass();
 
     end % ModelClass
   end % methods
