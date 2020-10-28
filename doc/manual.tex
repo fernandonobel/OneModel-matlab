@@ -16,6 +16,10 @@
 
 \usepackage{caption}
 
+\usepackage{tabularx}
+\newcolumntype{P}{>{\raggedright\arraybackslash}m}
+\newcolumntype{C}{>{\centering\arraybackslash}m}
+
 \graphicspath{{/home/nobel/Sync/phd/img/}}
 
 \providecommand{\tightlist}{%
@@ -51,7 +55,7 @@ ModelClass.version();
 and it should return something similar to this:
 
 \begin{lstlisting}
-v0.4.5 2f025fb   -   Fernando Nóbel (fersann1@upv.es)\end{lstlisting}
+v0.4.5 bc479d6   -   Fernando Nóbel (fersann1@upv.es)\end{lstlisting}
 , then if your local version does not match, please update to the latest version in the GitHub repository.
 
 \section{Introduction}
@@ -189,7 +193,56 @@ sp.plotAllStates(out);
 
 \subsubsection{update()}
 
-\section{Extends}
+\section{ModelClass syntax}
+
+\subsection{SimOptions}
+
+The keyword \mcode{SimOptions} allows us to define the default values for the configuration of the ode solver with \mcode{odeset()} and more general values as the time span for the simulation.
+
+The syntax for using this command is as follows:
+
+\begin{lstlisting}
+SimOptions parameter = value; 
+\end{lstlisting}
+
+, where \mcode{parameter} is one of the simulation configuration propierty and \mcode{value} is the value we want to assign to it.
+
+For example, the following code:
+
+\begin{lstlisting}
+SimOptions AbsTol = 1e-3;
+SimOptions RelTol = 1e-9;
+SimOptions TimeSpan  = [0 10];
+\end{lstlisting}
+
+will set the value of the absolute tolerance \mcode{AbsTol} to \mcode{1e-3}, the value of the relative tolerance \mcode{RelTol} to \mcode{1e-9} and the time span of the simualtion \mcode{TimeSpan} to \mcode{[0 10]}.
+
+In the following table is shown the list of simulation configuration propierties currently available:
+
+\begin{center}
+\footnotesize
+\begin{tabular}{
+    P{0.15\linewidth}
+    P{0.25\linewidth}
+    P{0.45\linewidth}
+  }
+\toprule
+    \textbf{Propierty} & \textbf{Description} & \textbf{Value} \\
+\midrule
+  \mcode{RelTol} & Relative error tolerance & \mcode{1e-3 (default) \| positive scalar} \\
+  \mcode{AbsTol} & Absolute error tolerance & \mcode{1e-6 (default) \| positive scalar \| vector} \\
+  \mcode{TimeSpan} & Simulation time span & \mcode{[0 10] (default) \| positive scalar vector} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+
+
+
+
+
+\subsection{Extends}
 
 The keyword \mcode{extends} allows us to create new ModelClass models that extends the functionality of a base class.
 
@@ -197,7 +250,7 @@ When we use the keyword \mcode{extends} with the filename of a base model, the p
 
 This way we can reuse model for building new models that expand the original functionality, and it a change is made in the original model, it will be also done in the extended models. This helps the maintenance of the models and reduces the time spent programming.
 
-\subsection{Usage}
+\subsubsection{Usage}
 
 When defining a ModelClass \mcode{.mc}, we can use the following structure for extending a base model:
 
@@ -227,7 +280,7 @@ extends /home/username/MATLAB/model.m;
 
 NOTE: It is best to declare the \mcode{extends} at the beginning of the ModelClass model.
 
-\subsection{Example}
+\subsubsection{Example}
 
 In \mcode{./examples/ex1_extends} there is a example code for using the \mcode{extends} keyword.
 
