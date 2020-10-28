@@ -3,7 +3,14 @@ m = ModelClass.load('model.mc');
 s = SimulationClass(m);
 sp = SimulationPlotClass(m);
 
-% Simulate.
+%% Simulate with default values.
 [out] = s.simulate();
+sp.plotAllStates(out);
 
+%% Simulate with user defined values.
+tspan = [0 12];
+p.k = 2;
+x0.x = 1;
+opt = odeset('AbsTol',1e-1);
+[out] = s.simulate(tspan,x0,p,opt);
 sp.plotAllStates(out);

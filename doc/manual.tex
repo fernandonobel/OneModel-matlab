@@ -51,7 +51,7 @@ ModelClass.version();
 and it should return something similar to this:
 
 \begin{lstlisting}
-v0.4.5 4bfe8c2   -   Fernando Nóbel (fersann1@upv.es)\end{lstlisting}
+v0.4.5 2f025fb   -   Fernando Nóbel (fersann1@upv.es)\end{lstlisting}
 , then if your local version does not match, please update to the latest version in the GitHub repository.
 
 \section{Introduction}
@@ -349,6 +349,47 @@ end
 Finally, at this point we can work as usually with the model \mcode{extendedModel.mc}, and we could even extended it to create a \mcode{extendedExtendedModel.md}!
 
 \section{SimulationClass}
+
+\subsection{Default values for simulating}
+
+It is possible to define the default values for parameters, initial conditions, simulation time and ode options in the definition of a model using the ModelClass syntax.
+
+In the following example, it is shown how we can set the intial condition of \mcode{Variables} setting the \mcode{start} propierty, the default value of a \mcode{Parameter} setting the \mcode{value} propierty or the simulation options using the \mcode{SimOptions} command.
+
+\begin{lstlisting}
+SimOptions AbsTol = 1e-3;
+SimOptions RelTol = 1e-9;
+SimOptions TimeSpan  = [0 10];
+
+Variable x(start = 0);
+Parameter k(value = 1);
+
+Equation der_x == k - x;
+\end{lstlisting}
+
+This is very handy because it allows us to have a single contained file with the structure of the model and everything we need to simulate it.
+
+However sometimes we would want to change some values of the model to perform different simulations.
+For this, we can override the default values without modifing the model. This can be done by calling the \mcode{simulate()} method with the arguments we want to use in this particular simulation.
+
+\begin{lstlisting}
+%% Init the model and the tools for simulating
+m = ModelClass.load('model.mc');
+s = SimulationClass(m);
+sp = SimulationPlotClass(m);
+
+%% Simulate with default values.
+[out] = s.simulate();
+sp.plotAllStates(out);
+
+%% Simulate with user defined values.
+tspan = [0 12];
+p.k = 2;
+x0.x = 1;
+opt = odeset('AbsTol',1e-1);
+[out] = s.simulate(tspan,x0,p,opt);
+sp.plotAllStates(out);
+\end{lstlisting}
 
 \subsection{Steady state}
 
