@@ -42,18 +42,18 @@ s.createDriverOdeFunction();
  
 ans =
  
-  x1
-  x2
-  x3
- ref
+ x1
+ x2
+ x3
+ref
  
  
 ans =
  
-    der_x1 == k1 - d1*x1 - gamma12*x1*x2
- der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
-                 der_x3 == k3*x1 - d3*x3
-                            ref == k3/d3
+   der_x1 == k1 - d1*x1 - gamma12*x1*x2
+der_x2 == k2*x3 - d2*x2 - gamma12*x1*x2
+                der_x3 == k3*x1 - d3*x3
+                           ref == k3/d3
  
 
 out = 
@@ -132,6 +132,7 @@ m =
     varsIndexNoNegative: []
                varsPlot: [1 1 1 1]
                    eqns: [4x1 sym]
+               eqnsName: {''  ''  ''  ''}
                eqnsLeft: [1x4 sym]
               eqnsRight: [1x4 sym]
                    ders: [1x4 sym]
@@ -139,11 +140,12 @@ m =
                  params: [1x7 sym]
              paramsName: {7x1 cell}
             paramsValue: [NaN NaN NaN NaN NaN NaN NaN]
-            symbolsName: {1x11 cell}
+            symbolsName: {'x1'  'x2'  'x3'  'k1'  'k2'  'k3'  'd1'  'd2'  'd3'  'gamma12'  'ref'}
           symbolsIsPlot: [1 1 1 0 0 0 0 0 0 0 1]
                 symbols: {1x11 cell}
               variables: [1x4 VariableClass]
              parameters: [1x7 ParameterClass]
               equations: [1x4 EquationClass]
+             simOptions: [1x1 SimulationOptionsClass]
 
 ```

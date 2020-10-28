@@ -51,7 +51,7 @@ classdef extendedModel < ModelClass
 			e.eqn = 'ref == k3/d3';
 			obj.addEquation(e);
 
-		obj.checkValidModel();
+			obj.checkValidModel();
 		end
 	end
 end
