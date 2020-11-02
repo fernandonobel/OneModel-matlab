@@ -8,7 +8,7 @@ sp = SimulationPlotClass(m);
 sp.plotAllStates(out);
 
 %% Simulate with user defined values.
-tspan = [0 12];
+tspan = 0:10;
 p.k = 2;
 x0.x = 1;
 opt = odeset('AbsTol',1e-1);

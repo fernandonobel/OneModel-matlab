@@ -74,8 +74,8 @@ classdef SimulationOptionsClass < handle
       %
       % return: void
 
-      if ~isnumeric(value) || length(value) ~= 2
-        error('Error ''TimeSpan'' must be a real vector of two elements.');
+      if ~isnumeric(value) || length(value) == 1
+        error('Error ''TimeSpan'' must be a real vector of minimun two elements.');
       end
 
       obj.TimeSpan = value;
