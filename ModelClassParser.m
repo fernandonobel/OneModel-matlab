@@ -129,7 +129,7 @@ classdef ModelClassParser < handle
 
       % Check if something is remaining in aux after finishing the model.
       if ~all(isspace(aux)) && ~isempty(aux)
-        error('Not found ; in the last line of the model.');
+        feval(cmd,obj,aux,-1);
       end
     end % executeFileLines
 
@@ -378,6 +378,12 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          st = dbstack;
+          error('the command ''%s'' has an error.',st(1).name);
+      end
 
       fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',name);
 
@@ -424,6 +430,12 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          st = dbstack;
+          error('the command ''%s'' has an error.',st(1).name);
+      end
 
       fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',name);
 
@@ -453,6 +465,12 @@ classdef ModelClassParser < handle
 
       if isReturn
         return;
+      end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          st = dbstack;
+          error('the command ''%s'' has an error.',st(1).name);
       end
 
       if isempty(options{1})
@@ -496,6 +514,12 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          st = dbstack;
+          error('the command ''%s'' has an error.',st(1).name);
+      end
 
       % Check if base model exists.
       if ~isfile(name)
@@ -524,6 +548,12 @@ classdef ModelClassParser < handle
 
       if ~exist('fout','var')
         fout = [];
+      end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          st = dbstack;
+          error('the command ''%s'' has an error.',st(1).name);
       end
 
       % Just for checking if the function exists.
@@ -565,6 +595,12 @@ classdef ModelClassParser < handle
       if ~exist('fout','var')
         fout = [];
       end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          st = dbstack;
+          error('the command ''%s'' has an error.',st(1).name);
+      end
 
       % Just for checking if the function exists.
       if nargin == 1
@@ -594,6 +630,64 @@ classdef ModelClassParser < handle
       fprintf(fout,['\t\t\tobj.simOptions.' tokens{1}{1} ';']);
       
     end % SimOptions
+
+    function [isComplete] = Class(obj,raw,fout)
+      %% CLASS This command allow us to define classes.
+      %
+      % param: raw Raw data.
+      %      : fout File output.
+      %
+      % return: isComplete
+
+      if ~exist('fout','var')
+        fout = [];
+      end
+      
+      % Error. The data of the model ended and the command wasn't complete.
+      if fout == -1
+          % Get the name of the class we want do define.
+          [tokens,matches] = regexp(raw,'Class\s*(\w*)\s*','tokens','match');
+          
+          error('the Class ''%s'' was defined but it has no ending. ',tokens{1}{1});
+      end
+
+      % Just for checking if the function exists.
+      if nargin == 1
+        isComplete = false;
+        return;
+      end
+
+      % Check if arg has all the data we need to perform this command.
+      if nargin == 2
+        % Get the name of the class we want do define.
+        [tokens,matches] = regexp(raw,'Class\s*(\w*)\s*','tokens','match');
+
+        if isempty(tokens)
+          % The argument is incomplete.
+          isComplete = false;
+          return;
+        end
+
+        if endsWith(raw,['end ' tokens{1}{1} ';'])
+          % The argument is complete.
+          isComplete = true;
+        else
+          % The argument is incomplete.
+          isComplete = false;
+        end
+
+      end
+
+      % Execute the command.
+      if nargin == 3
+        isComplete = [];
+      end
+       
+      %[tokens,matches] = regexp(raw,'SimOptions\s*(.*);','tokens','match');
+
+      %fprintf(fout,['\t\t\tobj.simOptions.' tokens{1}{1} ';']);
+      
+    end % Class
 
   end % methods
 
