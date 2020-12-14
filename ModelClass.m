@@ -714,13 +714,10 @@ classdef (Abstract) ModelClass < handle
       % param: name Name of the model to load.
       %
       % return: out ModelClass object.
-
-      aux = regexp(filename,'(\w*).(\w*)','tokens');
-
-      name = aux{1}{1};
-      extension = aux{1}{2};
       
-      if ~strcmp(extension,'mc')
+      [folder, name, extension] = fileparts(filename);
+      
+      if ~strcmp(extension,'.mc')
           error('The file must have ''.mc'' extension.');
       end
 
