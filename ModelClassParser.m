@@ -96,11 +96,11 @@ classdef ModelClassParser < handle
           % If we did not find a command.
           if isempty(cmd)
             % Look if any of the commands in the list is found.
-            for i = 1:length(commands)
+            for i = 1:length(obj.commands)
               % If any of the commands if found.
-              if commands{i}.findCommand(aux)
+              if obj.commands{i}.findCommand(aux)
                 % Save it and stop looking for more commands.
-                cmd = commands{i};
+                cmd = obj.commands{i};
                 break;
               end
             end
