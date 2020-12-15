@@ -1,12 +1,19 @@
 
-m = ModelClass.load('ProteinClass.mc');
-s = SimulationClass(m);
 
-[out] = s.simulate();
+mp = ModelClassParser('ProteinClass.mc');
 
-sp = SimulationPlotClass(m);
+mp.parse();
+    
 
-figure(1);
-clf(1);
-
-sp.plotAllStates(out);
+% m = ProteinClass();
+% 
+% s = SimulationClass(m);
+% 
+% [out] = s.simulate();
+% 
+% sp = SimulationPlotClass(m);
+% 
+% figure(1);
+% clf(1);
+% 
+% sp.plotAllStates(out);

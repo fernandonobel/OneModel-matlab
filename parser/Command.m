@@ -1,4 +1,4 @@
-classdef (Abstract) BaseCommand
+classdef (Abstract) Command
 
   properties (Abstract)
     % struct with the list of keywords that must be reserved for this command.
@@ -6,18 +6,14 @@ classdef (Abstract) BaseCommand
 
   end % properties
 
-  methods (Abstract, Static)
+  methods (Abstract)
 
     %% FINDCOMMAND Is the start of the command found?
     %
     % param: raw Raw text from the ModelClass file.
     %
     % return: true if the start of the command is found.
-    out = findCommand(raw);
-
-  end
-
-  methods (Abstract)
+    out = findCommand(obj, raw);
 
     %% ISARGUMENTCOMPLETE Does the command have everything it needs to run?
     %

@@ -1,4 +1,4 @@
-classdef TestCommand < BaseCommand
+classdef TestCommand < Command
 
   properties 
     % struct with the list of keywords that must be reserved for this command.
@@ -8,9 +8,9 @@ classdef TestCommand < BaseCommand
     
   end % properties 
 
-  methods (Static)
+  methods
 
-    function [out] = findCommand(raw)
+    function [out] = findCommand(obj, raw)
       %% FINDCOMMAND Is the start of the command found?
       %
       % param: raw Raw text from the ModelClass file.
@@ -20,10 +20,6 @@ classdef TestCommand < BaseCommand
       out = true;
 
     end % findCommand 
-
-  end % methods
-
-  methods 
 
     function out = isArgumentComplete(obj, raw)
       %% ISARGUMENTCOMPLETE Does the command have everything it needs to run?

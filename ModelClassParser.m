@@ -9,6 +9,8 @@ classdef ModelClassParser < handle
     basename
     % [char] Name for the ModelClass model.
     nameM
+    % {Command} List of command defined for the parser.
+    commands = {}
     % {filename} Filename of extended files. This is to avoid infinite recursion
     % of files
     filenameExtended = {}
@@ -29,6 +31,11 @@ classdef ModelClassParser < handle
       obj.basename = baseFileNameNoExt;
 
       obj.nameM = [baseFileNameNoExt '.m'];
+
+      % Add here all the commands of the parser.
+      obj.commands = {
+        TestCommand()
+      };
 
     end % ModelClassParser
 
