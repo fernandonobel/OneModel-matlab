@@ -37,7 +37,9 @@ classdef ModelClassParser < handle
       % Add here all the commands of the parser.
       obj.commands = {
         TestCommand(),
-        VariableCommand()
+        VariableCommand(),
+        ParameterCommand(),
+        EquationCommand()
       };
 
     end % ModelClassParser

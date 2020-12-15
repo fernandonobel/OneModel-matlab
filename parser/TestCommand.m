@@ -1,7 +1,7 @@
 classdef TestCommand < LineCommand
 
   properties 
-    % [char] Name used for the command.
+    % [char] Name used for the command. Name is auto-included to keywords.
     name = 'Test';
     % struct with the list of keywords that must be reserved for this command.
     keywords = {};

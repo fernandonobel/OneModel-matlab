@@ -35,4 +35,33 @@ classdef (Abstract) Command
 
   end % methods
 
+  % Utils functions.
+  methods
+
+    function [out] = removeSpace(obj,in)
+      %% REMOVESPACE Remove unnecessary space in string but keep the spaces
+      % between "'".
+      %
+      % param: in String with spaces.
+      %
+      % return: out String without unnecessary spaces.
+
+      % Remove space at the beggining or end of the string.
+      expression = '^[ \t]+|[ \t]+$';
+      splits = regexp(in,expression,'split');
+
+      % Save option without the empty splits.
+      for i = 1:length(splits)
+        if ~isempty(splits{i}) 
+          in = splits{i};
+        end
+      end
+
+      out = in;
+
+    end % removeSpace
+
+
+  end % methods
+
 end % classdef

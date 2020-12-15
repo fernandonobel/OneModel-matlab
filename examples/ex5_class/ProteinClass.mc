@@ -15,4 +15,4 @@
 
 Test;
 
-Variable;
+Variable x1(start = 0.0);
