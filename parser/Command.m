@@ -1,8 +1,11 @@
 classdef (Abstract) Command
+  %% COMMAND Base command definition.
+  %
+  % This is the base command class to define ModelClassParser commands.
 
   properties (Abstract)
-    % struct with the list of keywords that must be reserved for this command.
-    keywords 
+    % {[char]} struct with the list of keywords that must be reserved for this command.
+    keywords
 
   end % properties
 
@@ -25,11 +28,11 @@ classdef (Abstract) Command
     %% EXECUTE Execute the command.
     %
     % param: raw  Raw text from the ModelClass file.
-    %        fout File output.
+    %        mcp  ModelClassParser object.
     %
     % return: true if the argument is complete.
-    [] = execute(obj, raw, fout)
+    [] = execute(obj, raw, mcp)
 
   end % methods
 
-end
+end % classdef

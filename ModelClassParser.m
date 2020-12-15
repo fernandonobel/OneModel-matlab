@@ -9,6 +9,8 @@ classdef ModelClassParser < handle
     basename
     % [char] Name for the ModelClass model.
     nameM
+    % File descriptor of the ouput model file.
+    fout
     % {Command} List of command defined for the parser.
     commands = {}
     % {filename} Filename of extended files. This is to avoid infinite recursion
@@ -49,16 +51,16 @@ classdef ModelClassParser < handle
       fid = fopen(obj.filename);
 
       % Open the generated model.
-      fout = fopen(obj.nameM,'w');
+      obj.fout = fopen(obj.nameM,'w');
 
-      obj.addHeader(fout);
+      obj.addHeader(obj.fout);
 
-      obj.executeFileLines(fid,fout);
+      obj.executeFileLines(fid,obj.fout);
 
-      obj.addFooter(fout);
+      obj.addFooter(obj.fout);
 
       fclose(fid);
-      fclose(fout);
+      fclose(obj.fout);
 
     end % parse
 
@@ -113,7 +115,7 @@ classdef ModelClassParser < handle
             % Is the argument complete?
             if cmd.isArgumentComplete(aux)
               % Execute the comand.
-              cmd.execute(aux, fout);
+              cmd.execute(aux, obj);
 
               fprintf(fout,'\n');
 
@@ -151,6 +153,15 @@ classdef ModelClassParser < handle
       out = tline;
 
     end % removeComments
+
+    function [] = print(obj,str)
+      %% PRINT Prints 'str' into the output file.
+      %
+      % param: str String to be printed.
+      
+      fprintf(obj.fout,['\t\t\t' str]);
+      
+    end % print
 
     function [] = addHeader(obj,fout)
       %% ADDHEADER Add the header to the Matlab Class.

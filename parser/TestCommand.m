@@ -1,51 +1,24 @@
-classdef TestCommand < Command
+classdef TestCommand < LineCommand
 
   properties 
+    % [char] Name used for the command.
+    name = 'Test';
     % struct with the list of keywords that must be reserved for this command.
-    keywords = {
-      'Test'
-      };
+    keywords = {};
     
   end % properties 
 
   methods
 
-    function [out] = findCommand(obj, raw)
-      %% FINDCOMMAND Is the start of the command found?
-      %
-      % param: raw Raw text from the ModelClass file.
-      %
-      % return: out true if the start of the command is found.
-
-      % The command is found when 'Test is found.
-      [matches] = regexp(raw,'\s*Test\s*','match');
-      
-      out = ~isempty(matches);
-
-    end % findCommand 
-
-    function out = isArgumentComplete(obj, raw)
-      %% ISARGUMENTCOMPLETE Does the command have everything it needs to run?
-      %
-      % param: raw Raw text from the ModelClass file.
-      %
-      % return: true if the argument is complete.
-
-      % The argument is complete when ';' is found.
-      [matches] = regexp(raw,';','match');
-      
-      out = ~isempty(matches);
-    end
-
-    function [] = execute(obj, raw, fout)
+    function [] = execute(obj, raw, mcp)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        fout File output.
+      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
-      fprintf(fout,'%% This is a test comment.\n');
+      mcp.print('%% This is a test comment.\n');
     end
 
   end % methods
