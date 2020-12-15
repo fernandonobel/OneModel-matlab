@@ -17,7 +17,10 @@ classdef TestCommand < Command
       %
       % return: out true if the start of the command is found.
 
-      out = true;
+      % The command is found when 'Test is found.
+      [matches] = regexp(raw,'\s*Test\s*','match');
+      
+      out = ~isempty(matches);
 
     end % findCommand 
 
@@ -28,7 +31,10 @@ classdef TestCommand < Command
       %
       % return: true if the argument is complete.
 
-      out = true;
+      % The argument is complete when ';' is found.
+      [matches] = regexp(raw,';','match');
+      
+      out = ~isempty(matches);
     end
 
     function [] = execute(obj, raw, fout)
@@ -39,7 +45,7 @@ classdef TestCommand < Command
       %
       % return: true if the argument is complete.
 
-      disp('Executing command');
+      fprintf(fout,'%% This is a test comment.\n');
     end
 
   end % methods

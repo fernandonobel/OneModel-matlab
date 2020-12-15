@@ -34,7 +34,7 @@ classdef ModelClassParser < handle
 
       % Add here all the commands of the parser.
       obj.commands = {
-        TestCommand()
+      TestCommand()
       };
 
     end % ModelClassParser
@@ -70,14 +70,14 @@ classdef ModelClassParser < handle
       %
       % return: void
 
-      % Read the model line by line.
+      % Read a line of the model.
       tline = fgets(fid);
 
-      % Aux buffer for preparing the lines to execute.
+      % Aux buffer for preparing the lines to be executed.
       aux = '';
 
       % Variable to store the current command to execute.
-      cmd = '';
+      cmd = [];
 
       while ischar(tline)
         % Remove commented text in lines.
@@ -94,38 +94,33 @@ classdef ModelClassParser < handle
           aux(end+1) = tline(i);
 
           % If we did not find a command.
-          if strcmp(cmd,'')
-            % Look for it.
-            [tokens] = regexp(aux,'\s*(\w*)\s','tokens');
-            if ~isempty(tokens)
-              if ~strcmp(tokens{1}{1},'')
-                cmd = tokens{1}{1};
-
-                % Check if it is a valid command.
-                try
-                  feval(cmd,obj);
-                catch
-                  error('%s is not a valid command for ModelClass models.',cmd);
-                end
+          if isempty(cmd)
+            % Look if any of the commands in the list is found.
+            for i = 1:length(commands)
+              % If any of the commands if found.
+              if commands{i}.findCommand(aux)
+                % Save it and stop looking for more commands.
+                cmd = commands{i};
+                break;
               end
             end
           end
 
           % If we have found a command
-          if ~strcmp(cmd,'')
-            % Collect all the argument data needed for the command.
-            % Check if we have collecte all the argument in aux.
+          if ~isempty(cmd)
+            % Collect all the argument data needed for the command in aux.
 
             % Is the argument complete?
-            if feval(cmd,obj,aux)
+            if cmd.isArgumentComplete(aux)
               % Execute the comand.
-              feval(cmd,obj,aux,fout);
+              cmd.execute(aux, fout);
+
               fprintf(fout,'\n');
 
               % Reset the aux for new lines.
               aux = '';
               % Reset the cmd for new commands.
-              cmd = '';
+              cmd = [];
             end
           end
         end
@@ -251,7 +246,7 @@ classdef ModelClassParser < handle
       if nargin == 3
         isComplete = [];
         isReturn = false;
-        
+
         % Remove intros.
         raw = raw(raw~=newline);
         arg = obj.getArgument(raw);
@@ -385,11 +380,11 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          st = dbstack;
-          error('the command ''%s'' has an error.',st(1).name);
+        st = dbstack;
+        error('the command ''%s'' has an error.',st(1).name);
       end
 
       fprintf(fout,'\t\t\tv = VariableClass(''%s'');\n',name);
@@ -437,11 +432,11 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          st = dbstack;
-          error('the command ''%s'' has an error.',st(1).name);
+        st = dbstack;
+        error('the command ''%s'' has an error.',st(1).name);
       end
 
       fprintf(fout,'\t\t\tp = ParameterClass(''%s'');\n',name);
@@ -473,11 +468,11 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          st = dbstack;
-          error('the command ''%s'' has an error.',st(1).name);
+        st = dbstack;
+        error('the command ''%s'' has an error.',st(1).name);
       end
 
       if isempty(options{1})
@@ -521,11 +516,11 @@ classdef ModelClassParser < handle
       if isReturn
         return;
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          st = dbstack;
-          error('the command ''%s'' has an error.',st(1).name);
+        st = dbstack;
+        error('the command ''%s'' has an error.',st(1).name);
       end
 
       % Check if base model exists.
@@ -556,11 +551,11 @@ classdef ModelClassParser < handle
       if ~exist('fout','var')
         fout = [];
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          st = dbstack;
-          error('the command ''%s'' has an error.',st(1).name);
+        st = dbstack;
+        error('the command ''%s'' has an error.',st(1).name);
       end
 
       % Just for checking if the function exists.
@@ -585,7 +580,7 @@ classdef ModelClassParser < handle
       if nargin == 3
         isComplete = [];
       end
-       
+
       [tokens,matches] = regexp(raw,'\s*MatlabCode\s([\s\S]*)end;','tokens','match');
       fprintf(fout,tokens{1}{1});
 
@@ -602,11 +597,11 @@ classdef ModelClassParser < handle
       if ~exist('fout','var')
         fout = [];
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          st = dbstack;
-          error('the command ''%s'' has an error.',st(1).name);
+        st = dbstack;
+        error('the command ''%s'' has an error.',st(1).name);
       end
 
       % Just for checking if the function exists.
@@ -631,11 +626,11 @@ classdef ModelClassParser < handle
       if nargin == 3
         isComplete = [];
       end
-       
+
       [tokens,matches] = regexp(raw,'SimOptions\s*(.*);','tokens','match');
 
       fprintf(fout,['\t\t\tobj.simOptions.' tokens{1}{1} ';']);
-      
+
     end % SimOptions
 
     function [isComplete] = Class(obj,raw,fout)
@@ -649,13 +644,13 @@ classdef ModelClassParser < handle
       if ~exist('fout','var')
         fout = [];
       end
-      
+
       % Error. The data of the model ended and the command wasn't complete.
       if fout == -1
-          % Get the name of the class we want do define.
-          [tokens,matches] = regexp(raw,'Class\s*(\w*)\s*','tokens','match');
-          
-          error('the Class ''%s'' was defined but it has no ending. ',tokens{1}{1});
+        % Get the name of the class we want do define.
+        [tokens,matches] = regexp(raw,'Class\s*(\w*)\s*','tokens','match');
+
+        error('the Class ''%s'' was defined but it has no ending. ',tokens{1}{1});
       end
 
       % Just for checking if the function exists.
@@ -689,11 +684,11 @@ classdef ModelClassParser < handle
       if nargin == 3
         isComplete = [];
       end
-       
+
       %[tokens,matches] = regexp(raw,'SimOptions\s*(.*);','tokens','match');
 
       %fprintf(fout,['\t\t\tobj.simOptions.' tokens{1}{1} ';']);
-      
+
     end % Class
 
   end % methods
