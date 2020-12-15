@@ -14,3 +14,5 @@
 %Equation der_a == 1;
 
 Test;
+
+Variable;

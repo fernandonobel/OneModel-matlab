@@ -3,6 +3,8 @@ classdef ProteinClass < ModelClass
 		function [obj] = ProteinClass()
 			% This is a test comment.
 
+			% Variable comment.
+
 			obj.checkValidModel();
 		end
 	end
