@@ -1,7 +1,7 @@
 % I would like to represent the reference of the baseModel.mc dynamically.
 
 % First, extend the functionality defined in baseModel.mc.
-extends ./baseModel.mc;
+Import ./baseModel.mc;
 
 % Then, add a variable for the reference.
 Variable ref;
