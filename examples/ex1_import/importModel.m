@@ -31,24 +31,24 @@ classdef importModel < ModelClass
 			p = ParameterClass('gamma12');
 			obj.addParameter(p);
 
-			e = EquationClass('der_x1 == k1    - gamma12*x1*x2 - d1*x1');
-			e.eqn = '';
+			e = EquationClass('');
+			e.eqn = 'der_x1 == k1    - gamma12*x1*x2 - d1*x1';
 			obj.addEquation(e);
 
-			e = EquationClass('der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2');
-			e.eqn = '';
+			e = EquationClass('');
+			e.eqn = 'der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2';
 			obj.addEquation(e);
 
-			e = EquationClass('der_x3 == k3*x1 - d3*x3');
-			e.eqn = '';
+			e = EquationClass('');
+			e.eqn = 'der_x3 == k3*x1 - d3*x3';
 			obj.addEquation(e);
 
 
 			v = VariableClass('ref');
 			obj.addVariable(v);
 
-			e = EquationClass('ref == k3/d3');
-			e.eqn = '';
+			e = EquationClass('');
+			e.eqn = 'ref == k3/d3';
 			obj.addEquation(e);
 
 			obj.checkValidModel();
