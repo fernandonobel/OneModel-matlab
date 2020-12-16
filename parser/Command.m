@@ -18,12 +18,12 @@ classdef (Abstract) Command
     % return: true if the start of the command is found.
     out = findCommand(obj, raw);
 
-    %% ISARGUMENTCOMPLETE Does the command have everything it needs to run?
+    %% ISCOMPLETE Does the command have everything it needs to run?
     %
     % param: raw Raw text from the ModelClass file.
     %
     % return: true if the argument is complete.
-    out = isArgumentComplete(obj, raw)
+    out = isComplete(obj, raw)
 
     %% EXECUTE Execute the command.
     %

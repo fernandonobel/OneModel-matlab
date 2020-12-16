@@ -15,6 +15,8 @@ classdef (Abstract) LineCommand < Command
   properties (Abstract)
     % [char] Name used for the command.
     name
+    % [char] End sequence of the command.
+    endWith
 
   end % properties
 
@@ -45,15 +47,15 @@ classdef (Abstract) LineCommand < Command
 
     end % findCommand 
 
-    function out = isArgumentComplete(obj, raw)
-      %% ISARGUMENTCOMPLETE Does the command have everything it needs to run?
+    function out = isComplete(obj, raw)
+      %% ISCOMPLETE Does the command have everything it needs to run?
       %
       % param: raw Raw text from the ModelClass file.
       %
       % return: true if the argument is complete.
 
       % The argument is complete when ';' is found.
-      [matches] = regexp(raw,';','match');
+      [matches] = regexp(raw,obj.endWith,'match');
 
       out = ~isempty(matches);
     end

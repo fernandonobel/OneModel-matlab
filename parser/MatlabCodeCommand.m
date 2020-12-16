@@ -3,8 +3,10 @@ classdef MatlabCodeCommand < LineCommand
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
     name = 'MatlabCode';
-    % struct with the list of keywords that must be reserved for this command.
+    % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
+    % [char] End sequence of the command.
+    endWith = 'end;';
     
   end % properties 
 
@@ -18,19 +20,8 @@ classdef MatlabCodeCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      % Remove intros.
-      raw = raw(raw~=newline);
-      arg = obj.getArgument(raw);
-      [name,options] = obj.getOptions(arg);
-
-      % Check if base model exists.
-      if ~isfile(name)
-        error(...
-          'The file "%s" does not exists. Check the filename and the path.',name)
-      end
-
       [tokens,matches] = regexp(raw,'\s*MatlabCode\s([\s\S]*)end;','tokens','match');
-      fprintf(fout,tokens{1}{1});
+      fprintf(mcp.fout,tokens{1}{1});
 
       end % execute
 

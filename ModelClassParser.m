@@ -39,7 +39,9 @@ classdef ModelClassParser < handle
         TestCommand(),
         VariableCommand(),
         ParameterCommand(),
-        EquationCommand()
+        EquationCommand(),
+        ImportCommand(),
+        MatlabCodeCommand()
       };
 
     end % ModelClassParser
@@ -115,8 +117,8 @@ classdef ModelClassParser < handle
           if ~isempty(cmd)
             % Collect all the argument data needed for the command in aux.
 
-            % Is the argument complete?
-            if cmd.isArgumentComplete(aux)
+            % Does the command all it needs to be executed? 
+            if cmd.isComplete(aux)
               % Execute the comand.
               cmd.execute(aux, obj);
 
