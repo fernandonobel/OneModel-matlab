@@ -46,7 +46,9 @@ classdef VariableCommand < LineCommand
           fprintf(mcp.fout,'\t\t\tv.isSubstitution=true;\n',options{i});
           % And generate its correspondign equation.
           arg = compose(' %s_eq(%s == %s, isSubstitution = true);',name,name,tokens{1}{2});
-          obj.Equation(arg{1},mcp.fout);
+          
+          equation = EquationCommand();
+          equation.execute(arg{1},mcp);
         else
           fprintf(mcp.fout,'\t\t\tv.%s;\n',options{i});
         end

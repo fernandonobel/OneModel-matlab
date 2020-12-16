@@ -25,6 +25,11 @@ classdef EquationCommand < LineCommand
       arg = obj.getArgument(raw);
       [name,options] = obj.getOptions(arg);
 
+      if isempty(options{1})
+        options{1} = name;
+        name = '';
+      end
+
       fprintf(mcp.fout,'\t\t\te = EquationClass(''%s'');\n',name);      
 
       try

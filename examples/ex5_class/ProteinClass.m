@@ -13,8 +13,8 @@ classdef ProteinClass < ModelClass
 			p.value = 1;
 			obj.addParameter(p);
 
-			e = EquationClass('der_x1 == A');
-			e.eqn = '';
+			e = EquationClass('');
+			e.eqn = 'der_x1 == A';
 			obj.addEquation(e);
 
 

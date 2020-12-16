@@ -1,0 +1,57 @@
+classdef importModel < ModelClass
+	methods
+		function [obj] = importModel()
+			v = VariableClass('x1');
+			obj.addVariable(v);
+
+			v = VariableClass('x2');
+			obj.addVariable(v);
+
+			v = VariableClass('x3');
+			obj.addVariable(v);
+
+			p = ParameterClass('k1');
+			obj.addParameter(p);
+
+			p = ParameterClass('k2');
+			obj.addParameter(p);
+
+			p = ParameterClass('k3');
+			obj.addParameter(p);
+
+			p = ParameterClass('d1');
+			obj.addParameter(p);
+
+			p = ParameterClass('d2');
+			obj.addParameter(p);
+
+			p = ParameterClass('d3');
+			obj.addParameter(p);
+
+			p = ParameterClass('gamma12');
+			obj.addParameter(p);
+
+			e = EquationClass('der_x1 == k1    - gamma12*x1*x2 - d1*x1');
+			e.eqn = '';
+			obj.addEquation(e);
+
+			e = EquationClass('der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2');
+			e.eqn = '';
+			obj.addEquation(e);
+
+			e = EquationClass('der_x3 == k3*x1 - d3*x3');
+			e.eqn = '';
+			obj.addEquation(e);
+
+
+			v = VariableClass('ref');
+			obj.addVariable(v);
+
+			e = EquationClass('ref == k3/d3');
+			e.eqn = '';
+			obj.addEquation(e);
+
+			obj.checkValidModel();
+		end
+	end
+end
