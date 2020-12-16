@@ -5,7 +5,7 @@ classdef ModelPartClass < handle
     % [char] String with the name of the ModelPart.
     name
     % [char] The namespace of this object.
-    namespace
+    namespace = ''
     % ModelClass The object of the ModelClass which this ModelPart is added.
     mc
 
@@ -18,7 +18,12 @@ classdef ModelPartClass < handle
       %
       % param: mc ModelClass object.
 
+      % Get the namespace that is being used.
+      obj.namespace = mc.namespace;
+
+      % Save the ModelClass object for later use.
       obj.mc = mc;
+
 
     end % ModelPartClass
 

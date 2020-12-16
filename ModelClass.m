@@ -22,6 +22,13 @@ classdef (Abstract) ModelClass < handle
 
     % bool Use the extended model?
     isReduced = false
+
+    % [char] The current namespace being used. 
+    % This variable will be used during the initialization to inidicate the 
+    % current namespace that has to be used for defined ModelParts which does 
+    % not have a defined namespace.
+    namespace
+
   end
 
   properties (Dependent)
@@ -88,6 +95,9 @@ classdef (Abstract) ModelClass < handle
       %% MODELCLASS Constructor of Model Class.
       %
       % return: obj ModelClass object.
+
+      % Default value of the namespace.
+      obj.namespace = '';
 
       obj.variables = VariableClass.empty();
       obj.parameters = ParameterClass.empty();
