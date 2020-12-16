@@ -111,17 +111,17 @@ dxdt(3,1) = -p.d3.*x(3,:)+p.k3.*x(1,:);
 
 ```
 
-# Extends a model
+# Import a model
 
 ```MATLAB
-m = ModelClass.load('extendedModel.mc')
+m = ModelClass.load('importModel.mc')
 ```
 
 ```
 
 m = 
 
-  extendedModel with properties:
+  importModel with properties:
 
               isReduced: 0
                    vars: [4x1 sym]
