@@ -1,5 +1,3 @@
-
-
 mp = ModelClassParser('ProteinClass.mc');
 
 mp.parse();
