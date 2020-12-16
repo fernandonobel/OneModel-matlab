@@ -25,7 +25,7 @@ classdef VariableCommand < LineCommand
       arg = obj.getArgument(raw);
       [name,options] = obj.getOptions(arg);
 
-      fprintf(mcp.fout,'\t\t\tv = VariableClass(''%s'');\n',name);
+      fprintf(mcp.fout,'\t\t\tv = VariableClass(obj,''%s'');\n',name);
 
       for i=1:length(options)
         % Skip empty options.

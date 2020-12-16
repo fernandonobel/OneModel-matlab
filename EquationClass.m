@@ -1,10 +1,8 @@
-classdef EquationClass < handle
+classdef EquationClass < ModelPartClass
   %% EQUATIONCLASS This class defines equations for ModelClass.
   %
 
   properties
-    % [char] Name of the equation.
-    name
     % [char] Char array equation.
     eqn
     % [sym] Simbolic equation.
@@ -34,13 +32,21 @@ classdef EquationClass < handle
 
   methods 
 
-    function [obj] = EquationClass(name)
+    function [obj] = EquationClass(mc, name)
       %% Constructor of EquationClass.
       %
-      % param: eqn [char] String with the equation.
+      % param: mc   ModelClass object.
+      %        name Name of the equation. 
+
+      obj = obj@ModelPartClass(mc);
+
+      % Is the equation is defined with an empty name?
+      if isempty(name)
+        % Generate a name for it.
+        name = sprintf('eq_%d',length(mc.eqns));
+      end
 
       obj.name = name;
-      % obj.eqn = '1==1';
       obj.isSubstitution = false;
 
     end % EquationClass
@@ -70,21 +76,6 @@ classdef EquationClass < handle
       end
       
     end % getFreeVars
-
-    function [] = set.name(obj,name)
-      %% SET.NAME Set interface for name propierty.
-      %
-      % param: name
-      %
-      % return: void
-
-      if ~ischar(name) 
-        error('name must be a char array.');
-      end
-
-      obj.name = name;
-      
-    end % set.name
 
     function [] = set.eqn(obj,eqn)
       %% SET.EQN Set interface for eqn propierty.

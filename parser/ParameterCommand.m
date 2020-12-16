@@ -25,7 +25,7 @@ classdef ParameterCommand < LineCommand
       arg = obj.getArgument(raw);
       [name,options] = obj.getOptions(arg);
 
-      fprintf(mcp.fout,'\t\t\tp = ParameterClass(''%s'');\n',name);
+      fprintf(mcp.fout,'\t\t\tp = ParameterClass(obj,''%s'');\n',name);
 
       for i=1:length(options)
         % Skip empty options.

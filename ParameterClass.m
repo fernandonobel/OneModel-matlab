@@ -9,12 +9,14 @@ classdef ParameterClass < SymbolClass
   
   methods 
   
-    function [obj] = ParameterClass(name)
+    function [obj] = ParameterClass(mc, name)
       %% Constructor of ParameterClass.
       %
-      % param: name Name of the symbol. 
+      % param: mc   ModelClass object.
+      %        name Name of the symbol. 
 
-      obj = obj@SymbolClass(name);
+      obj = obj@SymbolClass(mc, name);
+
       obj.value = nan;
       
     end % ParameterClass

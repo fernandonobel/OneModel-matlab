@@ -11,12 +11,14 @@ classdef VariableClass < SymbolClass
 
   methods 
 
-    function [obj] = VariableClass(name)
+    function [obj] = VariableClass(mc, name)
       %% Constructor of VariableClass.
       %
-      % param: name Name of the symbol. 
+      % param: mc   ModelClass object.
+      %        name Name of the symbol. 
 
-      obj = obj@SymbolClass(name);
+      obj = obj@SymbolClass(mc, name);
+
       obj.isNoNegative = false;
       obj.isPlot = true;
       obj.start = 0;

@@ -30,7 +30,7 @@ classdef EquationCommand < LineCommand
         name = '';
       end
 
-      fprintf(mcp.fout,'\t\t\te = EquationClass(''%s'');\n',name);      
+      fprintf(mcp.fout,'\t\t\te = EquationClass(obj,''%s'');\n',name);      
 
       try
         fprintf(mcp.fout,'\t\t\te.eqn = ''%s'';\n',options{1});
