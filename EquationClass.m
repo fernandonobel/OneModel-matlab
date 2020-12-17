@@ -115,6 +115,8 @@ classdef EquationClass < ModelPartClass
           if ~contains(vars{i},'__')
               % Add the namespace.
               varsNamespace{i} = [obj.namespace vars{i}];
+          else
+              varsNamespace{i} = vars{i};
           end
       end
       

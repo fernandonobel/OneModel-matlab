@@ -29,7 +29,7 @@ classdef ProteinClass < ModelClass
 			obj.addParameter(p);
 
 			e = EquationClass(obj,'');
-			e.eqn = 'der_x1 == A';
+			e.eqn = 'der_x1 == myProtein__x';
 			obj.addEquation(e);
 
 			obj.checkValidModel();
