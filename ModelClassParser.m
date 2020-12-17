@@ -16,6 +16,10 @@ classdef ModelClassParser < handle
     % {filename} Filename of extended files. This is to avoid infinite recursion
     % of files
     filenameExtended = {}
+    % {[char]} List of name of defined classes.
+    className = {}
+    % {[char]} The ModelClass code of the defined classes.
+    classCode ={}
 
   end % properties
 

@@ -7,7 +7,7 @@ classdef ClassCommand < LineCommand
     keywords = {};
     % [char] End sequence of the command. It is defined dynamically.
     endWith; 
-    
+
   end % properties 
 
   methods
@@ -20,12 +20,12 @@ classdef ClassCommand < LineCommand
       % return: true if the argument is complete.
 
       [tokens] = regexp(raw,'\s*Class\s\s*(\w*)\s*','tokens');
-      
+
       if isempty(tokens)
-          out = false;
-          return;
+        out = false;
+        return;
       end
-      
+
       obj.endWith = ['\s*end\s\s*' tokens{1}{1} '\s*;'];
 
       out = isComplete@LineCommand(obj, raw);
@@ -41,9 +41,17 @@ classdef ClassCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      % TODO
+      [tokens] = regexp(raw,'\s*Class\s\s*(\w*)\s*','tokens');
 
-      end % execute
+      mcp.className{end+1} = tokens{1}{1};
+
+      expr = ['\s*Class\s\s*' tokens{1}{1} ';\s*([\s\S]+)end\s\s*' tokens{1}{1} ';'];
+
+      [tokens] = regexp(raw,expr,'tokens');
+
+      mcp.classCode = tokens{1}{1};
+
+    end % execute
 
   end % methods
 
