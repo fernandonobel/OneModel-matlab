@@ -7,16 +7,15 @@ classdef ParameterCommand < LineCommand
     keywords = {};
     % [char] End sequence of the command.
     endWith = ';';
-    
+
   end % properties 
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
@@ -25,7 +24,7 @@ classdef ParameterCommand < LineCommand
       arg = obj.getArgument(raw);
       [name,options] = obj.getOptions(arg);
 
-      fprintf(mcp.fout,'\t\t\tp = ParameterClass(obj,''%s'');\n',name);
+      fprintf(obj.mcp.fout,'\t\t\tp = ParameterClass(obj,''%s'');\n',name);
 
       for i=1:length(options)
         % Skip empty options.
@@ -33,13 +32,13 @@ classdef ParameterCommand < LineCommand
           continue
         end
 
-        fprintf(mcp.fout,'\t\t\tp.%s;\n',options{i});
+        fprintf(obj.mcp.fout,'\t\t\tp.%s;\n',options{i});
 
       end
 
-      fprintf(mcp.fout,'\t\t\tobj.addParameter(p);\n');
+      fprintf(obj.mcp.fout,'\t\t\tobj.addParameter(p);\n');
 
-      end % execute
+    end % execute
 
   end % methods
 

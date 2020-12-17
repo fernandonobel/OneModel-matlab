@@ -40,15 +40,15 @@ classdef ModelClassParser < handle
 
       % Add here all the commands of the parser.
       obj.commands = {
-        TestCommand(),
-        VariableCommand(),
-        ParameterCommand(),
-        EquationCommand(),
-        ImportCommand(),
-        MatlabCodeCommand(),
-        SimOptionsCommand(),
-        ClassCommand(),
-        NamespaceCommand()
+        TestCommand(obj),
+        VariableCommand(obj),
+        ParameterCommand(obj),
+        EquationCommand(obj),
+        ImportCommand(obj),
+        MatlabCodeCommand(obj),
+        SimOptionsCommand(obj),
+        ClassCommand(obj),
+        NamespaceCommand(obj)
       };
 
     end % ModelClassParser
@@ -127,7 +127,7 @@ classdef ModelClassParser < handle
             % Does the command all it needs to be executed? 
             if cmd.isComplete(aux)
               % Execute the comand.
-              cmd.execute(aux, obj);
+              cmd.execute(aux);
 
               fprintf(fout,'\n');
 

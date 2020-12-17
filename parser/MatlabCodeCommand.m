@@ -12,16 +12,15 @@ classdef MatlabCodeCommand < LineCommand
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
       [tokens,matches] = regexp(raw,'\s*MatlabCode\s([\s\S]*)end;','tokens','match');
-      fprintf(mcp.fout,tokens{1}{1});
+      fprintf(obj.mcp.fout,tokens{1}{1});
 
       end % execute
 

@@ -33,23 +33,22 @@ classdef ClassCommand < LineCommand
     end
 
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
       [tokens] = regexp(raw,'\s*Class\s\s*(\w*)\s*','tokens');
 
-      mcp.className{end+1} = tokens{1}{1};
+      obj.mcp.className{end+1} = tokens{1}{1};
 
       expr = ['\s*Class\s\s*' tokens{1}{1} ';\s*([\s\S]+)end\s\s*' tokens{1}{1} ';'];
 
       [tokens] = regexp(raw,expr,'tokens');
 
-      mcp.classCode = tokens{1}{1};
+      obj.mcp.classCode = tokens{1}{1};
 
     end % execute
 

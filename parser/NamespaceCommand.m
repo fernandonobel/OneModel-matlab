@@ -12,11 +12,10 @@ classdef NamespaceCommand < LineCommand
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
@@ -26,9 +25,9 @@ classdef NamespaceCommand < LineCommand
       [tokens] = regexp(raw,'\s*Namespace\s*(\w*)\s*;','tokens');
 
       if isempty(tokens)
-        fprintf(mcp.fout,'\t\t\tobj.namespace = '''';\n');
+        fprintf(obj.mcp.fout,'\t\t\tobj.namespace = '''';\n');
       else
-        fprintf(mcp.fout,'\t\t\tobj.namespace = ''%s'';\n',tokens{1}{1});
+        fprintf(obj.mcp.fout,'\t\t\tobj.namespace = ''%s'';\n',tokens{1}{1});
       end
 
     end % execute

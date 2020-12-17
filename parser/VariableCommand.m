@@ -12,11 +12,10 @@ classdef VariableCommand < LineCommand
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
@@ -25,7 +24,7 @@ classdef VariableCommand < LineCommand
       arg = obj.getArgument(raw);
       [name,options] = obj.getOptions(arg);
 
-      fprintf(mcp.fout,'\t\t\tv = VariableClass(obj,''%s'');\n',name);
+      fprintf(obj.mcp.fout,'\t\t\tv = VariableClass(obj,''%s'');\n',name);
 
       for i=1:length(options)
         % Skip empty options.
@@ -43,19 +42,18 @@ classdef VariableCommand < LineCommand
 
         if strcmp(option,'value')
           % Set variable as a substitution.
-          fprintf(mcp.fout,'\t\t\tv.isSubstitution=true;\n',options{i});
+          fprintf(obj.mcp.fout,'\t\t\tv.isSubstitution=true;\n',options{i});
           % And generate its correspondign equation.
           arg = compose(' %s_eq(%s == %s, isSubstitution = true);',name,name,tokens{1}{2});
           
           equation = EquationCommand();
-          equation.execute(arg{1},mcp);
+          equation.execute(arg{1},obj.mcp);
         else
-          fprintf(mcp.fout,'\t\t\tv.%s;\n',options{i});
+          fprintf(obj.mcp.fout,'\t\t\tv.%s;\n',options{i});
         end
-        %fprintf(mcp.fout,'\t\t\tv.%s;\n',options{i});
       end
 
-      fprintf(mcp.fout,'\t\t\tobj.addVariable(v);\n');
+      fprintf(obj.mcp.fout,'\t\t\tobj.addVariable(v);\n');
 
     end % execute
 

@@ -12,11 +12,10 @@ classdef EquationCommand < LineCommand
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
@@ -30,10 +29,10 @@ classdef EquationCommand < LineCommand
         name = '';
       end
 
-      fprintf(mcp.fout,'\t\t\te = EquationClass(obj,''%s'');\n',name);      
+      fprintf(obj.mcp.fout,'\t\t\te = EquationClass(obj,''%s'');\n',name);      
 
       try
-        fprintf(mcp.fout,'\t\t\te.eqn = ''%s'';\n',options{1});
+        fprintf(obj.mcp.fout,'\t\t\te.eqn = ''%s'';\n',options{1});
       catch
         error('eqn is not defined in the options.');
       end
@@ -44,11 +43,11 @@ classdef EquationCommand < LineCommand
           continue
         end
 
-        fprintf(mcp.fout,'\t\t\te.%s;\n',options{i});
+        fprintf(obj.mcp.fout,'\t\t\te.%s;\n',options{i});
 
       end
 
-      fprintf(mcp.fout,'\t\t\tobj.addEquation(e);\n');
+      fprintf(obj.mcp.fout,'\t\t\tobj.addEquation(e);\n');
 
       end % execute
 

@@ -22,9 +22,12 @@ classdef (Abstract) LineCommand < Command
 
   methods 
 
-    function [obj] = LineCommand()
+    function [obj] = LineCommand(mcp)
       %% Constructor of LineCommand.
       %
+      % param: mcp  ModelClassParser object.
+
+      obj = obj@Command(mcp);
 
       % Add the name of the command to the keywords to reserve.
       obj.keywords{end+1} = obj.name;
@@ -40,7 +43,7 @@ classdef (Abstract) LineCommand < Command
 
       expr = ['\s*' obj.name '\s*'];
 
-      % The command is found when 'Test is found.
+      % The command is found when the name is found.
       [matches] = regexp(raw,expr,'match');
 
       out = ~isempty(matches);

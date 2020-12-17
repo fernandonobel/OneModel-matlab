@@ -12,15 +12,14 @@ classdef TestCommand < LineCommand
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
-      mcp.print('%% This is a test comment.\n');
+      obj.mcp.print('%% This is a test comment.\n');
     end
 
   end % methods

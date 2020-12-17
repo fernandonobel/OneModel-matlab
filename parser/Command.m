@@ -9,6 +9,12 @@ classdef (Abstract) Command
 
   end % properties
 
+  properties
+    % ModelClassParser object.
+    mcp
+
+  end % properties
+
   methods (Abstract)
 
     %% FINDCOMMAND Is the start of the command found?
@@ -28,15 +34,24 @@ classdef (Abstract) Command
     %% EXECUTE Execute the command.
     %
     % param: raw  Raw text from the ModelClass file.
-    %        mcp  ModelClassParser object.
     %
     % return: true if the argument is complete.
-    [] = execute(obj, raw, mcp)
+    [] = execute(obj, raw)
 
   end % methods
 
   % Utils functions.
   methods
+    function [obj] = Command(mcp)
+      %% COMMAND Constructor of Command class.
+      %
+      % param: mcp  ModelClassParser object.
+      %
+      % return: obj
+
+      obj.mcp = mcp;
+      
+    end % Command
 
     function [out] = removeSpace(obj,in)
       %% REMOVESPACE Remove unnecessary space in string but keep the spaces
@@ -60,7 +75,6 @@ classdef (Abstract) Command
       out = in;
 
     end % removeSpace
-
 
   end % methods
 

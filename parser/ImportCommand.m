@@ -12,11 +12,10 @@ classdef ImportCommand < LineCommand
 
   methods
 
-    function [] = execute(obj, raw, mcp)
+    function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
       % param: raw  Raw text from the ModelClass file.
-      %        mcp  ModelClassParser object.
       %
       % return: true if the argument is complete.
 
@@ -32,10 +31,10 @@ classdef ImportCommand < LineCommand
       end
 
       % Open the base model.
-      mcp.avoidRecursion(name);
+      obj.mcp.avoidRecursion(name);
       fBase = fopen(name);
 
-      mcp.executeFileLines(fBase,mcp.fout);
+      obj.mcp.executeFileLines(fBase,obj.mcp.fout);
 
       fclose(fBase);
 
