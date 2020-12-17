@@ -43,6 +43,9 @@ classdef SymbolClass < ModelPartClass
 
       obj = obj@ModelPartClass(mc);
 
+      % Define the name taking into account the namespace.
+      name = [obj.namespace name];
+
       obj.name = name;
       obj.nameSym = sym(name);
       obj.nameTex = name;

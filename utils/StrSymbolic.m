@@ -17,7 +17,7 @@ classdef StrSymbolic < handle
       out = {};
 
       aux = in;
-      % Add 'p.' to all state and parameters.
+
       ind = false(size(aux));
       % Search for everything but words.
       % Words cannot start with a number but they can contain numbers.

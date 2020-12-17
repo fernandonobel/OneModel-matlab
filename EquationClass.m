@@ -46,6 +46,9 @@ classdef EquationClass < ModelPartClass
         name = sprintf('eq_%d',length(mc.eqns));
       end
 
+      % Define the name taking into account the namespace.
+      name = [obj.namespace name];
+
       obj.name = name;
       obj.isSubstitution = false;
 
@@ -95,7 +98,7 @@ classdef EquationClass < ModelPartClass
           error('''='' sign is used for variable assignation, use ''=='' instead in Equations.');
       end
       
-      % Chek if there is one and only one '=='.
+      % Check if there is one and only one '=='.
       expression = '==';
       [tokens,matches] = regexp(eqn,expression,'tokens','match');
       if isempty(matches)
@@ -103,6 +106,10 @@ classdef EquationClass < ModelPartClass
       elseif length(matches) > 1
           error('there must be only one ''=='' in the Equation.');
       end
+
+      % Take into account the namespace.
+
+
 
       obj.eqn = eqn;
       obj.eqnSym = str2sym(eqn);
