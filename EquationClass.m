@@ -108,8 +108,17 @@ classdef EquationClass < ModelPartClass
       end
 
       % Take into account the namespace.
-
-
+      vars = StrSymbolic.symvar(eqn);
+      
+      for i = 1:length(vars)
+          % Check if the var does not have a namespace defined by the user.
+          if ~contains(vars{i},'__')
+              % Add the namespace.
+              varsNamespace{i} = [obj.namespace vars{i}];
+          end
+      end
+      
+      eqn = StrSymbolic.subs(eqn,vars,varsNamespace);
 
       obj.eqn = eqn;
       obj.eqnSym = str2sym(eqn);
