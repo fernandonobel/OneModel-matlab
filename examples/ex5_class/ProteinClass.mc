@@ -11,7 +11,7 @@
 %
 %
 %
-%Namespace myProtein 
+%Namespace myProtein;
 %
 %  Variable x;
 %
@@ -23,6 +23,7 @@
 %end namespace;
 
 Variable x1(start = 0.0);
+
 Parameter A(value = 1);
 
 Equation der_x1 == A;

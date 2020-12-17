@@ -43,7 +43,8 @@ classdef ModelClassParser < handle
         ImportCommand(),
         MatlabCodeCommand(),
         SimOptionsCommand(),
-        ClassCommand()
+        ClassCommand(),
+        NamespaceCommand()
       };
 
     end % ModelClassParser
