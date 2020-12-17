@@ -83,22 +83,47 @@ classdef StrSymbolic < handle
       %
       % return: out {[char]} String with the substitution done.
 
-      cont = 0;
+      aux = s;
 
-      while any(strcmp(old,StrSymbolic.symvar(s)))
-
-        for i = 1:length(old)
-          s = strrep(s,old{i},new{i});
+      ind = false(size(aux));
+      % Search for everything but words.
+      % Words cannot start with a number but they can contain numbers.
+      ind(regexp(aux,'\W')) = true;
+      aux(ind)= ' ';
+      % Remove numbers that follow an empty space.
+      while 1
+        ind_old = ind;
+        ind(regexp(aux,'(?<=\s)\d')) = true;
+        aux(ind)= ' ';
+        offset = 0;
+        if ~sum(ind ~= ind_old)
+          break;
         end
-
-        cont = cont + 1;
-
-        if cont > 50
-          error('The substitution does not converge. Check that the arguments are coherent.');
-        end
-
       end
-
+      
+      [newStr, match] = split(aux);
+      
+      j = length(s);
+      
+      for i = length(newStr):-1:1
+          jNext = j - length(newStr{i}) +1;
+          
+          subsVar = s(jNext:j);
+          
+          ind = strcmp(subsVar,old);
+          
+          if any(ind)
+              s = [s(1:jNext-1) new{ind} s(j+1:end)];           
+          end
+          
+          if i > 1
+            j = j - length(newStr{i}) - length(match{i-1});
+          else
+            j = j - length(newStr{i});  
+          end
+          
+      end
+      
       out = s;
 
     end % subs
