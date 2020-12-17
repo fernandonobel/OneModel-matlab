@@ -1,4 +1,4 @@
-Class Protein;
+Class Protein
 
   Variable x;
 
