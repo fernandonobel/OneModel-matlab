@@ -201,14 +201,13 @@ classdef EquationClass < ModelPartClass
 
       vars = obj.vars;
 
-      expression = 'der_(\w*)';
-
       out = sym([]);
+
       for i = 1:length(vars)
-        [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
-        if ~isempty(tokens)
-          out(end+1) = sym(tokens{1});
-          matches;
+        [matches] = regexp(char(vars(i)), 'der_', 'tokens');
+
+        if ~isempty(matches)
+          out(end+1) = sym(erase(char(vars(i)), 'der_'));
         end
       end
 
@@ -221,14 +220,13 @@ classdef EquationClass < ModelPartClass
 
       vars = obj.vars;
 
-      expression = 'der_(\w*)';
-
       out = {};
+
       for i = 1:length(vars)
-        [tokens,matches] = regexp(char(vars(i)),expression,'tokens','match');
-        if ~isempty(tokens)
-          out{end+1} = tokens{1}{1};
-          matches;
+        [matches] = regexp(char(vars(i)), 'der_', 'tokens');
+
+        if ~isempty(matches)
+          out{end+1} = erase(char(vars(i)), 'der_');
         end
       end
 
