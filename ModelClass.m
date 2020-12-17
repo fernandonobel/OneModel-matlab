@@ -179,7 +179,7 @@ classdef (Abstract) ModelClass < handle
       out = obj.equations(strcmp(name, names));
 
       obj.isReduced = aux;
-      
+
     end % getEquationByName
 
     function [] = updateEquation(obj,eqn)
@@ -199,7 +199,7 @@ classdef (Abstract) ModelClass < handle
       obj.equations(strcmp(name, names)) = eqn;
 
       obj.isReduced = aux;
-      
+
     end % updateEquation
 
     function [out] = getSymbolByName(obj,name)
@@ -250,6 +250,29 @@ classdef (Abstract) ModelClass < handle
 
   %% Model data.
   methods
+    function [] = set.namespace(obj,in)
+      %% SET.NAMESPACE Set interface for namespace.
+      %
+      % param: in [char] Namespace to set
+
+      % If "in" is empty.
+      if isempty(in)
+        % Set the namespace to empty.
+        obj.namespace = in;
+        return;
+      end
+
+      % Check if it is a valid name for a namespace.
+      if isvarname(in)
+        % Set it.
+        obj.namespace = [in '__'];
+      else
+        % Throw an error.
+        error('''%s'' is not a valid name for a namespace.', in);
+      end
+
+    end % set.namespace
+
     function [out] =  get.vars(obj)
       %% GET.VARS Get symbolic variables of the model.
       %
@@ -425,13 +448,13 @@ classdef (Abstract) ModelClass < handle
       knownVars = [obj.paramsName(:)' {obj.variables(eqnIndex(eqnIndex>0)).name}];
 
       remainingIndex_last = sum(eqnIndex==0);
-      
+
       while true       
         % Exit the loop if all the indexes have been set.
         if remainingIndex_last == 0
-            break
+          break
         end
-        
+
         % Try to set more indexes.
         for i = 1:length(obj.equations)
           % If the equation has an index, skip it.
@@ -453,20 +476,20 @@ classdef (Abstract) ModelClass < handle
             knownVars(end+1) = eqnVars;
           end
         end
-        
+
         % Calculate the index remaining to be set.
         remainingIndex = sum(eqnIndex==0);
-        
+
         % If there wasn't an advance looking for indexes.
         if remainingIndex == remainingIndex_last
-            % Throw an error.
-            errorVars = [];
-            for i = 1:length(eqnVars)
-                errorVars = [errorVars '"' eqnVars{i} '" '];
-            end
-            error('The model is not well defined, plase check the definition and equations of the following Variables: %s',errorVars);
+          % Throw an error.
+          errorVars = [];
+          for i = 1:length(eqnVars)
+            errorVars = [errorVars '"' eqnVars{i} '" '];
+          end
+          error('The model is not well defined, plase check the definition and equations of the following Variables: %s',errorVars);
         end
-        
+
         remainingIndex_last = remainingIndex;
       end
 
@@ -506,11 +529,11 @@ classdef (Abstract) ModelClass < handle
 
       out = {obj.equations.name};
 
-       % Return reduced model if needed.
+      % Return reduced model if needed.
       if obj.isReduced
         out = out(~obj.isSubs);
       end
-      
+
     end % get.eqnsName
 
 
@@ -683,7 +706,7 @@ classdef (Abstract) ModelClass < handle
       for i = 1:length(names)
         aux = strfind(sf,names{i});
         for j = 1:length(aux)
-            ind(aux(j):aux(j)+length(names{i})-1) = true;
+          ind(aux(j):aux(j)+length(names{i})-1) = true;
         end
       end
       lastInd = false;
@@ -724,22 +747,22 @@ classdef (Abstract) ModelClass < handle
       % param: name Name of the model to load.
       %
       % return: out ModelClass object.
-      
+
       [folder, name, extension] = fileparts(filename);
-      
+
       if ~strcmp(extension,'.mc')
-          error('The file must have ''.mc'' extension.');
+        error('The file must have ''.mc'' extension.');
       end
 
       if ~isfile(filename)
-          error(['The file "' filename '" does not exist.']);
+        error(['The file "' filename '" does not exist.']);
       end
 
       mp = ModelClassParser(filename);
       mp.parse();
-    
+
       out = feval(name);
-    
+
     end % load
 
     function [] = version(~)
@@ -825,26 +848,26 @@ classdef (Abstract) ModelClass < handle
       %% UPDATE Update the ModelClass code to the latest in the main repository.
       %
       % return: void
-      
+
       % Get the initial path.
       pathInitial = pwd();
-      
+
       % Get the absoulute path.
       [path, name, ext]  = fileparts(which('ModelClass.m'));
-      
+
       cd(path);
       cd('..');
-      
+
       % Download the latest version of the code.
       disp('Downloading the latest version of ModelClass...');
       websave('./latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
       disp('Download end.');
-      
+
       % Move the .git if it exists.
       if exist([path '/.git'], 'dir')
-          disp('Founded .git folder.');
-          disp('Saved the .git folder.');
-          movefile([path '/.git'],'./git-tmp');
+        disp('Founded .git folder.');
+        disp('Saved the .git folder.');
+        movefile([path '/.git'],'./git-tmp');
       end
 
       % Remove the old code.
@@ -852,39 +875,39 @@ classdef (Abstract) ModelClass < handle
       warning('off');
       rmdir(path,'s'); % This generates a warnig and messes up with the path.
       warning('on');
-      
+
       % Unzip the code.
       disp('Unzip the code...');
       unzip('./latest.zip','.');
       disp('Unzip end');
-      
+
       % Move to that location the lastest code.
       disp('Move the lastest files.');
       try
-      movefile('./ModelClass-master',path);
+        movefile('./ModelClass-master',path);
       catch
       end
-      
+
       % Restore the path for this session.
       addpath(path);
       addpath([path '/utils']);
-      
+
       % Move back the .git folder if it exists.
       if exist('./git-tmp', 'dir')
-          disp('Move back the .git folder.');
-          movefile('./git-tmp',[path '/.git']);
+        disp('Move back the .git folder.');
+        movefile('./git-tmp',[path '/.git']);
       end
-      
+
       % Clean-up.
       disp('Clean installation files.');
       delete('latest.zip');
-      
+
       % Come back to the initial path.
       cd(pathInitial);
-      
+
       disp('');
       disp('ModelClass has been successfully updated!');
-      
+
     end % update
 
   end % methods
