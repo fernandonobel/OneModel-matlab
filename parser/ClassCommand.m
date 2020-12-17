@@ -48,7 +48,7 @@ classdef ClassCommand < LineCommand
 
       [tokens] = regexp(raw,expr,'tokens');
 
-      obj.mcp.classCode = tokens{1}{1};
+      obj.mcp.classCode{end+1} = tokens{1}{1};
 
     end % execute
 

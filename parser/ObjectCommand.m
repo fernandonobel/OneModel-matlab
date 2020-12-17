@@ -18,11 +18,20 @@ classdef ObjectCommand < LineCommand
       % param: raw Raw text from the ModelClass file.
       %
       % return: out true if the start of the command is found.
+      
+      if isempty(obj.mcp.className)
+          out = false;
+          return;
+      end
 
       % The command is found when the name of a defined class is found.
-      [matches] = regexp(raw,'\s*(\w*)\s*,'match');
-
-      out = ~isempty(matches);
+      [tokens] = regexp(raw,'\s*(\w*)\s*','tokens');
+      
+      if strcmp(tokens{1}{1},obj.mcp.className)
+        out = true;
+      else
+        out = false;
+      end
 
     end % findCommand 
 
@@ -34,6 +43,26 @@ classdef ObjectCommand < LineCommand
       % return: true if the argument is complete.
 
       % TODO
+      [tokens] = regexp(raw,'\s*(\w*)\s*(\w*);','tokens');
+      
+      className = tokens{1}{1};
+      objectName = tokens{1}{2};
+      
+      classCode = obj.mcp.classCode{strcmp(className, obj.mcp.className)};
+      
+      % Add a namespace with the object name.
+      classCode = ['Namespace ' objectName ';' newline classCode];
+      classCode = [classCode newline 'Namespace;'];
+      
+      fClass = fopen([className '_class.mc'], 'w');
+      fprintf(fClass, '%s', classCode);
+      fclose(fClass);
+      
+      fClass = fopen([className '_class.mc']);
+      obj.mcp.executeFileLines(fClass,obj.mcp.fout);
+      fclose(fClass);
+      
+      delete([className '_class.mc']);
 
     end % execute
 

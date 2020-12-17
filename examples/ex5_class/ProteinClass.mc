@@ -9,8 +9,10 @@ Class Protein;
 
 end Protein;
 
+Protein myProtein;
+
 Variable x1(start = 0.0);
 
 Parameter A(value = 1);
 
-Equation der_x1 == A;
+Equation der_x1 == myProtein__x+myProtein__w_x;

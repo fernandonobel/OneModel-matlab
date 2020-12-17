@@ -48,7 +48,8 @@ classdef ModelClassParser < handle
         MatlabCodeCommand(obj),
         SimOptionsCommand(obj),
         ClassCommand(obj),
-        NamespaceCommand(obj)
+        NamespaceCommand(obj),
+        ObjectCommand(obj)
       };
 
     end % ModelClassParser
