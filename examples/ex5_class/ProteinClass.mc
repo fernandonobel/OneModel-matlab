@@ -1,6 +1,8 @@
 Class Protein
-
-  Variable w_x; % Input
+  % Input
+  Variable w_x(
+    isPlot = false
+    ); 
 
   Variable x;  
 

@@ -12,6 +12,19 @@ classdef ClassCommand < LineCommand
 
   methods
 
+    function [obj] = ClassCommand(mcp)
+      %% Constructor of ClassCommand.
+      %
+      % param: mcp  ModelClassParser object.
+
+      obj = obj@LineCommand(mcp);
+
+      % We want to execute this command with "use" command.
+      obj.execUse = true;
+
+    end % LineCommand
+
+
     function out = isComplete(obj, raw)
       %% ISCOMPLETE Does the command have everything it needs to run?
       %

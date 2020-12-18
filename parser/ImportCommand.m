@@ -12,6 +12,18 @@ classdef ImportCommand < LineCommand
 
   methods
 
+    function [obj] = ImportCommand(mcp)
+      %% Constructor of ImportCommand.
+      %
+      % param: mcp  ModelClassParser object.
+
+      obj = obj@LineCommand(mcp);
+
+      % We want to execute this command with "use" command.
+      obj.execUse = true;
+
+    end % LineCommand
+
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %

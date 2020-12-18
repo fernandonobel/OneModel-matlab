@@ -19,7 +19,7 @@ classdef ModelClassParser < handle
     % {[char]} List of name of defined classes.
     className = {}
     % {[char]} The ModelClass code of the defined classes.
-    classCode ={}
+    classCode = {}
 
   end % properties
 

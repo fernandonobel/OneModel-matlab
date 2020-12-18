@@ -5,6 +5,7 @@ classdef ProteinClass < ModelClass
 			obj.namespace = 'p1';
 
 			v = VariableClass(obj,'w_x');
+			v.isPlot = false;
 			obj.addVariable(v);
 
 			v = VariableClass(obj,'x');
@@ -24,6 +25,7 @@ classdef ProteinClass < ModelClass
 			obj.namespace = 'p2';
 
 			v = VariableClass(obj,'w_x');
+			v.isPlot = false;
 			obj.addVariable(v);
 
 			v = VariableClass(obj,'x');
@@ -46,10 +48,12 @@ classdef ProteinClass < ModelClass
 
 			e = EquationClass(obj,'');
 			e.eqn = 'p1__w_x == A';
+			e.isSubstitution = true;
 			obj.addEquation(e);
 
 			e = EquationClass(obj,'');
 			e.eqn = 'p2__w_x == p1__x';
+			e.isSubstitution = true;
 			obj.addEquation(e);
 
 			obj.checkValidModel();

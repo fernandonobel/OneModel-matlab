@@ -12,6 +12,8 @@ classdef (Abstract) Command
   properties
     % ModelClassParser object.
     mcp
+    % bool True if we want to execute this command with "use" command.
+    execUse = false
 
   end % properties
 

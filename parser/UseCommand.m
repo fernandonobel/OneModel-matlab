@@ -1,19 +1,19 @@
-classdef NamespaceCommand < LineCommand
+classdef UseCommand < LineCommand
 
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
-    name = 'Namespace';
+    name = 'Use';
     % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
     % [char] End sequence of the command.
     endWith = ';';
-
+    
   end % properties 
 
   methods
 
-    function [obj] = NamespaceCommand(mcp)
-      %% Constructor of NamespaceCommand.
+    function [obj] = UseCommand(mcp)
+      %% Constructor of UseCommand.
       %
       % param: mcp  ModelClassParser object.
 
@@ -24,7 +24,6 @@ classdef NamespaceCommand < LineCommand
 
     end % LineCommand
 
-
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
@@ -34,19 +33,26 @@ classdef NamespaceCommand < LineCommand
 
       % Remove intros.
       raw = raw(raw~=newline);
+      arg = obj.getArgument(raw);
+      [name,options] = obj.getOptions(arg);
 
-      [tokens] = regexp(raw,'\s*Namespace\s*(\w*)\s*;','tokens');
-
-      if isempty(tokens)
-        fprintf(obj.mcp.fout,'\t\t\tobj.namespace = '''';\n');
-      else
-        fprintf(obj.mcp.fout,'\t\t\tobj.namespace = ''%s'';\n',tokens{1}{1});
+      % Check if base model exists.
+      if ~isfile(name)
+        error(...
+          'The file "%s" does not exists. Check the filename and the path.',name)
       end
 
-    end % execute
+      % Open the base model.
+      obj.mcp.avoidRecursion(name);
+      fBase = fopen(name);
+
+      obj.mcp.executeFileLines(fBase,obj.mcp.fout);
+
+      fclose(fBase);
+
+      end % execute
 
   end % methods
 
 end % classdef
-
 
