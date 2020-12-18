@@ -1,9 +1,4 @@
-mp = ModelClassParser('Model.mc');
-
-mp.parse();
-    
-
-m = Model();
+m = ModelClass.load('Model.mc');
 
 s = SimulationClass(m);
 
