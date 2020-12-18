@@ -25,9 +25,9 @@ classdef ObjectCommand < LineCommand
       end
 
       % The command is found when the name of a defined class is found.
-      [tokens] = regexp(raw,'\s*(\w*)\s*','tokens');
+      [tokens] = regexp(raw,'\s*(\w*)\s*','tokens');    
       
-      if strcmp(tokens{1}{1},obj.mcp.className)
+      if any(strcmp(tokens{1}{1},obj.mcp.className))
         out = true;
       else
         out = false;
@@ -42,7 +42,6 @@ classdef ObjectCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      % TODO
       [tokens] = regexp(raw,'\s*(\w*)\s*(\w*);','tokens');
       
       className = tokens{1}{1};

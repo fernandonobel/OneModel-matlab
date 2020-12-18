@@ -46,8 +46,8 @@ classdef VariableCommand < LineCommand
           % And generate its correspondign equation.
           arg = compose(' %s_eq(%s == %s, isSubstitution = true);',name,name,tokens{1}{2});
           
-          equation = EquationCommand();
-          equation.execute(arg{1},obj.mcp);
+          equation = EquationCommand(obj.mcp);
+          equation.execute(arg{1});
         else
           fprintf(obj.mcp.fout,'\t\t\tv.%s;\n',options{i});
         end
