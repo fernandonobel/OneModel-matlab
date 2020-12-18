@@ -749,8 +749,15 @@ classdef SimulationClass < handle
       out = subsEqns;
 
       if ~isempty(subsVars)
+             
+        aux = true;
         
-        while any(ismember(symvar(out).', subsVars.', 'rows'))
+        while aux
+            try
+                aux = any(ismember(symvar(out).', subsVars.', 'rows'));
+            catch
+                aux = false;
+            end
           out = subs(out,subsVars,subsEqns);
         end
       
