@@ -46,7 +46,7 @@ classdef UseCommand < LineCommand
       obj.mcp.avoidRecursion(name);
       fBase = fopen(name);
 
-      obj.mcp.executeFileLines(fBase,obj.mcp.fout);
+      obj.mcp.executeFileLines(fBase,obj.mcp.fout,'execUse');
 
       fclose(fBase);
 

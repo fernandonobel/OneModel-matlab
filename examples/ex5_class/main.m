@@ -1,9 +1,9 @@
-mp = ModelClassParser('ProteinClass.mc');
+mp = ModelClassParser('Model.mc');
 
 mp.parse();
     
 
-m = ProteinClass();
+m = Model();
 
 s = SimulationClass(m);
 

@@ -49,7 +49,8 @@ classdef ModelClassParser < handle
         SimOptionsCommand(obj),
         ClassCommand(obj),
         NamespaceCommand(obj),
-        ObjectCommand(obj)
+        ObjectCommand(obj),
+        UseCommand(obj)
       };
 
     end % ModelClassParser
@@ -77,13 +78,18 @@ classdef ModelClassParser < handle
 
     end % parse
 
-    function [] = executeFileLines(obj,fid,fout)
+    function [] = executeFileLines(obj,fid,fout,opt)
       %% EXECUTEFILELINES 
       %
       % param: fid File descriptor to read.
       %      : fout File descriptor to write.
+      %      : opt [char] options for the changing the behavior.
       %
       % return: void
+
+      if nargin < 4
+        opt = '';
+      end
 
       % Read a line of the model.
       tline = fgets(fid);
@@ -127,15 +133,18 @@ classdef ModelClassParser < handle
 
             % Does the command all it needs to be executed? 
             if cmd.isComplete(aux)
-              % Execute the comand.
-              cmd.execute(aux);
+              if ~strcmp(opt,'execUse') || (strcmp(opt,'execUse') && cmd.execUse)
+                % Execute the comand.
+                cmd.execute(aux);
 
-              fprintf(fout,'\n');
+                fprintf(fout,'\n');
+              end
 
-              % Reset the aux for new lines.
-              aux = '';
-              % Reset the cmd for new commands.
-              cmd = [];
+                % Reset the aux for new lines.
+                aux = '';
+                % Reset the cmd for new commands.
+                cmd = [];
+              
             end
           end
         end
