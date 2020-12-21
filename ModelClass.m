@@ -763,6 +763,8 @@ classdef (Abstract) ModelClass < handle
 
       out = feval(name);
 
+      %delete([name '.m']);
+
     end % load
 
     function [] = version(~)

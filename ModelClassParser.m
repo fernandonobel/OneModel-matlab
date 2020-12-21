@@ -64,8 +64,16 @@ classdef ModelClassParser < handle
       obj.avoidRecursion(obj.filename);
       fid = fopen(obj.filename);
 
+      % Check if build directory exists.
+      if ~exist('build', 'dir')
+       mkdir('build')
+      end
+
+      addpath('build');
+
       % Open the generated model.
-      obj.fout = fopen(obj.nameM,'w');
+
+      obj.fout = fopen(['build/' obj.nameM],'w');
 
       obj.addHeader(obj.fout);
 
