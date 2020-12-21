@@ -235,7 +235,9 @@ classdef ModelClassParser < handle
       [pathstr,name,ext] = fileparts(filename);
 
       if any(strcmp(obj.filenameExtended,name),'all')
-        error('The file "%s" was already included in the model. The parsing of the model was stoped to avoid infinite recursion.',name);
+        % error('The file "%s" was already included in the model. The parsing of the model was stoped to avoid infinite recursion.',name);
+        disp(sprintf('The file "%s" was already included in the model.',name));
+        return;
       end
 
       obj.filenameExtended{end+1} = name;
