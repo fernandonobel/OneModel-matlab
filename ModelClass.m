@@ -746,12 +746,18 @@ classdef (Abstract) ModelClass < handle
   end % methods
 
   methods (Static)
-    function [out] = load(filename)
+    function [out] = load(filename, opts)
       %% LOAD Load a ModelClass model.
       %
       % param: name Name of the model to load.
+      %        opts Options for the model (used typically with if commands).
       %
       % return: out ModelClass object.
+
+      if nargin < 2
+        opts = [];
+      end
+
 
       [folder, name, extension] = fileparts(filename);
 
@@ -766,9 +772,7 @@ classdef (Abstract) ModelClass < handle
       mp = ModelClassParser(filename);
       mp.parse();
 
-      out = feval(name);
-
-      %delete([name '.m']);
+      out = feval(name,opts);
 
     end % load
 

@@ -21,7 +21,7 @@ classdef EndIfCommand < LineCommand
 
       % Remove intros.
 
-      fprintf(obj.mcp.fout,'\t\t\tend;\n');
+      fprintf(obj.mcp.fout,'\t\t\tend\n');
 
     end % execute
 

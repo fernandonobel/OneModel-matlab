@@ -205,7 +205,7 @@ classdef ModelClassParser < handle
 
       fprintf(fout,'classdef %s < ModelClass\n',obj.basename);
       fprintf(fout,'\tmethods\n');
-      fprintf(fout,'\t\tfunction [obj] = %s()\n',obj.basename);
+      fprintf(fout,'\t\tfunction [obj] = %s(opts)\n',obj.basename);
 
     end % addHeader
 
