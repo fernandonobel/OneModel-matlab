@@ -19,12 +19,9 @@ classdef IfCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      % Remove intros.
-      raw = raw(raw~=newline);
-      arg = obj.getArgument(raw);
-      [name,options] = obj.getOptions(arg);
+      [tokens,matches] = regexp(raw,'If\s*(.*);','tokens','match');
 
-      fprintf(obj.mcp.fout,'\t\t\tif (%s)\n',name);
+      fprintf(obj.mcp.fout,'\t\t\tif (%s)\n',tokens{1}{1});
 
     end % execute
 
