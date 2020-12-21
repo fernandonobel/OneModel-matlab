@@ -171,6 +171,11 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out
 
+      if ~contains(name,'__')
+        % Take into accout the namespace.
+        name = [obj.namespace name]; 
+      end
+
       aux = obj.isReduced;
       obj.isReduced = false;
 
