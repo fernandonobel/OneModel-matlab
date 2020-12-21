@@ -51,7 +51,9 @@ classdef ModelClassParser < handle
         NamespaceCommand(obj),
         ObjectCommand(obj),
         UseCommand(obj),
-        ExtendsCommand(obj)
+        ExtendsCommand(obj),
+        IfCommand(obj),
+        EndIfCommand(obj)
       };
 
     end % ModelClassParser
