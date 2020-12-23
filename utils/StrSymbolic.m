@@ -47,6 +47,11 @@ classdef StrSymbolic < handle
         if (strcmp(word,'t'))
           continue;
         end
+        
+        % Remove not valid var names.
+        if ~isvarname(word)
+            continue;
+        end
 
         % Remove the exponencial.
         if word(1) == 'e' 
