@@ -170,6 +170,43 @@ classdef SimulationPlotClass < handle
         ind);
     end % selectSubplotByName
 
+    function [] = plotAllByNamespace(obj,out)
+      %% PLOTALLBYNAMESPACE Plot all states in different figures by namespace.
+      %
+      % param: out real. Result of the simulation.
+      
+      variables = obj.model.variables;
+
+      % Get the namespaces used in the model.
+      namespace = unique({variables.namespace});
+
+      orderedVariables = cell(size(namespace));
+
+      for i = 1:length(variables)
+
+        % Get the index which correponds with its namespace.
+        ind = find(strcmp(variables(i).namespace,namespace));
+        
+        % If we want to plot that var.
+        if variables(i).isPlot
+          % Add it to the list.
+          orderedVariables{ind} = [orderedVariables{ind} variables(i).name ' '];      
+        end
+
+      end
+      
+      for i = 1:length(namespace)
+          % Skip empty lists.
+          if isempty(orderedVariables{i})
+              continue;
+          end
+
+          figure('Name',namespace{i},'NumberTitle','on')
+          obj.plotAllStates(out,'names',orderedVariables{i});
+      end
+      
+    end % plotAllByNamespace
+
   end % methods
 
 end % classdef
