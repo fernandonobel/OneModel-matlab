@@ -207,7 +207,7 @@ classdef SimulationClass < handle
       end
       
       if nargin < 5
-        mTime = 1;
+        mTime = 10;
       end
 
       if nargin < 6
@@ -254,7 +254,7 @@ classdef SimulationClass < handle
       end
 
       if nargin < 7
-        mTime = 1;
+        mTime = 10;
       end
 
       if sTime ~= -1
