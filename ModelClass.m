@@ -672,8 +672,11 @@ classdef (Abstract) ModelClass < handle
       % return: out {[char]} Names of the symbols of the model.
 
       out = {};
-      for i = 1:length(obj.symbols)
-        out{end+1} = obj.symbols{i}.name;
+      
+      symbols = obj.symbols;
+      
+      for i = 1:length(symbols)
+        out{end+1} = symbols{i}.name;
       end
 
     end % get.varsName
@@ -684,8 +687,11 @@ classdef (Abstract) ModelClass < handle
       % return: out [bool] symbolsIsPlot.
 
       out = [];
-      for i = 1:length(obj.symbols)
-        out(end+1) = obj.symbols{i}.isPlot;
+      
+      symbols = obj.symbols;
+      
+      for i = 1:length(symbols)
+        out(end+1) = symbols{i}.isPlot;
       end
 
     end % get.symbolsIsPlot
