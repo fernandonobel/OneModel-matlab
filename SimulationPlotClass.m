@@ -203,7 +203,7 @@ classdef SimulationPlotClass < handle
           
           f = figure(i);
 
-          set(f,'Name',namespace{i},'NumberTitle','off');
+          set(f,'Name',namespace{i},'NumberTitle','on');
           
           obj.plotAllStates(out,'names',orderedVariables{i});
       end
