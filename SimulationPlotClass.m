@@ -200,8 +200,11 @@ classdef SimulationPlotClass < handle
           if isempty(orderedVariables{i})
               continue;
           end
+          
+          f = figure(i);
 
-          figure('Name',namespace{i},'NumberTitle','on')
+          set(f,'Name',namespace{i},'NumberTitle','off');
+          
           obj.plotAllStates(out,'names',orderedVariables{i});
       end
       
