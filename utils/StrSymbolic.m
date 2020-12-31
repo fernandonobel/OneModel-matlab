@@ -42,6 +42,11 @@ classdef StrSymbolic < handle
         if (exist(word,'builtin')==5)
           continue;
         end
+        
+        % Remove names of files with .m extension.
+        if exist(word) == 2
+            continue;
+        end
 
         % Remove the time variable.
         if (strcmp(word,'t'))
