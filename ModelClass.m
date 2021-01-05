@@ -226,6 +226,24 @@ classdef (Abstract) ModelClass < handle
 
     end % getSymbolByName
 
+    function [] = updateSymbol(obj,symbol)
+      %% UPDATESYMBOL Update a symbol with new information.
+      %
+      % param: symbol New symbol object to replace the old one.
+      %
+      % return: void
+
+      aux = obj.isReduced;
+      obj.isReduced = false;
+
+      names = obj.symbolsName();
+
+      obj.symbols{strcmp(symbol.name, names)} = symbol;
+
+      obj.isReduced = aux;
+      
+    end % updateSymbol
+
     function [] = checkValidModel(obj)
       %% CHECKVALIDMODEL Check if the model is valid. 
       % This involves: 
