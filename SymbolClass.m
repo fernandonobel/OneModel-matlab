@@ -43,14 +43,12 @@ classdef SymbolClass < ModelPartClass
 
       obj = obj@ModelPartClass(mc);
 
-      % Save the name for latex without namespace.
-      obj.nameTex = name;
-
       % Define the name taking into account the namespace.
       name = [obj.namespace name];
 
       obj.name = name;
       obj.nameSym = sym(name);
+      obj.nameTex = name;
       obj.isPlot = false;
       obj.xlim = [-inf inf];
       obj.ylim = [-inf inf];
