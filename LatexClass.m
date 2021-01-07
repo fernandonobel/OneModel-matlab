@@ -112,7 +112,7 @@ classdef LatexClass < handle
 
       for i = 1:length(v)
         if v(i).isTex
-          fprintf(f,'\t$%s$ & %s & & %s & \\\\\n', v(i).nameTex, v(i).comment, v(i).units);
+          fprintf(f,'\t$%s$ & %s & & $%s$ & \\\\\n', v(i).nameTex, v(i).comment, v(i).units);
         end
       end
 
