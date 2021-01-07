@@ -35,7 +35,7 @@ classdef LatexClass < handle
       fprintf(f,'\\begin{specialtable}[H] \n');
       fprintf(f,'\\centering\n');
       fprintf(f,'\\caption{%s}\n',caption);
-      fprintf(f,'\\label{label}\n',label);
+      fprintf(f,'\\label{%s}\n',label);
       fprintf(f,'%%%% \\tablesize{} %% You can specify the fontsize here, e.g., \\tablesize{\\footnotesize}. If commented out \\small will be used.\n');
       fprintf(f,'\\begin{tabular}{lllll}\n');
       fprintf(f,'\\toprule\n');
@@ -91,11 +91,11 @@ classdef LatexClass < handle
       fprintf(f,'\\begin{specialtable}[H] \n');
       fprintf(f,'\\centering\n');
       fprintf(f,'\\caption{%s}\n',caption);
-      fprintf(f,'\\label{label}\n',label);
+      fprintf(f,'\\label{%s}\n',label);
       fprintf(f,'%%%% \\tablesize{} %% You can specify the fontsize here, e.g., \\tablesize{\\footnotesize}. If commented out \\small will be used.\n');
       fprintf(f,'\\begin{tabular}{lllll}\n');
       fprintf(f,'\\toprule\n');
-      fprintf(f,'\\textbf{Name}	& \\textbf{Description}	& \\textbf{Value} & \\textbf{Units} & \\textbf{Reference} \\\\\n');
+      fprintf(f,'\\textbf{Name}	& \\textbf{Description}	& \\textbf{Initial value} & \\textbf{Units} & \\textbf{Reference} \\\\\n');
       fprintf(f,'\\midrule\n');
 
       % fprintf(f,'\\begin{table}[h]\n');
@@ -112,7 +112,7 @@ classdef LatexClass < handle
 
       for i = 1:length(v)
         if v(i).isTex
-          fprintf(f,'\t$%s$ & & & & \\\\\n', v(i).nameTex);
+          fprintf(f,'\t$%s$ & %s & & %s & \\\\\n', v(i).nameTex, v(i).comment, v(i).units);
         end
       end
 
