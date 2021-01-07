@@ -5,6 +5,8 @@ classdef ParameterClass < SymbolClass
   properties
     % real Value of the paramter.
     value
+    % char Value for TeX generation.
+    valueTex
   end % properties
   
   methods 
@@ -18,6 +20,7 @@ classdef ParameterClass < SymbolClass
       obj = obj@SymbolClass(mc, name);
 
       obj.value = nan;
+      obj.valueTex = [];
       
     end % ParameterClass
 
@@ -33,6 +36,10 @@ classdef ParameterClass < SymbolClass
       end
 
       obj.value = value;
+
+      if isempty(obj.valueTex)
+        obj.valueTex = num2str(obj.value);
+      end
       
     end % set.value
     	

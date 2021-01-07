@@ -33,12 +33,13 @@ classdef LatexClass < handle
 
       fprintf(f,'%% The MDPI table float is called specialtable\n');
       fprintf(f,'\\begin{specialtable}[H] \n');
+      fprintf(f,'\\centering\n');
       fprintf(f,'\\caption{%s}\n',caption);
       fprintf(f,'\\label{label}\n',label);
       fprintf(f,'%%%% \\tablesize{} %% You can specify the fontsize here, e.g., \\tablesize{\\footnotesize}. If commented out \\small will be used.\n');
-      fprintf(f,'\\begin{tabular}{llll}\n');
+      fprintf(f,'\\begin{tabular}{lllll}\n');
       fprintf(f,'\\toprule\n');
-      fprintf(f,'\\textbf{Name}	& \\textbf{Description}	& \\textbf{Value} & \\textbf{Units} \\\\\n');
+      fprintf(f,'\\textbf{Name}	& \\textbf{Description}	& \\textbf{Value} & \\textbf{Units} & \\textbf{Reference} \\\\\n');
       fprintf(f,'\\midrule\n');
 
       % fprintf(f,'\\begin{table}[h]\n');
@@ -54,7 +55,9 @@ classdef LatexClass < handle
       % fprintf(f,'\\midrule\n');
 
       for i = 1:length(p)
-        fprintf(f,'\t$%s$ & %s & %g & $%s$ \\\\\n', p(i).nameTex,p(i).comment,p(i).value,p(i).units);
+        if p(i).isTex
+          fprintf(f,'\t$%s$ & %s & %s & $%s$ & \\\\\n', p(i).nameTex,p(i).comment,p(i).valueTex,p(i).units);
+        end
       end
 
       fprintf(f,'\\bottomrule\n');

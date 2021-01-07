@@ -31,6 +31,8 @@ classdef SymbolClass < ModelPartClass
     plotIn
     % bool Is the symbol just a substitution of variables?
     isSubstitution
+    % bool Should the symbol be used for LaTex code generation?
+    isTex
   end % properties
 
   methods 
@@ -57,6 +59,7 @@ classdef SymbolClass < ModelPartClass
       obj.title = obj.name;
       obj.plotIn = '';
       obj.isSubstitution = false;
+      obj.isTex = true;
 
     end % SymbolClass
 
