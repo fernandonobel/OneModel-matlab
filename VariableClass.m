@@ -7,6 +7,8 @@ classdef VariableClass < SymbolClass
     isNoNegative
     % real Initial condition value.
     start
+    % [char] Equation that calculates the variable in TeX format.
+    equationTex
   end % properties
 
   methods 
@@ -22,6 +24,7 @@ classdef VariableClass < SymbolClass
       obj.isNoNegative = false;
       obj.isPlot = true;
       obj.start = 0;
+      obj.equationTex = '';
 
     end % VariableClass
 
