@@ -95,7 +95,7 @@ classdef EquationClass < ModelPartClass
       expression = '(?<!=)=(?!=)';
       [tokens,matches] = regexp(eqn,expression,'tokens','match');
       if ~isempty(matches)
-          error('''='' sign is used for variable assignation, use ''=='' instead in Equations.');
+          error('''='' symbol is used for variable assignation, use ''=='' instead in Equations.');
       end
       
       % Check if there is one and only one '=='.
