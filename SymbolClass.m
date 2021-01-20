@@ -109,7 +109,7 @@ classdef SymbolClass < ModelPartClass
       % If the ylabel is not defined.
       if strcmp(obj.ylabel,'')
         % Use the units.
-        obj.ylabel = ['[' obj.units ']'];
+        obj.ylabel = ['$[' obj.units ']$'];
       end
 
     end % set.units
