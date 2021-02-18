@@ -120,8 +120,29 @@ classdef (Abstract) LineCommand < Command
         name = tokens{1}{1};
 
         arg = tokens{1}{2};
+        
+        % Look for comma to separate the options
+        % But some arguments can be as: arg1=1+1,arg2='bla,bla'
+        % Only the first comma delimites an option
+        % The second comma is literal comma part of the option
+        
+        % Change literal commas between '' to space.
+        arg_noLiteralComma = '';
+        isLiteral = false;
+        for i = 1:length(arg)
+            if strcmp(arg(i),"'")
+                isLiteral = ~isLiteral;
+            end
+            
+            if strcmp(arg(i),",") && isLiteral
+                arg_noLiteralComma(i) = " ";
+            else
+                arg_noLiteralComma(i) = arg(i);
+            end
+        end        
+        
         expression = ',(?![^\(]*\))';
-        ind = regexp(arg,expression);
+        ind = regexp(arg_noLiteralComma,expression);
 
         if ~isempty(ind) 
           options{1} = arg(1:ind(1)-1);
