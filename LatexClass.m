@@ -195,16 +195,26 @@ classdef LatexClass < handle
       % return: out [char] LaTeX code.
 
       v = obj.model.variables;
+      
+      aux_v = VariableClass.empty();
+      
+      for i = 1:length(v)
+        if v(i).isTex && ~v(i).isSubstitution && ~isempty(v(i).equationTex)
+          aux_v(end+1) = v(i);
+        end
+      end
+      
+      v = aux_v;
 
       f = fopen(filename,'w');
 
       fprintf(f,'\\begin{align}\n');
 
-      for i = 1:length(v)
-        if v(i).isTex && ~v(i).isSubstitution && ~isempty(v(i).equationTex)
+      for i = 1:length(v)-1
           fprintf(f,'\t %s \\\\\n', v(i).equationTex);
-        end
       end
+      
+      fprintf(f,'\t %s \n', v(i).equationTex);
 
       fprintf(f,'\\end{align}\n');
 
