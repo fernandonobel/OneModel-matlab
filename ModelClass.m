@@ -800,7 +800,7 @@ classdef (Abstract) ModelClass < handle
 
     end % load
 
-    function [] = version(~)
+    function [out] = version(~)
       %% VERSION Prints the version of the ModelClass software.
       %
       % return: void
@@ -836,7 +836,7 @@ classdef (Abstract) ModelClass < handle
         commit = [' ' commit(1:7)];
       end
 
-      disp([versionNumber commit '   -   Fernando Nóbel (fersann1@upv.es)']);
+      out = ([versionNumber commit '   -   Fernando Nóbel (fersann1@upv.es)']);
 
     end % version
 
