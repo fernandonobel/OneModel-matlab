@@ -129,7 +129,7 @@ classdef SimulationClass < handle
       obj.model.isReduced = true;
 
       x0 = [];
-      for i = 1:length(obj.model.vars)
+      for i = 1:obj.model.varsNum
         x0.(obj.model.varsName{i}) = out.(obj.model.varsName{i})(end);
       end
       tspan = [out.t(end) out.t(end)+tadd];
@@ -174,18 +174,26 @@ classdef SimulationClass < handle
       p = obj.combineParam(p);
 
       % Check if the initial conditions match the number of states.
-      if length(x0) ~= length(obj.model.vars)
+      if length(x0) ~= obj.model.varsNum
         error('The number of initial conditions do not match with the number of states');
       end
 
       % Simulate
-      [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
+      % TODO: Make optional the noNegativeWrapper because it is slow.
+      % [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
+      [t,x] = ode15s(@(t,x) obj.fncDaeModel(t,x,p),tspan,x0,opt);
 
       % Calculate the susbtitution variables.
-      xSubs = [];
+      obj.model.isReduced = false;
+      totalVars = obj.model.varsNum;
+      obj.model.isReduced = true;
+      
+      xSubs = zeros(length(t),totalVars-obj.model.varsNum);
+      
       for i = 1:length(t)
-        xSubs = [xSubs; obj.fncSubsModel(t(i),x(i,:)',p)];
+        xSubs(i,:) = obj.fncSubsModel(t(i),x(i,:)',p);
       end
+      
       x = [x xSubs];
 
     end % simulateTX
@@ -307,7 +315,7 @@ classdef SimulationClass < handle
       
       opt = odeset(opt,'Events',@(t,y) obj.eventSteadyState(t,y,p,tol,sTime,mTime));
 
-    end % optSteadyState
+    end % State
 
     function [out] = combineInitialCondition(obj,x0)
       %% COMBINEINITIALCONDITION Combines the value of the initial conditions
@@ -322,27 +330,22 @@ classdef SimulationClass < handle
       % return: out
 
       out = [];
-      x0Default = [];
 
       varsName = obj.model.varsName;
+      varsStart = obj.model.varsStart;
 
-      for i = 1:length(obj.model.vars)
-        x0Default.(varsName{i}) = obj.model.varsStart(i);
+      for i = 1:obj.model.varsNum
+        out.(varsName{i}) = varsStart(i);
+      end
+      
+      if isempty(x0)
+        f = [];
+      else
+        f = fieldnames(x0);
       end
 
-      f = fieldnames(x0Default);
-
       for i = 1:length(f)
-        try 
-          out.(f{i}) = x0.(f{i});
-        catch
-          out.(f{i}) = x0Default.(f{i});
-        end
-
-        % Check if the parameter has been initialized.
-        if isnan(out.(f{i}))
-          error('Initial condition of ''%s'' is not defined.', f{i});
-        end
+          out.(f{i}) = x0.(f{i});  
       end
       
     end % combineInitialCondition
@@ -360,32 +363,22 @@ classdef SimulationClass < handle
       % return: out Paramters including the default values if needed.
 
       out = [];
-      pDefault = [];
-
-      
+     
       paramsName = obj.model.paramsName;
+      paramsValue = obj.model.paramsValue;
 
-      for i = 1:length(obj.model.params)
-        pDefault.(paramsName{i}) = obj.model.paramsValue(i);
+      for i = 1:length(paramsName)
+        out.(paramsName{i}) = paramsValue(i);
       end
 
-      if isempty(pDefault)
+      if isempty(p)
         f = [];
       else
-        f = fieldnames(pDefault);
+        f = fieldnames(p);
       end
-
+      
       for i = 1:length(f)
-        try 
           out.(f{i}) = p.(f{i});
-        catch
-          out.(f{i}) = pDefault.(f{i});
-        end
-
-        % Check if the parameter has been initialized.
-        if isnan(out.(f{i}))
-          error('Start of ''%s'' is not defined.', f{i});
-        end
       end
 
     end % combineParam
@@ -397,8 +390,8 @@ classdef SimulationClass < handle
       %
       % return: out Initial condition array.
 
-      out = zeros(1,length(obj.model.vars));
-      for i = 1:length(obj.model.vars)
+      out = zeros(1,obj.model.varsNum);
+      for i = 1:obj.model.varsNum
         try
           out(i) = x0.(obj.model.varsName{i});
         catch
@@ -452,8 +445,8 @@ classdef SimulationClass < handle
       
     end % initialConditionWrapper
 
-    function [] =  createOdeFunction(obj,name)
-      %% CREATEODEFUNCTION Create a matlab function that evaluates the ODE 
+    function [] =  generateOdeFunction(obj,name)
+      %% GENERATEODEFUNCTION Generate a matlab function that evaluates the ODE 
       % of the model.
       %
       % param: name [char] Name of the file where the funtion is saved.
@@ -463,9 +456,12 @@ classdef SimulationClass < handle
       if nargin < 2
         name = [class(obj.model) 'OdeFun'];
       end
+      
+      tokenReduced = obj.model.isReduced;
+      obj.model.isReduced = true;
 
       % Write ModelClassV2 model to file.
-      fm = fopen([name, '.m'],'w');
+      fm = fopen(['./build/' name '.m'],'w');
 
       % Function definition.
       aux=compose("function [dxdt] =  %s(t,x,p)", name);
@@ -473,14 +469,14 @@ classdef SimulationClass < handle
 
       % Main comment of the function.
       aux=compose(...
-        "%%%% %s Function that evaluates the ODEs of %s.",...
+        "%%%% %s Function that evaluates the ODEs of %s.mc",...
       upper(name),class(obj.model));
       fprintf(fm,'%s\n',aux);
 
       % Secondary comment.
       aux=compose(...
-        "%% This function was autogenerated by the %s.",...
-      class(obj));
+        "%% This function was autogenerated with ModelClass %s.",...
+      ModelClass.version());
       fprintf(fm,'%s\n',aux);
 
       fprintf(fm,'%%\n',aux);
@@ -510,11 +506,11 @@ classdef SimulationClass < handle
       % Define states.
       aux=compose("%% States");
       fprintf(fm,'%s\n',aux);
-      for i = 1:length(obj.model.vars)
+      for i = 1:obj.model.varsNum
         aux=compose("%% x(%d,:) = %s",i, char(obj.model.vars(i)));
         fprintf(fm,'%s',aux);
         if (obj.model.varsIsAlgebraic(i))
-          aux=compose("\t %% (Algebraic state)");
+          aux=compose(" %% (Algebraic state)");
           fprintf(fm,'%s',aux);
         end
         fprintf(fm,'\n');
@@ -574,10 +570,12 @@ classdef SimulationClass < handle
       end
 
       fprintf(fm,"end");
-    end % createOdeFunction
+      
+      obj.model.isReduced = tokenReduced;
+    end % generateOdeFunction
 
-    function [] =  createDriverOdeFunction(obj,name)
-      %% CREATEDRIVERODEFUNCTION  Creates a driver script for simulating the ODE
+    function [] =  generateDriverOdeFunction(obj,name)
+      %% GENERATEDRIVERODEFUNCTION  Generates a driver script for simulating the ODE
       % function.
       %
       % param: name [char] Name of the driver for the der function.
@@ -588,13 +586,22 @@ classdef SimulationClass < handle
         name = [class(obj.model) 'DriverOdeFun'];
       end
 
+      tokenReduced = obj.model.isReduced;
+      obj.model.isReduced = true;
+      
       % Open driver file.
-      fm = fopen([name, '.m'],'w');
+      fm = fopen(['./build/' name '.m'],'w');
 
       % Scrit main comment.
       aux=compose(...
         "%%%% Driver script for simulating the ODE function %s", ...
       name);
+      fprintf(fm,'%s\n',aux);
+
+      % Secondary comment.
+      aux=compose(...
+        "%% This script was autogenerated with ModelClass %s.",...
+      ModelClass.version());
       fprintf(fm,'%s\n',aux);
 
       fprintf(fm,'\n',aux);
@@ -648,12 +655,13 @@ classdef SimulationClass < handle
       fprintf(fm,'%s\n\n',aux);
 
       % Initial condition for the model.
-      fprintf(fm,'%% Initial condition.\n',aux);
+      fprintf(fm,'%% Default initial condition value.\n',aux);
       fprintf(fm,'x0 = [\n',aux);
 
-      for i = 1:length(obj.model.vars)
+      for i = 1:obj.model.varsNum
         aux=compose(...
-          "\t 0.0 %% %s",...
+          "\t %e %% %s",...
+        obj.model.varsStart(i),...
         char(obj.model.vars(i)));
         fprintf(fm,'%s\n',aux);
       end
@@ -661,13 +669,14 @@ classdef SimulationClass < handle
       fprintf(fm,'];\n\n',aux);
 
       % Paremeters definition.
-      fprintf(fm,'%% Definition of parameters of the model.\n',aux);
+      fprintf(fm,'%% Default parameters value.\n',aux);
 
       params = obj.model.params;
       for i = 1:length(params)
         aux=compose(...
-          "p.%s = 1.0;",...
-        char(params(i)));
+          "p.%s = %e;",...
+        char(params(i)),...
+        obj.model.paramsValue(i));
         fprintf(fm,'%s\n',aux);
       end
 
@@ -675,8 +684,8 @@ classdef SimulationClass < handle
 
       % Simulate using the ode15s and using previous defined parameters.
       aux=compose(...
-        "[t,x] = ode15s(@(t,x) modelOdeFun(t,x,p), tspan, x0, opt);"...
-        );
+        "[t,x] = ode15s(@(t,x) %sOdeFun(t,x,p), tspan, x0, opt);",...
+        class(obj.model));
       fprintf(fm,'%s\n',aux);
 
       fprintf(fm,'\n',aux);
@@ -692,7 +701,7 @@ classdef SimulationClass < handle
         char(obj.model.vars(1)));
       fprintf(fm,'%s',aux);
 
-      for i = 2:length(obj.model.vars)
+      for i = 2:obj.model.varsNum
         aux=compose(...
           ",'%s'",...
           char(obj.model.vars(i)));
@@ -701,8 +710,10 @@ classdef SimulationClass < handle
 
       fprintf(fm,');\n');
       fprintf(fm,'grid on;\n');
+      
+      obj.model.isReduced = tokenReduced;
 
-    end % createDriverOdeFunction
+    end % generateDriverOdeFunction
 
     function [out] =  get.daeModel(obj)
       %% GET.DAEMODEL Get DAE model.

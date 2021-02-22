@@ -46,6 +46,8 @@ classdef (Abstract) ModelClass < handle
     varsIndexNoNegative
     % [bool] Should var be plotted?
     varsPlot
+    % int Number of variables.
+    varsNum
     % [sym] Equations of the model. 
     eqns                
     % {str} Names of the equations.
@@ -409,6 +411,20 @@ classdef (Abstract) ModelClass < handle
       % Return reduced model if needed.
       if obj.isReduced
         out = out(~obj.isSubs);
+      end
+
+    end % get.varsPlot
+    
+    function [out] =  get.varsNum(obj)
+      %% GET.VARSPLOT Number of variables in the model.
+      %
+      % return: out int varsNum.
+
+      % Return reduced model if needed.
+      if obj.isReduced
+        out = sum(~obj.isSubs);
+      else
+        out = length(obj.variables);
       end
 
     end % get.varsPlot
