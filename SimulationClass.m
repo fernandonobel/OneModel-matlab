@@ -284,7 +284,7 @@ classdef SimulationClass < handle
       isterminal = 1; % Stop the integration
       direction = 0; % Negative direction only
 
-    end % simulateTX
+    end % eventSteadyState
 
     function [opt] = optSteadyState(obj,opt,p,tol,sTime,mTime)
       %% OPTSTEADYSTATE Set the event for simulating until steady state is
