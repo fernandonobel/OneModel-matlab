@@ -20,6 +20,11 @@ classdef (Abstract) LineCommand < Command
 
   end % properties
 
+  properties
+    % bool Write an intro after the execution of the command?
+    introEnd
+  end
+
   methods 
 
     function [obj] = LineCommand(mcp)
@@ -31,6 +36,8 @@ classdef (Abstract) LineCommand < Command
 
       % Add the name of the command to the keywords to reserve.
       obj.keywords{end+1} = obj.name;
+
+      obj.introEnd = true;
 
     end % LineCommand
 

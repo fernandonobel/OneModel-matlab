@@ -22,6 +22,8 @@ classdef UseCommand < LineCommand
       % We want to execute this command with "use" command.
       obj.execUse = true;
 
+      obj.introEnd = false;
+
     end % LineCommand
 
     function [] = execute(obj, raw)

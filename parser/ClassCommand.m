@@ -22,6 +22,8 @@ classdef ClassCommand < LineCommand
       % We want to execute this command with "use" command.
       obj.execUse = true;
 
+      obj.introEnd = false;
+
     end % LineCommand
 
 

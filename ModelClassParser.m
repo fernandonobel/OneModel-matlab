@@ -148,7 +148,10 @@ classdef ModelClassParser < handle
                 % Execute the comand.
                 cmd.execute(aux);
 
-                % fprintf(fout,'\n');
+                if cmd.introEnd
+                  fprintf(fout,'\n');
+                end
+
               end
 
                 % Reset the aux for new lines.
