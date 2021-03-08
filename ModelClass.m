@@ -792,17 +792,17 @@ classdef (Abstract) ModelClass < handle
   end % methods
 
   methods (Static)
-    function [out] = load(filename, opts)
+    function [out] = load(filename, varargin)
       %% LOAD Load a ModelClass model.
       %
-      % param: name Name of the model to load.
-      %        opts Options for the model (used typically with if commands).
+      % param: filename Name of the model to load.
       %
       % return: out ModelClass object.
 
-      if nargin < 2
-        opts = [];
-      end
+      % Options for the model (used typically with "if" commands").
+      opts = getOption(varargin,'opts',[]);
+      % Always compile the model.
+      force_compile = getFlag(varargin,'force-compile');
 
       [folder, name, extension] = fileparts(filename);
 
@@ -817,7 +817,7 @@ classdef (Abstract) ModelClass < handle
       % Check if the model is up-to-date.
       out = feval([name '.isUpToDate']);
 
-      if out
+      if out && ~force_compile
         % Just use the current version of the model.
         disp('Using preexisting compilated model.');
       else
