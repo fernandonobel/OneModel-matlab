@@ -16,6 +16,8 @@ classdef ModelClassParser < handle
     % {filename} Filename of extended files. This is to avoid infinite recursion
     % of files
     filenameExtended = {}
+    % {char} Cell with all the path to the files that make up the model.
+    dependenciesPath = {}
     % {[char]} List of name of defined classes.
     className = {}
     % {[char]} The ModelClass code of the defined classes.
@@ -79,9 +81,7 @@ classdef ModelClassParser < handle
       obj.fout = fopen(['build/' obj.nameM],'w');
 
       obj.addHeader(obj.fout);
-
       obj.executeFileLines(fid,obj.fout);
-
       obj.addFooter(obj.fout);
 
       fclose(fid);
@@ -218,9 +218,22 @@ classdef ModelClassParser < handle
       % return: void
 
       fprintf(fout,'\t\t\tobj.checkValidModel();\n');
+      fprintf(obj.fout,'\t\tend\n\n');
+      fprintf(fout,'\tend\n');
 
+
+      fprintf(fout,'\tmethods(Static)\n');
+
+      fprintf(fout,'\t\tfunction [out] = isUpToDate()\n');
+      fprintf(fout,'\t\t\tdependenciesPath = {...\n');
+      for i = 1:length(obj.dependenciesPath)
+      fprintf(fout,'\t\t\t\t''%s''...\n',obj.dependenciesPath{i});
+      end
+      fprintf(fout,'\t\t\t};\n');
+      fprintf(fout,'\t\t\tout = %s.checkUpToDate(dependenciesPath);\n',obj.basename);
       fprintf(fout,'\t\tend\n');
       fprintf(fout,'\tend\n');
+
       fprintf(fout,'end\n');
 
     end % addFooter
@@ -242,6 +255,7 @@ classdef ModelClassParser < handle
       end
 
       obj.filenameExtended{end+1} = name;
+      obj.dependenciesPath{end+1} = filename;
 
     end % avoidRecursion
 

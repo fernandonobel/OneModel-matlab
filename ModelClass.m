@@ -29,6 +29,12 @@ classdef (Abstract) ModelClass < handle
     % not have a defined namespace.
     namespace
 
+    % {char} List of file dependencies.
+    % This is used to check if the generated .m is up-to-date with the .mc model
+    % If it is up-to-date, the .m code wont be generated again to save 
+    % computation time.
+    dependenciesPath = {}
+
   end
 
   properties (Dependent)
@@ -243,7 +249,7 @@ classdef (Abstract) ModelClass < handle
       obj.symbols{strcmp(symbol.name, names)} = symbol;
 
       obj.isReduced = aux;
-      
+
     end % updateSymbol
 
     function [] = checkValidModel(obj)
@@ -414,7 +420,7 @@ classdef (Abstract) ModelClass < handle
       end
 
     end % get.varsPlot
-    
+
     function [out] =  get.varsNum(obj)
       %% GET.VARSPLOT Number of variables in the model.
       %
@@ -706,9 +712,9 @@ classdef (Abstract) ModelClass < handle
       % return: out {[char]} Names of the symbols of the model.
 
       out = {};
-      
+
       symbols = obj.symbols;
-      
+
       for i = 1:length(symbols)
         out{end+1} = symbols{i}.name;
       end
@@ -721,9 +727,9 @@ classdef (Abstract) ModelClass < handle
       % return: out [bool] symbolsIsPlot.
 
       out = [];
-      
+
       symbols = obj.symbols;
-      
+
       for i = 1:length(symbols)
         out(end+1) = symbols{i}.isPlot;
       end
@@ -798,7 +804,6 @@ classdef (Abstract) ModelClass < handle
         opts = [];
       end
 
-
       [folder, name, extension] = fileparts(filename);
 
       if ~strcmp(extension,'.mc')
@@ -809,10 +814,24 @@ classdef (Abstract) ModelClass < handle
         error(['The file "' filename '" does not exist.']);
       end
 
-      mp = ModelClassParser(filename);
-      mp.parse();
+      % Check if the model is up-to-date.
+      out = feval([name '.isUpToDate']);
 
+      if out
+        % Just use the current version of the model.
+        disp('Using preexisting compilated model.');
+      else
+        % Compile an up-to-date version.
+        disp(['Compiling model...']);
+        mp = ModelClassParser(filename);
+        mp.parse();
+        disp('Compilation finished.');
+      end
+
+      % Load the model.
+      disp('Model is loading...');
       out = feval(name,opts);
+      disp('Model is loaded.');
 
     end % load
 
@@ -960,6 +979,32 @@ classdef (Abstract) ModelClass < handle
       disp('ModelClass has been successfully updated!');
 
     end % update
+
+    function [out] = checkUpToDate(dependenciesPath)
+      %% CHECKUPTODATE Check if the model is up-to-date.
+      %
+      % param: obj
+      %
+      % return: out True if model if up-to-date.
+
+      out = true;
+
+      [folder, name, extension] = fileparts(dependenciesPath{1});
+
+      modelPath = ['./build/' name '.m'];
+      modelDate = dir(modelPath).datenum;
+
+      for i = 1:length(dependenciesPath)
+        if  modelDate < dir(dependenciesPath{i}).datenum
+          out = false;
+          disp('Model is out-dated.');
+          return
+        end
+      end
+
+      disp('Model is up-to-date.');
+
+    end % checkUpToDate
 
   end % methods
 
