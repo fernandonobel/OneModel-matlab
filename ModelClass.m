@@ -813,11 +813,16 @@ classdef (Abstract) ModelClass < handle
       if ~isfile(filename)
         error(['The file "' filename '" does not exist.']);
       end
+      
+      compile = true;
+      
+      if isfile(['./build/' name '.m'])
+        disp('Found a compilated model.'); 
+        % Check if the model is up-to-date.
+        compile = ~feval([name '.isUpToDate']);
+      end
 
-      % Check if the model is up-to-date.
-      out = feval([name '.isUpToDate']);
-
-      if out && ~force_compile
+      if compile && ~force_compile
         % Just use the current version of the model.
         disp('Using preexisting compilated model.');
       else

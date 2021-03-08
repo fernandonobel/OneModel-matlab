@@ -55,7 +55,8 @@ classdef ModelClassParser < handle
         UseCommand(obj),
         ExtendsCommand(obj),
         IfCommand(obj),
-        EndIfCommand(obj)
+        EndIfCommand(obj),
+        ConnectCommand(obj)
       };
 
     end % ModelClassParser
