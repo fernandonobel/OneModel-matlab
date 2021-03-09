@@ -79,7 +79,7 @@ classdef (Abstract) LineCommand < Command
 
       arg = [];
 
-      expression = '\s*\w*\s(.+);';
+      expression = '\s*\w*\s*(.+);';
 
       [tokens,matches] = regexp(raw,expression,'tokens','match');
 

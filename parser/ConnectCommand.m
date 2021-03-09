@@ -25,7 +25,7 @@ classdef ConnectCommand < LineCommand
       [name,options] = obj.getOptions(arg);
       
       if length(options) ~= 2
-          error(['"' obj.name '" must have only two arguments.']); 
+          error(['"' obj.name '" must have only two arguments. \n\n %s'], raw); 
       end
       
       arg = compose(' (%s == %s, isSubstitution = true);',options{1},options{2});

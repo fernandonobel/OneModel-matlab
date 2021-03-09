@@ -44,7 +44,7 @@ classdef VariableCommand < LineCommand
           % Set variable as a substitution.
           fprintf(obj.mcp.fout,'\t\t\tv.isSubstitution=true;\n',options{i});
           % And generate its correspondign equation.
-          arg = compose(' %s_eq(%s == %s, isSubstitution = true);',name,name,tokens{1}{2});
+          arg = compose('Equation %s_eq(%s == %s, isSubstitution = true);',name,name,tokens{1}{2});
           
           equation = EquationCommand(obj.mcp);
           equation.execute(arg{1});
