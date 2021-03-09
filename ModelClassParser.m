@@ -170,7 +170,11 @@ classdef ModelClassParser < handle
 
       % Check if something is remaining in aux after finishing the model.
       if ~all(isspace(aux)) && ~isempty(aux)
-        feval(cmd,obj,aux,-1);
+        try
+          feval(cmd,obj,aux,-1);
+        catch
+          error('The following code did not correspond to any ModelClass command: \n--- Start of code error ---\n%s\n--- End of code error ---',aux);
+        end
       end
     end % executeFileLines
 

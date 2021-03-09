@@ -47,7 +47,11 @@ classdef ObjectCommand < LineCommand
       className = tokens{1}{1};
       objectName = tokens{1}{2};
       
-      classCode = obj.mcp.classCode{strcmp(className, obj.mcp.className)};
+      try
+        classCode = obj.mcp.classCode{strcmp(className, obj.mcp.className)};
+      catch
+        error('"%s" does not correspond to any object declared.',raw)
+      end
       
       % Add a namespace with the object name.
       classCode = ['Namespace ' objectName ';' newline classCode];
