@@ -2,7 +2,7 @@ classdef NamespaceCommand < LineCommand
 
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
-    name = 'Namespace';
+    name = 'namespace';
     % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
     % [char] End sequence of the command.
@@ -35,7 +35,7 @@ classdef NamespaceCommand < LineCommand
       % Remove intros.
       raw = raw(raw~=newline);
 
-      [tokens] = regexp(raw,'\s*Namespace\s*(\w*)\s*;','tokens');
+      [tokens] = regexp(raw,'\s*namespace\s*(\w*)\s*;','tokens');
 
       if isempty(tokens)
         fprintf(obj.mcp.fout,'\t\t\tobj.namespace = '''';\n');

@@ -2,7 +2,7 @@ classdef ClassCommand < LineCommand
 
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
-    name = 'Class';
+    name = 'class';
     % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
     % [char] End sequence of the command. It is defined dynamically.
@@ -34,7 +34,7 @@ classdef ClassCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      [tokens] = regexp(raw,'\s*Class\s\s*(\w*)\s*','tokens');
+      [tokens] = regexp(raw,'\s*class\s\s*(\w*)\s*','tokens');
 
       if isempty(tokens)
         out = false;
@@ -55,11 +55,11 @@ classdef ClassCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      [tokens] = regexp(raw,'\s*Class\s\s*(\w*)\s*','tokens');
+      [tokens] = regexp(raw,'\s*class\s\s*(\w*)\s*','tokens');
 
       obj.mcp.className{end+1} = tokens{1}{1};
 
-      expr = ['\s*Class\s\s*' tokens{1}{1} '\s*([\s\S]+)end\s\s*' tokens{1}{1} ';'];
+      expr = ['\s*class\s\s*' tokens{1}{1} '\s*([\s\S]+)end\s\s*' tokens{1}{1} ';'];
 
       [tokens] = regexp(raw,expr,'tokens');
 

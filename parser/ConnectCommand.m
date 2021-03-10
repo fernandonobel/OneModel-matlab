@@ -2,7 +2,7 @@ classdef ConnectCommand < LineCommand
 
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
-    name = 'Connect';
+    name = 'connect';
     % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
     % [char] End sequence of the command.

@@ -54,8 +54,8 @@ classdef ObjectCommand < LineCommand
       end
       
       % Add a namespace with the object name.
-      classCode = ['Namespace ' objectName ';' newline classCode];
-      classCode = [classCode newline 'Namespace;'];
+      classCode = ['namespace ' objectName ';' newline classCode];
+      classCode = [classCode newline 'namespace;'];
       
       fClass = fopen([className '_class.mc'], 'w');
       fprintf(fClass, '%s', classCode);

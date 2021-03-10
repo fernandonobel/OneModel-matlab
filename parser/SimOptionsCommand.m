@@ -2,7 +2,7 @@ classdef SimOptionsCommand < LineCommand
 
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
-    name = 'SimOptions';
+    name = 'simOptions';
     % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
     % [char] End sequence of the command.
@@ -19,7 +19,7 @@ classdef SimOptionsCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      [tokens,matches] = regexp(raw,'SimOptions\s*(.*);','tokens','match');
+      [tokens,matches] = regexp(raw,'simOptions\s*(.*);','tokens','match');
       fprintf(obj.mcp.fout,['\t\t\tobj.simOptions.' tokens{1}{1} ';']);
 
       end % execute

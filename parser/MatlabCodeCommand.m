@@ -2,7 +2,7 @@ classdef MatlabCodeCommand < LineCommand
 
   properties 
     % [char] Name used for the command. Name is auto-included to keywords.
-    name = 'MatlabCode';
+    name = 'matlabCode';
     % {[char]} struct with the list of keywords that must be reserved for this command.
     keywords = {};
     % [char] End sequence of the command.
@@ -19,7 +19,7 @@ classdef MatlabCodeCommand < LineCommand
       %
       % return: true if the argument is complete.
 
-      [tokens,matches] = regexp(raw,'\s*MatlabCode\s([\s\S]*)end;','tokens','match');
+      [tokens,matches] = regexp(raw,'\s*matlabCode\s([\s\S]*)end;','tokens','match');
       fprintf(obj.mcp.fout,tokens{1}{1});
 
       end % execute
