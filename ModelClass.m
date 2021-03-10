@@ -169,6 +169,7 @@ classdef (Abstract) ModelClass < handle
       % return: void
 
       obj.equations(end+1) = e;
+      obj.symbols{end+1} = e;
 
     end % addEquation
 
