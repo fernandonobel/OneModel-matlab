@@ -35,6 +35,7 @@ classdef ChangeAtributeCommand < LineCommand
       [tokens] = regexp(raw,'\s*(\w*)(.\w*\s*=\s*.+;)\s*','tokens');
       
       name = tokens{1}{1};
+
       rest = tokens{1}{2};
 
       fprintf(obj.mcp.fout,'\t\t\tobj.getSymbolByName(''%s'')%s\n',name,rest);

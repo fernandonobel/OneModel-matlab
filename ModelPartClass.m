@@ -82,4 +82,29 @@ classdef ModelPartClass < handle
 
   end % methods
 
+  methods (Static)
+
+    function [out] = getNameWithNamespace(name,m)
+      %% Get the full name with the namespace included.
+      %
+      % If the name does not have a namespace, it will add the current one.
+      %
+      % param: name The name we want with the namespace.
+      %      : m    ModelClass object.
+      %
+      % return: out
+
+      [matches] = regexp(name,'__','match');    
+      
+      if isempty(matches)
+        out = [m.namespace name];
+
+      else
+        out = name;
+      end
+      
+    end % 
+    
+  end % methods
+
 end % classdef

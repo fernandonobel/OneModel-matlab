@@ -224,6 +224,8 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Variable Object symbol.
 
+      name = ModelPartClass.getNameWithNamespace(name,obj);
+
       aux = obj.isReduced;
       obj.isReduced = false;
 
