@@ -1,7 +1,7 @@
 %% 1. Model definition.
 
 % Initialize an object of the model.
-m = ModelClass.load('model.mc');
+m = ModelClass.load('./model/model.mc');
 
 % Display variables and equations of the model.
 m.vars
@@ -19,6 +19,7 @@ tspan = [0 10];
 p = []; % They are already defined in "model.mc"
 
 % Intial conditions of the model.
+x0 = [];
 x0.x1 = 0.000000;
 x0.x2 = 0.000000;
 x0.x3 = 0.000000;
@@ -44,7 +45,7 @@ saveas(gcf,'simulationPlot.png')
 
 %% 4. Function that evaluates the ODEs.
 
-% Create an ode function of the model.
-s.createOdeFunction();
-% Create the driver script for the ode function.
-s.createDriverOdeFunction();
+% Generate an ode function of the model.
+s.generateOdeFunction();
+% Generate the driver script for the ode function.
+s.generateDriverOdeFunction();

@@ -1,10 +1,10 @@
 % I would like to represent the reference of the baseModel.mc dynamically.
 
 % First, extend the functionality defined in baseModel.mc.
-Import ./baseModel.mc;
+import ./model/baseModel.mc;
 
 % Then, add a variable for the reference.
-Variable ref;
+variable ref;
 
 % And add the equation to calculate the reference value.
-Equation ref == k3/d3;
+equation ref == k3/d3;

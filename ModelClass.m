@@ -813,9 +813,15 @@ classdef (Abstract) ModelClass < handle
       if ~isfile(filename)
         error(['The file "' filename '" does not exist.']);
       end
-      
+
       compile = true;
-      
+
+      % Check if build directory exists.
+      if ~exist('./build', 'dir')
+        % If not, create it.
+        mkdir('./build')
+      end
+
       if isfile(['./build/' name '.m'])
         disp(['Found a previous compilated model at: ./build/' name '.m']); 
         % Check if the model is up-to-date.
