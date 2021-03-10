@@ -4,7 +4,9 @@
 m = ModelClass.load('./model/model.mc');
 
 % Display variables and equations of the model.
+disp('Variables of the model:');
 m.vars
+disp('Equations of the model:');
 m.eqns
 
 %% 2. Simulation.
@@ -31,6 +33,7 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 [out] = s.simulate(tspan,x0,p,opt);
 
 % Result of the simulation.
+disp('Result of the simulation:');
 out
 %% 3. Plot simulation result.
 
