@@ -5,12 +5,16 @@
 
 # Autogenerate ode function
 
-```sh exec --path ../examples/ex0_readme
+```sh exec --path ../examples/ex0_readme/build
 cat modelOdeFun.m
+```
+
+```sh exec --path ../examples/ex0_readme/build
+cat modelDriverOdeFun.m
 ```
 
 # Import a model
 
 ```MATLAB exec --path ../examples/ex1_import
-m = ModelClass.load('importModel.mc')
+m = ModelClass.load('./model/importModel.mc')
 ```
