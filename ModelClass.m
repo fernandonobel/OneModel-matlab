@@ -903,7 +903,7 @@ classdef (Abstract) ModelClass < handle
 
     end % load
 
-    function [out] = version(~)
+    function [varargout] = version(~)
       %% VERSION Prints the version of the ModelClass software.
       %
       % return: void
@@ -940,6 +940,12 @@ classdef (Abstract) ModelClass < handle
       end
 
       out = ([versionNumber commit '   -   Fernando Nóbel (fersann1@upv.es)']);
+
+      if nargout == 0
+        disp(out);
+      else
+        varargout{1} = out;
+      end
 
     end % version
 

@@ -18,5 +18,5 @@
 \contentsline {subsection}{\numberline {6.1}Default values for simulating}{9}{subsection.6.1}
 \contentsline {subsection}{\numberline {6.2}Steady state}{10}{subsection.6.2}
 \contentsline {subsubsection}{\numberline {6.2.1}Simulate until steady state}{10}{subsubsection.6.2.1}
-\contentsline {subsubsection}{\numberline {6.2.2}Get the steady state}{10}{subsubsection.6.2.2}
+\contentsline {subsubsection}{\numberline {6.2.2}Get the steady state}{11}{subsubsection.6.2.2}
 \contentsline {subsubsection}{\numberline {6.2.3}Example}{11}{subsubsection.6.2.3}
