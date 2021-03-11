@@ -35,6 +35,7 @@ opt = odeset('AbsTol', 1e-8, 'RelTol', 1e-8);
 % Result of the simulation.
 disp('Result of the simulation:');
 out
+
 %% 3. Plot simulation result.
 
 % Initialize a SimulationPlotClass object with the model data.

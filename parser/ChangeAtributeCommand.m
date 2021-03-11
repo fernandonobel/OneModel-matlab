@@ -38,7 +38,7 @@ classdef ChangeAtributeCommand < LineCommand
 
       rest = tokens{1}{2};
 
-      fprintf(obj.mcp.fout,'\t\t\tobj.getSymbolByName(''%s'')%s\n',name,rest);
+      fprintf(obj.mcp.fout,'\t\t\tobj.getModelPartByName(''%s'')%s\n',name,rest);
 
     end % execute
 

@@ -76,6 +76,8 @@ classdef (Abstract) ModelClass < handle
     symbolsName
     % [bool] Should the symbol be plotted?
     symbolsIsPlot
+    % {[char]} Names of the model parts of the model.
+    modelPartsName
   end % propierties (Dependent)
 
   %properties (Dependent, Access = private)
@@ -85,6 +87,8 @@ classdef (Abstract) ModelClass < handle
   end % properties (Dependent)
 
   properties % (Access = private)
+    % [ModelPartClass] Array with all the parts of the model (parameters, variables and equations).
+    modelParts
     % [SymbolClass] Array with all the symbols of the model.
     symbols
     % [VariableClass] Array with all the variables of the model.
@@ -107,6 +111,7 @@ classdef (Abstract) ModelClass < handle
       % Default value of the namespace.
       obj.namespace = '';
 
+      obj.modelParts = ModelPartClass.empty();
       obj.variables = VariableClass.empty();
       obj.parameters = ParameterClass.empty();
       obj.symbols = SymbolClass.empty();
@@ -146,6 +151,7 @@ classdef (Abstract) ModelClass < handle
 
       obj.variables(end+1) = v;
       obj.symbols{end+1} = v;
+      obj.modelParts{end+1} = v;
 
     end % addVariable
 
@@ -158,6 +164,7 @@ classdef (Abstract) ModelClass < handle
 
       obj.parameters(end+1) = p;
       obj.symbols{end+1} = p;
+      obj.modelParts{end+1} = p;
 
     end % addParameter
 
@@ -169,7 +176,7 @@ classdef (Abstract) ModelClass < handle
       % return: void
 
       obj.equations(end+1) = e;
-      obj.symbols{end+1} = e;
+      obj.modelParts{end+1} = e;
 
     end % addEquation
 
@@ -224,7 +231,10 @@ classdef (Abstract) ModelClass < handle
       %
       % return: out Variable Object symbol.
 
-      name = ModelPartClass.getNameWithNamespace(name,obj);
+      if ~contains(name,'__')
+        % Take into accout the namespace.
+        name = [obj.namespace name]; 
+      end
 
       aux = obj.isReduced;
       obj.isReduced = false;
@@ -254,6 +264,30 @@ classdef (Abstract) ModelClass < handle
       obj.isReduced = aux;
 
     end % updateSymbol
+
+    function [out] = getModelPartByName(obj,name)
+      %% GETMODELPARTBYNAME Get the ModelPartClass object by its name.
+      %
+      % param: name [char] String with the name of the ModelPartClass.
+      %
+      % return: out ModelPartClass.
+
+      if ~contains(name,'__')
+        % Take into accout the namespace.
+        name = [obj.namespace name]; 
+      end
+
+      aux = obj.isReduced;
+      obj.isReduced = false;
+
+      names = obj.modelPartsName();
+
+      out = obj.modelParts{strcmp(name, names)};
+
+      obj.isReduced = aux;
+
+    end % getModelPartByName
+
 
     function [] = checkValidModel(obj)
       %% CHECKVALIDMODEL Check if the model is valid. 
@@ -710,7 +744,7 @@ classdef (Abstract) ModelClass < handle
     end
 
     function [out] =  get.symbolsName(obj)
-      %% GET.SYMBOLSNAME Get symbols name.
+      %% GET.SYMBOLSNAME Get symbols names.
       %
       % return: out {[char]} Names of the symbols of the model.
 
@@ -738,6 +772,21 @@ classdef (Abstract) ModelClass < handle
       end
 
     end % get.symbolsIsPlot
+
+    function [out] =  get.modelPartsName(obj)
+      %% GET.MODELPARTSNAME Get modelParts names.
+      %
+      % return: out {[char]} Names of the model parts.
+
+      out = {};
+
+      modelParts = obj.modelParts;
+
+      for i = 1:length(modelParts)
+        out{end+1} = modelParts{i}.name;
+      end
+
+    end % get.modelPartsName
 
   end % methods
 
