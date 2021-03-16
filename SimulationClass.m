@@ -181,7 +181,6 @@ classdef SimulationClass < handle
       % Simulate
       % TODO: Make optional the noNegativeWrapper because it is slow.
       % [t,x] = ode15s(@(t,x) obj.noNegativeWrapper(t,x,p,obj.fncDaeModel),tspan,x0,opt);
-      % [t,x] = ode15s(@(t,x) obj.fncDaeModel(t,x,p),tspan,x0,opt);
       [t,x] = ode15s(obj.fncDaeModel,tspan,x0,opt,p);
 
       % Calculate the susbtitution variables.
@@ -310,9 +309,6 @@ classdef SimulationClass < handle
       if nargin < 6
         mTime = 1;
       end
-  
-      % Combine the user parameters with the defaults of the model.
-      p = obj.combineParam(p);
       
       opt = odeset(opt,'Events',@(t,y,p) obj.eventSteadyState(t,y,p,tol,sTime,mTime));
 
