@@ -30,7 +30,7 @@ tspan = [0 +inf];
 
 % Define the tolerance to determine the steady state.
 % Try changing this value to see its effect.
-tol = 1e-1;
+tol = 1e-2;
 
 % Set the event for ending the simulation when steady state is reached.
 opt = s.optSteadyState(opt,p,tol);
@@ -53,5 +53,5 @@ hold on;
 grid on;
 plot(out_1.t,out_1.x);
 plot(out_2.t,out_2.x,'--','LineWidth',1.5);
-plot(out_1.t(end),out_3.x,'o');
+plot(out_1.t(end),out_3.x,'o','LineWidth',2);
 legend('simulate','optSteadyState','simulateSteadyState','Location','SouthEast');

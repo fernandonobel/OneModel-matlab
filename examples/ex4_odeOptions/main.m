@@ -11,6 +11,7 @@ sp.plotAllStates(out);
 tspan = 0:10;
 p.k = 2;
 x0.x = 1;
+
 opt = odeset('AbsTol',1e-1);
 [out] = s.simulate(tspan,x0,p,opt);
 sp.plotAllStates(out);
