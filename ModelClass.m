@@ -873,6 +873,8 @@ classdef (Abstract) ModelClass < handle
         % If not, create it.
         mkdir('./build')
       end
+      
+      addpath('./build');
 
       if isfile(['./build/' name '.m'])
         disp(['Found a previous compilated model at: ./build/' name '.m']); 

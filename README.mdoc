@@ -67,10 +67,14 @@ It is recommended to properly comment on the models.
 For example, a ModelClass model defined with this syntax will look something like this (./examples/ex0_readme/model.mc):
 
 ```MATLAB
-@[](./examples/ex0_readme/model.mc)
+@[](./examples/ex0_readme/model/model.mc)
 ```
 
 and the models are initialized with the following function:
+
+```sh exec --no-echo --no-code
+rm ./examples/ex0_readme/build/model.m
+```
 
 ```MATLAB exec --path ./examples/ex0_readme
 @[ini=%% 1,end=%%](./examples/ex0_readme/main.m)
@@ -88,7 +92,7 @@ Once we have a ModelClass model it is easy to start simulating it. We need to pa
 
 The SimulatePlotClass simplifies the task of plotting the result of simulations. And if we define plot configuration in our ModelClass, the PlotClass will use that information. This way do not need to provide it when plotting.
 
-```MATLAB exec
+```MATLAB exec --no-echo
 @[ini=%% 3,end=%%](./examples/ex0_readme/main.m)
 ```
 
@@ -107,16 +111,16 @@ With the following code you can generate the ODE function and the driver script:
 
 ```
 
-, the contents of the generated ODE funtion (./examples/ex0_readme/modelOdeFun.m) are:
+, the contents of the generated ODE funtion (./examples/ex0_readme/build/modelOdeFun.m) are:
 
 ```MATLAB
-@[](./examples/ex0_readme/modelOdeFun.m)
+@[](./examples/ex0_readme/build/modelOdeFun.m)
 ```
 
-and the content of the generated driver script (./examples/ex0_readme/modelDriverOdeFun.m) are:
+and the content of the generated driver script (./examples/ex0_readme/driver/modelDriverOdeFun.m) are:
 
 ```MATLAB
-@[](./examples/ex0_readme/modelDriverOdeFun.m)
+@[](./examples/ex0_readme/build/modelDriverOdeFun.m)
 ```
 
 Finally, we can simulate by executing the driver script.
