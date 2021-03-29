@@ -19,6 +19,7 @@ tspan = [0 10];
 
 % Parameters of the model.
 p = []; % They are already defined in "model.mc"
+% p.d1 = 10;
 
 % Intial conditions of the model.
 x0 = [];

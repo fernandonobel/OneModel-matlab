@@ -214,7 +214,7 @@ classdef LatexClass < handle
           fprintf(f,'\t %s \\\\\n', v(i).equationTex);
       end
       
-      fprintf(f,'\t %s \n', v(i).equationTex);
+      fprintf(f,'\t %s \n', v(i+1).equationTex);
 
       fprintf(f,'\\end{align}\n');
 

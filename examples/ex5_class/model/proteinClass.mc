@@ -26,3 +26,5 @@ connect(p1__omega, 1);
 
 % We can connect the transcription of p2 dependent of p1.
 connect(p2__omega, p1__x);
+
+
