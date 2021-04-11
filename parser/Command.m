@@ -1,7 +1,7 @@
 classdef (Abstract) Command
   %% COMMAND Base command definition.
   %
-  % This is the base command class to define ModelClassParser commands.
+  % This is the base command class to define OneModelParser commands.
 
   properties (Abstract)
     % {[char]} struct with the list of keywords that must be reserved for this command.
@@ -10,7 +10,7 @@ classdef (Abstract) Command
   end % properties
 
   properties
-    % ModelClassParser object.
+    % OneModelParser object.
     mcp
     % bool True if we want to execute this command with "use" command.
     execUse = false
@@ -21,21 +21,21 @@ classdef (Abstract) Command
 
     %% FINDCOMMAND Is the start of the command found?
     %
-    % param: raw Raw text from the ModelClass file.
+    % param: raw Raw text from the OneModel file.
     %
     % return: true if the start of the command is found.
     out = findCommand(obj, raw);
 
     %% ISCOMPLETE Does the command have everything it needs to run?
     %
-    % param: raw Raw text from the ModelClass file.
+    % param: raw Raw text from the OneModel file.
     %
     % return: true if the argument is complete.
     out = isComplete(obj, raw)
 
     %% EXECUTE Execute the command.
     %
-    % param: raw  Raw text from the ModelClass file.
+    % param: raw  Raw text from the OneModel file.
     %
     % return: true if the argument is complete.
     [] = execute(obj, raw)
@@ -47,7 +47,7 @@ classdef (Abstract) Command
     function [obj] = Command(mcp)
       %% COMMAND Constructor of Command class.
       %
-      % param: mcp  ModelClassParser object.
+      % param: mcp  OneModelParser object.
       %
       % return: obj
 

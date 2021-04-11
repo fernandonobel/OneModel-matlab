@@ -3,7 +3,7 @@ classdef LatexClass < handle
   %
 
   properties
-    % ModelClass object to simulate.
+    % OneModel object to simulate.
     model
   end % properties
 
@@ -12,7 +12,7 @@ classdef LatexClass < handle
     function [obj] = LatexClass(model)
       %% Constructor of LatexClass.
       %
-      % param: model ModelClass object.
+      % param: model OneModel object.
 
       obj.model = model;
 

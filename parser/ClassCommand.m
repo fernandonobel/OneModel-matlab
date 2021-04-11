@@ -15,7 +15,7 @@ classdef ClassCommand < LineCommand
     function [obj] = ClassCommand(mcp)
       %% Constructor of ClassCommand.
       %
-      % param: mcp  ModelClassParser object.
+      % param: mcp  OneModelParser object.
 
       obj = obj@LineCommand(mcp);
 
@@ -30,7 +30,7 @@ classdef ClassCommand < LineCommand
     function out = isComplete(obj, raw)
       %% ISCOMPLETE Does the command have everything it needs to run?
       %
-      % param: raw Raw text from the ModelClass file.
+      % param: raw Raw text from the OneModel file.
       %
       % return: true if the argument is complete.
 
@@ -51,7 +51,7 @@ classdef ClassCommand < LineCommand
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
-      % param: raw  Raw text from the ModelClass file.
+      % param: raw  Raw text from the OneModel file.
       %
       % return: true if the argument is complete.
 

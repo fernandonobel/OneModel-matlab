@@ -1,5 +1,5 @@
 classdef EquationClass < ModelPartClass
-  %% EQUATIONCLASS This class defines equations for ModelClass.
+  %% EQUATIONCLASS This class defines equations for OneModel.
   %
 
   properties
@@ -35,7 +35,7 @@ classdef EquationClass < ModelPartClass
     function [obj] = EquationClass(mc, name)
       %% Constructor of EquationClass.
       %
-      % param: mc   ModelClass object.
+      % param: mc   OneModel object.
       %        name Name of the equation. 
 
       obj = obj@ModelPartClass(mc);

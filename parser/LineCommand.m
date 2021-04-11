@@ -30,7 +30,7 @@ classdef (Abstract) LineCommand < Command
     function [obj] = LineCommand(mcp)
       %% Constructor of LineCommand.
       %
-      % param: mcp  ModelClassParser object.
+      % param: mcp  OneModelParser object.
 
       obj = obj@Command(mcp);
 

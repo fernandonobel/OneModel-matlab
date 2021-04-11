@@ -15,7 +15,7 @@ classdef NamespaceCommand < LineCommand
     function [obj] = NamespaceCommand(mcp)
       %% Constructor of NamespaceCommand.
       %
-      % param: mcp  ModelClassParser object.
+      % param: mcp  OneModelParser object.
 
       obj = obj@LineCommand(mcp);
 
@@ -28,7 +28,7 @@ classdef NamespaceCommand < LineCommand
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
-      % param: raw  Raw text from the ModelClass file.
+      % param: raw  Raw text from the OneModel file.
       %
       % return: true if the argument is complete.
 

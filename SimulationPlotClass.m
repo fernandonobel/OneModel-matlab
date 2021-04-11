@@ -4,7 +4,7 @@ classdef SimulationPlotClass < handle
   %
 
   properties
-    % ModelClass object of the simulation.
+    % OneModel object of the simulation.
     model    
     % Names of vars plotted in each plot of the subplot.
     plotNames                    
@@ -19,7 +19,7 @@ classdef SimulationPlotClass < handle
     function [obj] = SimulationPlotClass(model)
       %% Constructor of SimulationPlotClass.
       %
-      % param: ModelClass object of the simulation.
+      % param: OneModel object of the simulation.
       %
       % return: obj SimulationPlotClass object.
 

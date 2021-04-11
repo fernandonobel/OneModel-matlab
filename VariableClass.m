@@ -16,7 +16,7 @@ classdef VariableClass < SymbolClass
     function [obj] = VariableClass(mc, name)
       %% Constructor of VariableClass.
       %
-      % param: mc   ModelClass object.
+      % param: mc   OneModel object.
       %        name Name of the symbol. 
 
       obj = obj@SymbolClass(mc, name);

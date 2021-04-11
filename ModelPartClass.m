@@ -1,12 +1,12 @@
 classdef ModelPartClass < handle
-  %% MODELPARTCLASS This class is the base for all objects defined in a ModelClass model.
+  %% MODELPARTCLASS This class is the base for all objects defined in a OneModel model.
 
   properties
     % [char] String with the name of the ModelPart.
     name
     % [char] The namespace of this object.
     namespace = ''
-    % ModelClass The object of the ModelClass which this ModelPart is added.
+    % OneModel The object of the OneModel which this ModelPart is added.
     mc
 
   end % properties
@@ -16,12 +16,12 @@ classdef ModelPartClass < handle
     function [obj] = ModelPartClass(mc)
       %% Constructor of ModelPartClass.
       %
-      % param: mc ModelClass object.
+      % param: mc OneModel object.
 
       % Get the namespace that is being used.
       obj.namespace = mc.namespace;
 
-      % Save the ModelClass object for later use.
+      % Save the OneModel object for later use.
       obj.mc = mc;
 
 

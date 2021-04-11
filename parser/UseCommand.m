@@ -15,7 +15,7 @@ classdef UseCommand < LineCommand
     function [obj] = UseCommand(mcp)
       %% Constructor of UseCommand.
       %
-      % param: mcp  ModelClassParser object.
+      % param: mcp  OneModelParser object.
 
       obj = obj@LineCommand(mcp);
 
@@ -29,7 +29,7 @@ classdef UseCommand < LineCommand
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
-      % param: raw  Raw text from the ModelClass file.
+      % param: raw  Raw text from the OneModel file.
       %
       % return: true if the argument is complete.
 

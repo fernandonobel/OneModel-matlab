@@ -15,7 +15,7 @@ classdef MatlabCodeCommand < LineCommand
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
-      % param: raw  Raw text from the ModelClass file.
+      % param: raw  Raw text from the OneModel file.
       %
       % return: true if the argument is complete.
 

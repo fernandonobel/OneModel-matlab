@@ -15,7 +15,7 @@ classdef ChangeAtributeCommand < LineCommand
     function [out] = findCommand(obj, raw)
       %% FINDCOMMAND Is the start of the command found?
       %
-      % param: raw Raw text from the ModelClass file.
+      % param: raw Raw text from the OneModel file.
       %
       % return: out true if the start of the command is found.
       
@@ -28,7 +28,7 @@ classdef ChangeAtributeCommand < LineCommand
     function [] = execute(obj, raw)
       %% EXECUTE Execute the command.
       %
-      % param: raw  Raw text from the ModelClass file.
+      % param: raw  Raw text from the OneModel file.
       %
       % return: true if the argument is complete.
 

@@ -1,6 +1,6 @@
 %% Stand-alone use of the class.
 
-m = ModelClass.load('./model/proteinClass.mc');
+m = OneModel.load('./model/proteinClass.mc');
 
 s = SimulationClass(m);
 [out] = s.simulate();
@@ -11,7 +11,7 @@ sp.plotAllStates(out);
 
 %% Use the class defined in other model.
 
-m = ModelClass.load('./model/model.mc');
+m = OneModel.load('./model/model.mc');
 
 s = SimulationClass(m);
 [out] = s.simulate();

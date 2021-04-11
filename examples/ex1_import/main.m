@@ -1,7 +1,7 @@
 %% Simulate the extended model.
 
 % Initialize an object of the base model.
-m = ModelClass.load('./model/importModel.mc');
+m = OneModel.load('./model/importModel.mc');
 
 % Initialize a SimulationClass object with the model data.
 s = SimulationClass(m);

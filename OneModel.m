@@ -1,4 +1,4 @@
-classdef (Abstract) ModelClass < handle
+classdef (Abstract) OneModel < handle
   %% MODELCLASS This class simplifies working with ODE models.
   % The main idea is to simplify the work of building a ODE model,
   % and therefore reducing the time spent in this process. The main
@@ -103,10 +103,10 @@ classdef (Abstract) ModelClass < handle
 
   %% Contructors
   methods
-    function [obj] =  ModelClass()
+    function [obj] =  OneModel()
       %% MODELCLASS Constructor of Model Class.
       %
-      % return: obj ModelClass object.
+      % return: obj OneModel object.
 
       % Default value of the namespace.
       obj.namespace = '';
@@ -118,10 +118,10 @@ classdef (Abstract) ModelClass < handle
       obj.equations = EquationClass.empty();
       obj.simOptions = SimulationOptionsClass();
 
-    end % ModelClass
+    end % OneModel
   end % methods
 
-  % ModelClass propierties.
+  % OneModel propierties.
   methods
     function [] = set.isReduced(obj,isReduced)
       %% SET.ISREDUCED Set interface for isReduced propierty.
@@ -845,11 +845,11 @@ classdef (Abstract) ModelClass < handle
 
   methods (Static)
     function [out] = load(filename, varargin)
-      %% LOAD Load a ModelClass model.
+      %% LOAD Load a OneModel model.
       %
       % param: filename Name of the model to load.
       %
-      % return: out ModelClass object.
+      % return: out OneModel object.
 
       % Options for the model (used typically with "if" commands").
       opts = getOption(varargin,'opts',[]);
@@ -893,7 +893,7 @@ classdef (Abstract) ModelClass < handle
       else
         % Compile an up-to-date version.
         disp(['Compiling model...']);
-        mp = ModelClassParser(filename);
+        mp = OneModelParser(filename);
         mp.parse();
         disp('Compilation finished.');
       end
@@ -906,11 +906,11 @@ classdef (Abstract) ModelClass < handle
     end % load
 
     function [varargout] = version(~)
-      %% VERSION Prints the version of the ModelClass software.
+      %% VERSION Prints the version of the OneModel software.
       %
       % return: void
 
-      [filepath, name, ext]  = fileparts(which('ModelClass.m'));
+      [filepath, name, ext]  = fileparts(which('OneModel.m'));
 
       % Get the version from the version file.
       pathVersion = [filepath '/version'];
@@ -952,12 +952,12 @@ classdef (Abstract) ModelClass < handle
     end % version
 
     function [isOutdated] = checkVersion(~)
-      %% CHECKVERSION Check if the local version of ModelClass is outdated.
+      %% CHECKVERSION Check if the local version of OneModel is outdated.
       %
       % return: isOutdated bool True if the local version is outdated.
 
       % Get the local version.
-      [filepath, name, ext]  = fileparts(which('ModelClass.m'));
+      [filepath, name, ext]  = fileparts(which('OneModel.m'));
       pathVersion = [filepath '/version'];
       fid = fopen(pathVersion);
       versionLocal = fgetl(fid);
@@ -966,7 +966,7 @@ classdef (Abstract) ModelClass < handle
       versionLocal = versionLocal{1};
 
       % Get the latest version.
-      versionLatest = webread('https://raw.githubusercontent.com/FernandoNobel/ModelClass/master/version');
+      versionLatest = webread('https://raw.githubusercontent.com/FernandoNobel/OneModel/master/version');
       versionLatest = regexp(versionLatest,'v(\d*).(\d*).(\d*)','tokens');
       versionLatest = versionLatest{1};
 
@@ -983,15 +983,15 @@ classdef (Abstract) ModelClass < handle
       end
 
       if isOutdated
-        warning('The local version of ModelClass is outdated, please update to the latest version.');
+        warning('The local version of OneModel is outdated, please update to the latest version.');
       else
-        disp('The local version of ModelClass is up to date.');
+        disp('The local version of OneModel is up to date.');
       end
 
     end % checkVersion
 
     function [] = update(~)
-      %% UPDATE Update the ModelClass code to the latest in the main repository.
+      %% UPDATE Update the OneModel code to the latest in the main repository.
       %
       % return: void
 
@@ -999,14 +999,14 @@ classdef (Abstract) ModelClass < handle
       pathInitial = pwd();
 
       % Get the absoulute path.
-      [path, name, ext]  = fileparts(which('ModelClass.m'));
+      [path, name, ext]  = fileparts(which('OneModel.m'));
 
       cd(path);
       cd('..');
 
       % Download the latest version of the code.
-      disp('Downloading the latest version of ModelClass...');
-      websave('./latest.zip','https://github.com/FernandoNobel/ModelClass/archive/master.zip');
+      disp('Downloading the latest version of OneModel...');
+      websave('./latest.zip','https://github.com/FernandoNobel/OneModel/archive/master.zip');
       disp('Download end.');
 
       % Move the .git if it exists.
@@ -1030,7 +1030,7 @@ classdef (Abstract) ModelClass < handle
       % Move to that location the lastest code.
       disp('Move the lastest files.');
       try
-        movefile('./ModelClass-master',path);
+        movefile('./OneModel-master',path);
       catch
       end
 
@@ -1052,7 +1052,7 @@ classdef (Abstract) ModelClass < handle
       cd(pathInitial);
 
       disp('');
-      disp('ModelClass has been successfully updated!');
+      disp('OneModel has been successfully updated!');
 
     end % update
 

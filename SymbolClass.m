@@ -1,5 +1,5 @@
 classdef SymbolClass < ModelPartClass
-  %% SYMBOLCLASS This class is a base for defining symbols for the ModelClass.
+  %% SYMBOLCLASS This class is a base for defining symbols for the OneModel.
   %
 
   properties
@@ -40,7 +40,7 @@ classdef SymbolClass < ModelPartClass
     function [obj] = SymbolClass(mc, name)
       %% Constructor of ValueClass.
       %
-      % param: mc   ModelClass object.
+      % param: mc   OneModel object.
       %        name Name of the symbol. 
 
       obj = obj@ModelPartClass(mc);

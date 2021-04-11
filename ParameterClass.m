@@ -14,7 +14,7 @@ classdef ParameterClass < SymbolClass
     function [obj] = ParameterClass(mc, name)
       %% Constructor of ParameterClass.
       %
-      % param: mc   ModelClass object.
+      % param: mc   OneModel object.
       %        name Name of the symbol. 
 
       obj = obj@SymbolClass(mc, name);
