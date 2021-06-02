@@ -18,7 +18,7 @@ classdef LatexClass < handle
 
     end % LatexClass
 
-    function [out] = parametersTable(obj,filename,label,caption)
+    function [out] = parametersTable(obj,filename,label,caption,note)
       %% PARAMETERSTABLE Generates a table with the parameters of the model.
       %
       % param: filename [char] Name of the file to create.
@@ -62,6 +62,7 @@ classdef LatexClass < handle
 
       fprintf(f,'\\bottomrule\n');
       fprintf(f,'\\end{tabular}\n');
+      fprintf(f,note);
       fprintf(f,'\\end{specialtable}\n');
 
       % fprintf(f,'\\bottomrule\n');
@@ -209,6 +210,8 @@ classdef LatexClass < handle
       f = fopen(filename,'w');
 
       fprintf(f,'\\begin{align}\n');
+      fprintf(f,'\\begin{split}\n');
+      fprintf(f,'\\label{%s}\n',label);
 
       for i = 1:length(v)-1
           fprintf(f,'\t %s \\\\\n', v(i).equationTex);
@@ -216,6 +219,7 @@ classdef LatexClass < handle
       
       fprintf(f,'\t %s \n', v(i+1).equationTex);
 
+      fprintf(f,'\\end{split}\n');
       fprintf(f,'\\end{align}\n');
 
       fclose(f);
