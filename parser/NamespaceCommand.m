@@ -39,10 +39,8 @@ classdef NamespaceCommand < LineCommand
 
       if isempty(tokens{1}{1})
         fprintf(obj.mcp.fout,'\t\t\tobj.namespaceRemove();\n');
-        fprintf(obj.mcp.fout,'\t\t\tobj.namespace\n');
       else
         fprintf(obj.mcp.fout,'\t\t\tobj.namespaceAdd(''%s'');\n',tokens{1}{1});
-        fprintf(obj.mcp.fout,'\t\t\tobj.namespace\n');
       end
 
     end % execute
