@@ -138,6 +138,27 @@ classdef (Abstract) OneModel < handle
 
     end % set.isReduced
 
+    function [] = namespaceAdd(obj,ns)
+      %% NAMESPACEADD Add ns to the current namespace.
+      %
+      % param: ns Name to be added in the namespace.
+
+      obj.namespace = [obj.namespace ns];
+      
+    end % namespaceAdd
+
+    function [] = namespaceRemove(obj)
+      %% NAMESPACEADD Removes last name from the current namespace.
+      %
+
+      pos = strfind(obj.namespace,'__');
+      if length(pos) > 1
+        obj.namespace = obj.namespace(1:pos(end-1)-1);
+      else
+        obj.namespace = '';
+      end
+    end
+
   end % methods
 
   %% Model definition.
