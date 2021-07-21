@@ -293,10 +293,10 @@ classdef (Abstract) OneModel < handle
       %
       % return: out ModelPartClass.
 
-      if ~contains(name,'__')
+      %if ~contains(name,'__')
         % Take into accout the namespace.
         name = [obj.namespace name]; 
-      end
+      %end
 
       aux = obj.isReduced;
       obj.isReduced = false;
